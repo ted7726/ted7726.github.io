@@ -1,0 +1,235 @@
+
+<html>
+	<head>
+    <title>
+    </title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js.js"></script>
+
+</head>
+	<body>
+		<div id="nav">
+			<div>Regular Expression Tester</div>
+			<div id="about"s>About</div>
+        </div>
+		
+		<div id="wrap">
+			
+			<div id="main">
+			<div style="width:100%;">
+				<div 	id="Match" 
+						class="buttonA" 
+				>Match</div><div 
+						id="sidebyside" 
+						class="buttonA"
+				>Replace - Side by Side</div><div 
+						id="stacked"
+						class="buttonA"
+				>Replace - Stacked</div>
+			</div>
+			<div style="padding:0% 1%">
+				<br>
+				
+				<textarea 	id="reg_cmd" 
+							class="cmd_class" 
+							rows="1" 
+							placeholder="Give a regular expression command here"></textarea><textarea 	id="rep_cmd"
+							class="cmd_class" 
+							rows="1" 
+							placeholder="Give a replace command here" style="display:none"></textarea>
+				<br>
+				<div id="code_wrap" style="position:relative;">
+					<div id="disp_match" class="disp_match_class" style="
+						float:left;
+						top:0%;
+						left:0%;
+						width:99.5%;	
+						height:595px;
+						z-index:0;
+						position:static;
+					"></div>
+					<textarea id="code" class="code_class" placeholder="Give the target text string here" style="
+						float:left;
+						top:0%;
+						left:0%;
+						width:100%;
+						height:600px;
+						z-index:1;
+						position:absolute;
+					"></textarea>
+					<div id="disp_replace" class="disp_replace_class" style="
+	
+						height:300px;
+						display:none;
+						position:static;
+					"></div>
+					</div>
+				</div>
+					
+					
+			
+			</div>
+			<div id="sidebar_warp">
+				<div id="command" class="buttonD">Command</div><div id="library" class="buttonC">Library</div>
+				<div id="sidebar2" class="sidebar">
+					
+					<br>
+					
+					<div id="Special_Characters_menu" class = "menu2">Special Characters</div>
+					<div id="Special_Characters_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">.</div><div class="instruction">Match any character except newline</div><div class="detail">1234</div></li>
+							<li class="hor"><div class="espresso">\w</div><div class="instruction">Match any alphanumeric character</div></li>
+							<li class="hor"><div class="espresso">\s</div><div class="instruction">Match any whitespace character</div></li>
+							<li class="hor"><div class="espresso">\d</div><div class="instruction">Match any digit</div></li>
+							<li class="hor"><div class="espresso">\b</div><div class="instruction">Match the beginning or end of a word</div></li>
+							<li class="hor"><div class="espresso">^</div><div class="instruction">Match the beginning of the string</div></li>
+							<li class="hor"><div class="espresso">$</div><div class="instruction">Match the end of the string</div></li>
+							
+						</ul>
+					</div>
+					<div id="Escaped_characters" 	class = "menu2">Escaped characters</div>
+					<div id="Escaped_characters_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">\\</div><div class="instruction">Match special character "\"</div></li>
+							<li class="hor"><div class="espresso">\.</div><div class="instruction">Match special character "."</div></li>
+							<li class="hor"><div class="espresso">\$</div><div class="instruction">Match special character "$"</div></li>
+							<li class="hor"><div class="espresso">\^</div><div class="instruction">Match special character "^"</div></li>
+							<li class="hor"><div class="espresso">\(</div><div class="instruction">Match special character "("</div></li>
+							<li class="hor"><div class="espresso">\)</div><div class="instruction">Match special character ")"</div></li>
+							<li class="hor"><div class="espresso">\{</div><div class="instruction">Match special character "{"</div></li>
+							<li class="hor"><div class="espresso">\}</div><div class="instruction">Match special character "}"</div></li>
+							<li class="hor"><div class="espresso">\[</div><div class="instruction">Match special character "["</div></li>
+							<li class="hor"><div class="espresso">\]</div><div class="instruction">Match special character "]"</div></li>
+							
+						</ul>
+					</div>
+					<div id="Repetitions" class = "menu2">Repetitions</div>
+					<div id="Repetitions_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">*</div><div class="instruction">Repeat any number of times</div></li>
+							<li class="hor"><div class="espresso">+</div><div class="instruction">Repeat one or more times</div></li>
+							<li class="hor"><div class="espresso">?</div><div class="instruction">Repeat zero or one time</div></li>
+							<li class="hor"><div class="espresso">{n}</div><div class="instruction">Repeat n times</div></li>
+							<li class="hor"><div class="espresso">{n,m}</div><div class="instruction">Repeat at least n, but no more than m times</div></li>
+							<li class="hor"><div class="espresso">{n,}</div><div class="instruction">Repeat at least n times</div></li>
+						</ul>
+					</div>
+					<div id="Character_Classes"	class = "menu2">Character Classes</div>
+					<div id="Character_Classes_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">[a-z]</div><div class="instruction">match any lowercase letter of the alphabet</div></li>
+							<li class="hor"><div class="espresso">[a-zA-Z]</div><div class="instruction">match any letter of the alphabet</div></li>
+							<li class="hor"><div class="espresso">[0-9]</div><div class="instruction">match any digit</div></li>
+							<li class="hor"><div class="espresso">[0-9a-fA-F]</div><div class="instruction">match any Hex</div></li>
+							<li class="hor"><div class="espresso">[\(\[\{]</div><div class="instruction">match any of "(", "[" or "{"</div></li>
+						</ul>
+					</div>
+					<div id="Negation" 				class = "menu2">Negation</div>
+					<div id="Negation_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">\W</div><div class="instruction">Match any character that is NOT alphanumeric</div></li>
+							<li class="hor"><div class="espresso">\D</div><div class="instruction">Match any character that is NOT whitespace</div></li>
+							<li class="hor"><div class="espresso">\S</div><div class="instruction">Match any character that is NOT a digit</div></li>
+							<li class="hor"><div class="espresso">\B</div><div class="instruction">Match a position that is NOT the beginning or end of a word</div></li>
+							<li class="hor"><div class="espresso">[^aeiou]</div><div class="instruction">Match any character that is NOT one of the characters aeiou</div></li>
+						</ul>
+					</div>
+					<div id="Greedy_and_Lazy" 	class = "menu2">Greedy and Lazy</div>
+					<div id="Greedy_and_Lazy_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">a.*b</div><div class="instruction">The longest string starting with a and ending with b</div></li>
+							<li class="hor"><div class="espresso">a.*?b</div><div class="instruction">The shortest string starting with a and ending with b</div></li>
+							<li class="hor"><div class="espresso">*?</div><div class="instruction">Repeat any number of times, but as few as possible</div></li>
+							<li class="hor"><div class="espresso">+?</div><div class="instruction">Repeat one or more times, but as few as possible</div></li>
+							<li class="hor"><div class="espresso">??</div><div class="instruction">Repeat zero or one time, but as few as possible</div></li>
+							<li class="hor"><div class="espresso">{n,m}?</div><div class="instruction">Repeat at least n, but no more than m times, but as few as possible</div></li>
+							<li class="hor"><div class="espresso">{n,}?</div><div class="instruction">Repeat at least n times, but as few as possible</div></li>
+						</ul>
+					</div>
+					<div id="Alternatives" 			class = "menu2">Alternatives</div>
+					<div id="Alternatives_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">exp1|exp2</div><div class="instruction">Match exp1 or exp2</div></li>
+							<li class="hor"><div class="espresso">\d{10}|\d{3}-\d{3}-\d{4}</div><div class="instruction">Match phone number with or without hyphen</div></li>
+						</ul>
+					</div>
+					<div id="Grouping" 				class = "menu2">Grouping</div>
+					<div id="Grouping_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">(exp)</div><div class="instruction">Match exp and capture it in an automatically numbered group</div></li>
+							<li class="hor"><div class="espresso">(?&lt;name&gt;exp)</div><div class="instruction">Match exp and capture it in a group named name</div></li>
+							<li class="hor"><div class="espresso">(?:exp)</div><div class="instruction">Match exp, but do not capture it</div></li>
+						</ul>
+					</div>
+					<div id="Positive_Lookaround" 	class = "menu2">Positive Lookaround</div>
+					<div id="Positive_Lookaround_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">(?=exp)</div><div class="instruction">Match any position preceding a suffix exp</div></li>
+							<li class="hor"><div class="espresso">(?&lt;=exp)</div><div class="instruction">Match any position following a prefix exp</div></li>
+							<li class="hor"><div class="espresso">(?&lt;=&lt;(\w+)&gt;).*(?=&lt;\/\1&gt;)</div><div class="instruction">Text between HTML tags</div></li>
+						</ul>
+					</div>
+					<div id="Negative_Lookaround" 	class = "menu2">Negative Lookaround</div>
+					<div id="Negative_Lookaround_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso">(?!exp)</div><div class="instruction">Match any position after which the suffix exp is not found</div></li>
+							<li class="hor"><div class="espresso">(?&lt;!exp)</div><div class="instruction">Match any position before which the prefix exp is not found</div></li>
+						</ul>
+					</div>
+					<div id="Other" 	class = "menu2">Other</div>
+					<div id="Other_item" class="item_wrap">
+						<ul>
+							<li class="hor"><div class="espresso"></div><div class="instruction">
+							<li class="hor"><div class="espresso">\a</div><div class="instruction">Bell character</div></li>
+							<li class="hor"><div class="espresso">\b</div><div class="instruction">Normally a word boundary, but within a character class it means backspace</div></li>
+							<li class="hor"><div class="espresso">\t</div><div class="instruction">Tab</div></li>
+							<li class="hor"><div class="espresso">\r</div><div class="instruction">Carriage return</div></li>
+							<li class="hor"><div class="espresso">\v</div><div class="instruction">Vertical tab</div></li>
+							<li class="hor"><div class="espresso">\f</div><div class="instruction">Form feed</div></li>
+							<li class="hor"><div class="espresso">\n</div><div class="instruction">New line</div></li>
+							<li class="hor"><div class="espresso">\e</div><div class="instruction">Escape</div></li>
+							<li class="hor"><div class="espresso">\nnn</div><div class="instruction">Character whose ASCII octal code is nnn</div></li>
+							<li class="hor"><div class="espresso">\xnn</div><div class="instruction">Character whose hexadecimal code is nn</div></li>
+							<li class="hor"><div class="espresso">\unnnn</div><div class="instruction">Character whose Unicode is nnnn</div></li>
+							<li class="hor"><div class="espresso">\cN</div><div class="instruction">Control N character, for example carriage return (Ctrl-M) is \cM</div></li>
+							<li class="hor"><div class="espresso">\A</div><div class="instruction">Beginning of a string (like ^ but does not depend on the multiline option)</div></li>
+							<li class="hor"><div class="espresso">\Z</div><div class="instruction">End of string or before \n at end of string (ignores multiline)</div></li>
+							<li class="hor"><div class="espresso">\z</div><div class="instruction">End of string (ignores multiline)</div></li>
+							<li class="hor"><div class="espresso">\G</div><div class="instruction">Beginning of the current search</div></li>
+						</ul>
+					</div>
+					<div id="Reference" 	class = "menu2">Reference websites</div>
+					<div id="Reference_item" class="item_wrap">
+						<ul>
+							<li class="hor"><a href="http://www.codeproject.com/Articles/9099/The-Minute-Regex-Tutorial">30 Minute Regex Tutorial</a></li>
+							<li class="hor"><a href="http://en.wikipedia.org/wiki/Regular_expression">WikiPedia - Regular Expression</a></li>
+						</ul>
+					</div>
+				</div>
+				<div id="sidebar1" class="sidebar">
+					
+					<div class = "menu1">Pattern:</div>
+					<p id="pattern_cmd"></p>
+					<div class = "menu1">Command:</div>
+					<p id="regex_cmd"></p>
+					<div class = "menu1">Flags:</div>
+					<p>
+						<input type="checkbox" id="check_g" checked>(g) global match<br>
+						<input type="checkbox" id="check_i">(i) ignore case <br>
+						<input type="checkbox" id="check_m" checked>(m) multiple lines<br>
+					</p>
+					<div class = "menu1">Match Groups:</div>
+					<p id="match_groups"></p>
+
+				</div>
+			</div>
+			
+		</div>
+		
+		<div id="footer">
+		<p>Last Edited 04/15/2014 by ted7726 at gmail dot com</p></div>
+		
+	</body>
+</html>
