@@ -260,15 +260,22 @@
 	text-align:right;
 	//font-family:'Open Sans';
 	position: fixed;
-    bottom: 0px;
+    right: 0px;
+	bottom: 0px;
 	color: #FAFAFA;
-	height: 0%;
-    width: 100%;
+	height: 40px;
+    width: 300px;
     z-index: 2;
-    background: linear-gradient(#505050, #202020);
-    
-    
-	
+	box-shadow: 0px 0px 3px black;
+    background: linear-gradient(#F5F5F5, #FEFEFE);
+	-webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: 	all 0.3s ease-in-out;
+    -o-transition: 		all 0.3s ease-in-out;
+    -ms-transition: 	all 0.3s ease-in-out;
+    transition: 		all 0.3s ease-in-out;
+}
+#footer:hover{
+	height: 80px;
 }
 
 textarea{
@@ -426,17 +433,14 @@ textarea{
 }
 
 
-
 body,
 html {
-margin:0;
-padding:0;
-font-family: 'Open Sans';
-font-size: medium;
-color:black;
-
-background: linear-gradient( white,#858585 );
-
-
+	margin:0;
+	padding:0;
+	font-family: 'Open Sans';
+	font-size: medium;
+	color:black;
+	
+	background: linear-gradient( white,#858585 );
 }
 

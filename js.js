@@ -15,13 +15,7 @@ $(document).ready(function(){
 	$("#command").click(function(){
 		ToCommand();
 	});
-	$("#about").click(function(){
-		if ($("#footer").height()>0){
-			$("#footer").animate({ height:'0%'});
-		}else{
-			$("#footer").animate({ height:'5%'});
-		}
-	});
+	
 	
 	
 	$(".hor").click(function(){
