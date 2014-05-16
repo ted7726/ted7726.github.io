@@ -186,7 +186,7 @@ $(document).ready(function(){
 			)));
 			
 			
-			$("#pattern_cmd").text($("#reg_cmd").val());
+			$("#pattern_cmd").html(newline_Br(encode_gt_lt($("#reg_cmd").val())));
 			if(replace_mode){
 				$("#disp_replace").html(
 					newline_Br(str.replace(patt1,$("#rep_cmd").val()
