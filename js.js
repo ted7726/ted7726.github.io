@@ -16,6 +16,12 @@ $(document).ready(function(){
 		ToCommand();
 	});
 	
+	$("#about").click(function(){
+		$("#wrap").fadeOut(50);
+		$("#wrap2").delay(50).fadeIn(50);
+		
+	});
+	
 	
 	
 	$(".hor").click(function(){
