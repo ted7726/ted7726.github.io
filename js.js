@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	Regexr();
 	match_animate();
-	// ToCommand();
 	ToCommand();
 	var replace_mode=0;
 	$("#disp_match").css({
@@ -19,7 +18,6 @@ $(document).ready(function(){
 	$("#about").click(function(){
 		$("#wrap").fadeOut(50);
 		$("#wrap2").delay(50).fadeIn(50);
-		
 	});
 	
 	
@@ -109,21 +107,10 @@ $(document).ready(function(){
 		}
 	}
 	$("img").mouseenter(function(){
-		
 		$("#sidebar_left").fadeIn();
-		// $("#sidebar_left").animate({	left:'0%'	});
-		
 	});
-	// $("img").mouseleave(function(){
-		// $("#sidebar_left").animate({	left:'-10%'	});
-	// });
+	
 
-	$(".cmd_class").keyup(function(){
-		Regexr();
-	});
-	// $("#code").keyup(function(){
-	// Regexr();
-	// });
 	$("#wrap").click(function(){
 		$("#sidebar_left").fadeOut();
 	});
@@ -137,65 +124,39 @@ $(document).ready(function(){
 		$("#code").scrollTop($(this).scrollTop());
 	});
 	
-	
-	
-	// $("#code").focusout(function(){
-		// Regexr();
-	// });
-
-	$("#code").keyup(function(){
-		Regexr();
-	});
-	$("#disp_match").mousedown(function(){
-		//$("#disp_match").attr("style","display:none;");
-		//$("#code").attr("style","display:compact; height:300px");
+	$("#code").keyup(function(){ Regexr();	});
+    $(".cmd_class").keyup(function(){Regexr();});    
+	$("#check_i,#check_g,#check_m").click(function(){ Regexr();});
 		
-		// $("#code").focus();
-	});
-	$("#reg_cmd").keydown(function(){
-		Regexr();
-	});
-        
-	$("#check_i,#check_g,#check_m").click(function(){ ; Regexr();});
 	
-	
-	$("#rep_cmd").keyup(function(){
-        Regexr();
-	});
 	
 	var str;
 	var modifier;
 	var patt1;
 	
 	function Regexr(){
-		// $("#disp_match").attr("style","display:compact;");
-		// $("#code").attr("style","display:none;");
-		// $("#disp_match").attr("rows:"+("#code").attr('rows')+";");
-		str=encode_gt_lt($("#code").val());
+		str=$("#code").val();
+		$("#code").val(str.replace(/\t/g,'        ')); 
 		if($("#reg_cmd").val() === ""){
-			$("#disp_match").html(newline_Br(encode_gt_lt(str)));
+			$("#disp_match").html(display_processor(str));
+			$("#regex_cmd").text("");
+			$("#pattern_cmd").text("");
 		}else{
 			modifier = "";
 			if ($("#check_g").prop('checked')){modifier += "g";}
 			if ($("#check_i").prop('checked')){modifier += "i";}
 			if ($("#check_m").prop('checked')){modifier += "m";}
-			patt1=new RegExp(encode_gt_lt($("#reg_cmd").val()),modifier);
-			// $("#disp_match").html(newline_Br(str));
-		
-			$("#disp_match").html(newline_Br(str.replace(patt1,function(match){
-				if (typeof match === "undefined"){
-					return "";
-				}else{
-					return ("<hi>".concat(match)).concat("</hi>");
+			patt1=new RegExp($("#reg_cmd").val(),modifier);
+			$("#disp_match").html(display_processor(str.replace(patt1,function(match){
+				if (typeof match !== "undefined"){
+					return "[!@#!@#]"+match+"[#@!#@!]";
 				}
 			}
 			)));
-			
-			
 			$("#pattern_cmd").html(newline_Br(encode_gt_lt($("#reg_cmd").val())));
 			if(replace_mode){
 				$("#disp_replace").html(
-					newline_Br(str.replace(patt1,$("#rep_cmd").val()
+					display_processor(str.replace(patt1,$("#rep_cmd").val()
 				)));
 				$("#regex_cmd").text("/"+$("#reg_cmd").val()+"/"+$("#rep_cmd").val()+"/"+modifier);
 			}else{
@@ -205,27 +166,21 @@ $(document).ready(function(){
 		}	
 		
 	}
+	function display_processor(x){
+		x = x.replace(/</g,'&lt;');
+		x = x.replace(/\r\n|\r|\n/g,'<br>');
+		x = x.replace(/\s/g,'&nbsp;');
+		x = x.replace(/\[!@#!@#\](.*?)\[#@!#@!\]/g,'<hi>$1</hi>');
+		return x;
+	}
 
 	function newline_Br(x){
-		// x = x.replace(/\t/g,'&#09;');
-		
 		x = (x.replace(/\r\n|\r|\n/g,'<br/>')+'<br/>');
 		return x.replace(/\s/g,'&nbsp;');
 	}
 	function encode_gt_lt(x){
-		
 		return x.replace(/</g,'&lt;');
 	}
-	
-	function match_handle(m){
-		if (typeof m === "undefined"){
-			return "";
-		}else{
-		
-		return ("<high>".concat(m)).concat("</high>");
-		}
-	}
-	
 	
 	function find_brackets(input_str,i,obj){
 		if (i===1){
@@ -239,16 +194,10 @@ $(document).ready(function(){
 			obj.next().text("match[" + i + "]: " + myArray[1]);
 			
 		}
-		
-		
-		// if (myArray != null){
-			// return "match[" + i + "]: " + myArray[1]+"<br>"+find_brackets(myArray[2],i+1);
-		// }else{
-			// return "";
-		// }
+
 	}
 	
-	
+/* Facebook and Google+ like button: */
 	(function(d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];
 		if (d.getElementById(id)) return;
