@@ -8,49 +8,12 @@ $(document).ready(function(){
 		right:(($("#code").offset()).right)
 	});
 	// var screen_left=$("#sidebar_right").position().left;
-	$("#library").click(function(){
-		ToLibrary();
-	});
-	$("#command").click(function(){
-		ToCommand();
-	});
 	
 	$("#about").click(function(){
 		$("#wrap").fadeOut(50);
 		$("#wrap2").delay(50).fadeIn(50);
 	});
 	
-	
-	
-	$(".hor").click(function(){
-		$("#reg_cmd").val($("#reg_cmd").val()+($(this).children(".espresso").text()));
-		Regexr();
-	});
-	$(".menu2").click(function(){
-		var item_warp = $(this).next();
-		if(item_warp.css('display') === "none"){
-			item_warp.slideDown();
-		}else{
-			item_warp.slideUp();
-		}
-		
-	});
-	function ToLibrary(){
-		$("#sidebar2").delay(50).fadeIn(50);
-		$("#sidebar1").fadeOut(50);
-		$("#library").removeClass('buttonC');
-		$("#library").addClass('buttonD');
-		$("#command").removeClass('buttonD');
-		$("#command").addClass('buttonC');
-	}
-	function ToCommand(){
-		$("#sidebar1").delay(50).fadeIn(50);
-		$("#sidebar2").fadeOut(50);
-		$("#command").removeClass('buttonC');
-		$("#command").addClass('buttonD');
-		$("#library").removeClass('buttonD');
-		$("#library").addClass('buttonC');
-	}
 	
 	$("#sidebyside").click(function(){
 		$("#reg_cmd").animate({			width:'49%'		});
@@ -79,21 +42,9 @@ $(document).ready(function(){
 		toggleclass_to_B($("#stacked"));
 		toggleclass_to_A($("#sidebyside"));
 		
-		replace_mode=1;
+		
 	});
-	$("#Match").click(function(){match_animate()});
 
-	function match_animate(){
-		$("#reg_cmd").animate({			width:'100%'		});
-		$("#rep_cmd").fadeOut();
-		$("#disp_match").animate({		width:'99.5%'	,height:'695px',	'margin-right':'0'		});
-		$("#code").animate({			width:'100%'	,height:'700px'								});
-		$("#disp_replace").fadeOut();
-		toggleclass_to_B($("#Match"));
-		toggleclass_to_A($("#stacked"));
-		toggleclass_to_A($("#sidebyside"));
-		replace_mode=0;
-	}
 	function toggleclass_to_A(c){
 		if(c.is('.buttonB')){
 			c.removeClass('buttonB');
@@ -106,27 +57,16 @@ $(document).ready(function(){
 			c.addClass('buttonB');
 		}
 	}
-	$("img").mouseenter(function(){
-		$("#sidebar_left").fadeIn();
-	});
 	
 
-	$("#wrap").click(function(){
-		$("#sidebar_left").fadeOut();
-	});
-	$("#code").scroll(function(){
-		$("#disp_match").scrollTop($(this).scrollTop());
-		$("#disp_replace").scrollTop($(this).scrollTop());
+	$("#cmp1").scroll(function(){
+		$("#cmp2").scrollTop($(this).scrollTop());
 	});
 	
-	$("#disp_replace").scroll(function(){
-		$("#disp_match").scrollTop($(this).scrollTop());
-		$("#code").scrollTop($(this).scrollTop());
+	$("#cmp2").scroll(function(){
+		$("#cmp1").scrollTop($(this).scrollTop());
 	});
 	
-	$("#code").keyup(function(){ Regexr();	});
-    $(".cmd_class").keyup(function(){Regexr();});    
-	$("#check_i,#check_g,#check_m").click(function(){ Regexr();});
 		
 	
 	function display_processor(x){
@@ -145,21 +85,7 @@ $(document).ready(function(){
 		return x.replace(/</g,'&lt;');
 	}
 	
-	function find_brackets(input_str,i,obj){
-		if (i===1){
-			obj.nextAll("p").remove();
-		}
-		var myRe = /(?!\\)\((.*?)\)(.*)/;
-		var myArray = myRe.exec(input_str);
-		if (myArray !== null){
-			find_brackets(myArray[2],i+1,obj);
-			obj.after("<p></p>");
-			obj.next().text("match[" + i + "]: " + myArray[1]);
-			
-		}
 
-	}
-	
 /* Facebook and Google+ like button: */
 	(function(d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];

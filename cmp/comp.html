@@ -6,97 +6,37 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="js.js"></script>
 	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-
-
-
 </head>
 	<body>
-
 		<div id="nav">
 			<div><a href="http://ted7726.github.io/">Text comparison Tool</a></div>
 			<div id="about">About</div>
         </div>
-		
 		<div id="wrap" class = "wrap">
-			
 			<div id="main">
-			<div style="width:100%;">
-				<div 	id="sidebyside" 
-						class="buttonA"
-				>paragraph compare</div><div 
-						id="stacked"
-						class="buttonA"
-				>Single Line compare</div>
-			</div>
-			<div style="padding:0% 1%">
-				<br>
-				
-				<textarea 	id="reg_cmd" 
-							class="cmd_class" 
-							rows="1" 
-							placeholder="Give a regular expression command here"></textarea><textarea 	
-							id="rep_cmd"
-							class="cmd_class" 
-							rows="1" 
-							placeholder="Give a replace command here" style="display:none"></textarea>
-				<br>
-				<div id="code_wrap" style="position:relative;">
-					<div id="disp_match" class="disp_match_class" style="
-						float:left;
-						top:0%;
-						left:0%;
-						width:48.5%;	
-						height:695px;
-						'margin-right':'0.5%';
-						z-index:0;
-						position:static;
-					"></div>
-					<textarea id="code" class="code_class" placeholder="Give the target text string here" style="
-						float:left;
-						top:0%;
-						left:0%;
-						width:100%;
-						height:600px;
-						z-index:1;
-						position:absolute;
-					"></textarea>
-					<div id="disp_replace" class="disp_replace_class" style="
-						height:300px;
-						position:static;
-					"></div>
-					</div>
+				<div style="width:100%;">
+					<div 	id="sidebyside" class="buttonA"	>paragraph compare</div><div 
+							id="stacked"	class="buttonA"	>Single Line compare</div>
 				</div>
+				<div style="padding:0% 1%">
+					<br>
+					<textarea 	id="cmp1" 
+								class="cmp_class" 
+								rows="1" 
+								placeholder="text 1"></textarea>
+					<textarea 	
+								id="cmp2"
+								class="cmp_class" 
+								rows="1" 
+								placeholder="text 2"></textarea>
+					<br>
 					
-					
-			
+				</div>
 			</div>
-			
-			
 		</div>
-		
-		<div id="wrap2" class = "wrap" style="display:none;" >
-			<div style="padding:10%; font-size:20px;">
-			<b style ="font-size:24px">About</b><br><br>
-			<b>This website</b><br>I created this website because I realized every time I write regular expression command, I am not sure what the code exactly matches,
-whether it is a word document or hundreds of lines of code. 
-			<br><br>Existing tools weren't purpose-built for instant match with side by side to compare the changes.
-I created regular expression online tool both to save myself time, and to save the time of others who want to test the regular expression.
-			<br><br><b>Me</b><br>
-			<a href="http://www.linkedin.com/pub/weisheng-su/7b/a67/b34">
-				<img src="https://static.licdn.com/scds/common/u/img/webpromo/btn_myprofile_160x33.png" width="160" height="33" border="0" alt="View WeiSheng Su's profile on LinkedIn">
-			</a>
-			</div>
-			
-		</div>
-	
-		
-		
-
 		<div id="footer">
-		<div class="fb-like" data-href="http://ted7726.github.io" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br>
-		<div class="g-plusone" data-annotation="inline" data-width="300"></div>
-			
+			<div class="fb-like" data-href="http://ted7726.github.io" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br>
+			<div class="g-plusone" data-annotation="inline" data-width="300"></div>
 		</div>
-		
 	</body>
 </html>
