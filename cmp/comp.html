@@ -1,42 +1,39 @@
 
 <html>
 	<head>
-    <title>Regular Expression Online Tool</title>
+    <title>Difference compare Online Tool</title>
 	<link rel="stylesheet" href="css/style.css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="js.js"></script>
-	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+	
+	
 </head>
 	<body>
 		<div id="nav">
 			<div><a href="http://ted7726.github.io/">Text comparison Tool</a></div>
 			<div id="about">About</div>
         </div>
-		<div id="wrap" class = "wrap">
-			<div id="main">
-				<div style="width:100%;">
-					<div 	id="sidebyside" class="buttonA"	>paragraph compare</div><div 
-							id="stacked"	class="buttonA"	>Single Line compare</div>
-				</div>
-				<div style="padding:0% 1%">
-					<br>
-					<textarea 	id="cmp1" 
-								class="cmp_class" 
-								rows="1" 
-								placeholder="text 1"></textarea>
-					<textarea 	
-								id="cmp2"
-								class="cmp_class" 
-								rows="1" 
-								placeholder="text 2"></textarea>
-					<br>
-					
-				</div>
-			</div>
+		<div class = "wrap">
+			<div style="width:30%; padding:0 0 0 70%;display:inline-block;">
+				<div 	id="paragraph" class="buttonA"	>paragraph compare</div><div 
+						id="line"	class="buttonB"	>Single Line compare</div>
+			</div> 
+		</div>
+		<div id="main" >
+			<div id="submit">COMPARE!</div> <br>
+			<textarea 	id="cmp1" 
+						class="cmp_class" 
+						rows="1" 
+						placeholder="text 1"></textarea><textarea 	
+						id="cmp2"
+						class="cmp_class" 
+						rows="1" 
+						placeholder="text 2"></textarea>
+			<br>
+			
 		</div>
 		<div id="footer">
-			<div class="fb-like" data-href="http://ted7726.github.io" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br>
-			<div class="g-plusone" data-annotation="inline" data-width="300"></div>
+			
 		</div>
 	</body>
 </html>
