@@ -66,14 +66,106 @@ a 1 0 1 2
 z 2 1 1 2
 b 3 2 1 2
 c 4 3 2 1
-*/
+
+  x a b c
+x 0 1 2 3
+a 1 0 1 2
+b 2 1 0 1
+c 3 2 1 0
 		var d = new Array(str2.length+1);
+		var m1;
+		var m2;
+		var m_value;
+		var x;
+
+		for(var j=0;j<str2.length+1;j++)d[j] = j;
 		for(var i=0;i<str1.length;i++){
+			m1 = d[0];
+			d[0] = i+1;
 			for(var j=0;j<str2.length;j++){
-				
+				m2 = d[j+1];
+				if(str1[i] === str2[j])	m_value = 0;
+				else					m_value = 1;
+				if(d[j]<d[j+1])d[j+1] = d[j];
+				if(m1+m_value<d[j+1]+1) d[j+1] = m1+m_value;
+				else d[j+1] = d[j+1] +1;
+				m1 = m2;
+
 			}
 		}
+
+Sequence alignment algorithms:
+*/
+		var d = new Array(str1.length+1);
+		var m1;
+		var m2;
+		var m_value;
+		var x;
+		d[0] = new Array(str2.length+1);
+		for(var j=0;j<str2.length+1;j++)d[0][j] = j;
+		for(var i=0;i<str1.length;i++){
+			d[i+1] = new Array(str2.length+1);
+			d[i+1][0]= i+1;
+			for(var j=0;j<str2.length;j++){
+				if(str1[i] === str2[j])	m_value = 0;
+				else					m_value = 1;
+				d[i+1][j+1] = min(d[i][j]+m_value,d[i][j+1]+1,d[i+1][j]+1);
+			}
+		}
+		
+		
+		for(var i=0;i<str1.length+1;i++){
+			for(var j=0;j<str2.length+1;j++){
+				$("#ttt").html($("#ttt").html()+d[i][j]+",");
+			}
+			$("#ttt").html($("#ttt").html()+"<br>");
+		}
+		/* trace back the path */
+		var path = trace_back_path(d,str1.length,str2.length,str1,str2);
+		
+		
+		for(var k=0;k<path.length;k++){
+			$("#ttt").html($("#ttt").html()+path[k][0]+"<br>");
+			$("#ttt").html($("#ttt").html()+path[k][1]+"<br>");
+			$("#ttt").html($("#ttt").html()+"====== <br>");
+			
+		}
+		
 	});
+	/* trace back the path */
+	function trace_back_path(d,i,j,str1,str2){
+		var path = [["",""]];
+		console.log(i,j);
+		s = [];
+		if (i>0 && j>0){
+			x = min(d[i-1][j-1],d[i-1][j],d[i][j-1]);
+			if(	x === d[i-1][j-1] && (
+					(d[i-1][j-1]   === d[i][j] && str1[i-1] === str2[j-1]) || 
+					(d[i-1][j-1]+1 === d[i][j] && str1[i-1] !== str2[j-1])
+				)
+			){
+				A = trace_back_path(d,i-1,j-1,str1,str2);
+				for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+str2[j-1]]);
+			}if(x === d[i-1][j] && d[i-1][j]+1 === d[i][j]){
+				A = trace_back_path(d,i-1,j,str1,str2);
+				for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+"-"]);
+			}if(x === d[i][j-1] && d[i][j-1]+1 === d[i][j]){
+				A = trace_back_path(d,i,j-1,str1,str2);
+				for (var k=0;k<A.length;k++) s.push([A[k][0]+"-",A[k][1]+str2[j-1]]);
+			}
+		}
+		else if (i>0){
+			A = trace_back_path(d,i-1,0,str1,str2);
+			for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+"-"]);
+		}
+		else if (j>0){
+			A = trace_back_path(d,0,j-1,str1,str2);
+			for (var k=0;k<A.length;k++) s.push([A[k][0]+"-",A[k][1]+str2[j-1]]);
+		}else{
+			s.push(["",""]);
+		}
+		return s;
+	}
 	
 	
 		
@@ -84,6 +176,12 @@ c 4 3 2 1
 		x = x.replace(/\s/g,'&nbsp;');
 		x = x.replace(/\[!@#!@#\](.*?)\[#@!#@!\]/g,'<hi>$1</hi>');
 		return x;
+	}
+	function min(){
+		var m = Number.MAX_VALUE;
+		for(var i=0;i<arguments.length;i++)
+			if (arguments[i]<m)m = arguments[i];
+		return m;
 	}
 
 	function newline_Br(x){
