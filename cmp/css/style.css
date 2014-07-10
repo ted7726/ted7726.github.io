@@ -104,15 +104,37 @@
 textarea{
 	resize:none;
 	background:transparent;
-	font-size: medium;
+	font-size: 16px;
 	font-family: Inconsolata;
 	color: #333333;
 } 
+.display{
+	display:inline-block;
+	color:#333333;
+	margin: 0 0 0.5% 0.5%;
+	width:100%;
+	font-family:Inconsolata;
+	font-size: 16px;
+	background: #EFEFEF;
+}
+.t1_space{
+	width:24px;
+	background: #FF9900;
+}
+.t2_space{
+	width:24px;
+	background: #6666FF;
+	
+}
+.conflict{
+	width:24px;
+	background: #FF6666;
+}
 
 .cmp_class {
 	color:#333333;
-	width:99%;
 	margin: 0 0 0.5% 0.5%;
+	width:99%;
 	height: 350px;
 } 
 

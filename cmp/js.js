@@ -17,8 +17,8 @@ $(document).ready(function(){
 	
 	
 	$("#paragraph").click(function(){
-		$("#cmp1").animate({			width:'49%'		,height:'700px'});
-		$("#cmp2").animate({			width:'49%'		,height:'700px'});
+		$("#cmp1").animate({	width:'49%'	,height:'700px'});
+		$("#cmp2").animate({	width:'49%'	,height:'700px'});
 		toggleclass_to_B($("#paragraph"));
 		toggleclass_to_A($("#line"));
 		compare_mode = 1;
@@ -26,10 +26,8 @@ $(document).ready(function(){
 	});
 	
 	$("#line").click(function(){
-
-		$("#cmp1").animate({			width:'99%'	,height:'350px'	});
-		$("#cmp2").animate({			width:'99%'	,height:'330px'	});
-
+		$("#cmp1").animate({	width:'99%'	,height:'350px'	});
+		$("#cmp2").animate({	width:'99%'	,height:'330px'	});
 		toggleclass_to_B($("#line"));
 		toggleclass_to_A($("#paragraph"));
 		compare_mode = 0;
@@ -58,6 +56,11 @@ $(document).ready(function(){
 		$("#cmp1").scrollTop($(this).scrollTop());
 	});
 	$("#submit").click(function(){
+
+		$(".cmp_class").animate({height:'24px'});
+		
+		if(compare_mode === 0)$(".display").animate({ width:'99%'});
+		else $(".display").animate({ width:'50%'});
 		alignment_algorithms();
 		
 	});
@@ -117,7 +120,15 @@ $(document).ready(function(){
 		for(var k=0;k<path.length;k++){
 			console.log(path[k][0]);
 			console.log(path[k][1]);
-			console.log("======");
+			
+			$('<div/>',{
+				text: path[k][1],
+			}).appendTo('#disp1');
+			$('<div/>',{
+				text: path[k][0],
+			}).appendTo('#disp1');
+			
+			
 		}
 	}
 	/* trace back the path */
