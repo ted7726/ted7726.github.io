@@ -159,6 +159,28 @@ textarea{
 	
 }
 
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .7 ) 
+                url('loading.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+body.loading {
+    overflow: hidden;   
+}
+
+body.loading .modal {
+    display: block;
+}
+
 body,
 html {
 	margin:0;
@@ -167,7 +189,7 @@ html {
 	font-family: Calibri;
 	font-size: medium;
 	color:black;
-	overflow: hidden;
+	//overflow: hidden;
 	//background: linear-gradient( white,#858585 );
 	background: #F2F0F0;
 }

@@ -1,8 +1,16 @@
 $(document).ready(function(){
+
+
+
+
+
 	var compare_mode=0;
 	var str1;
 	var str2;
+	var d;
 	$("#about").click(function(){
+		
+		$("body").addClass("loading");
 		// $("#wrap").fadeOut(50);
 		// $("#wrap2").delay(50).fadeIn(50);
 	});
@@ -14,6 +22,7 @@ $(document).ready(function(){
 		toggleclass_to_B($("#paragraph"));
 		toggleclass_to_A($("#line"));
 		compare_mode = 1;
+		$("body").removeClass("loading");
 	});
 	
 	$("#line").click(function(){
@@ -49,6 +58,11 @@ $(document).ready(function(){
 		$("#cmp1").scrollTop($(this).scrollTop());
 	});
 	$("#submit").click(function(){
+		alignment_algorithms();
+		
+	});
+	
+	function alignment_algorithms(){
 		if(compare_mode === 0){
 			str1=($("#cmp1").val()).split('');
 			str2=($("#cmp2").val()).split('');
@@ -58,26 +72,12 @@ $(document).ready(function(){
 		}
 		
 /*
-
-
-  x a b c
-x 0 1 2 3
-a 1 0 1 2
-z 2 1 1 2
-b 3 2 1 2
-c 4 3 2 1
-
-  x a b c
-x 0 1 2 3
-a 1 0 1 2
-b 2 1 0 1
-c 3 2 1 0
+		O(n) space:
 		var d = new Array(str2.length+1);
 		var m1;
 		var m2;
 		var m_value;
 		var x;
-
 		for(var j=0;j<str2.length+1;j++)d[j] = j;
 		for(var i=0;i<str1.length;i++){
 			m1 = d[0];
@@ -90,13 +90,11 @@ c 3 2 1 0
 				if(m1+m_value<d[j+1]+1) d[j+1] = m1+m_value;
 				else d[j+1] = d[j+1] +1;
 				m1 = m2;
-
 			}
 		}
-
-Sequence alignment algorithms:
 */
-		var d = new Array(str1.length+1);
+/* Sequence alignment algorithms: */
+		d = new Array(str1.length+1);
 		var m1;
 		var m2;
 		var m_value;
@@ -112,62 +110,78 @@ Sequence alignment algorithms:
 				d[i+1][j+1] = min(d[i][j]+m_value,d[i][j+1]+1,d[i+1][j]+1);
 			}
 		}
-		
-		
-		for(var i=0;i<str1.length+1;i++){
-			for(var j=0;j<str2.length+1;j++){
-				$("#ttt").html($("#ttt").html()+d[i][j]+",");
-			}
-			$("#ttt").html($("#ttt").html()+"<br>");
-		}
+		$("#ttt").html("");
+		for(var i=0;i<str1.length+1;i++) console.log(d[i]);
 		/* trace back the path */
-		var path = trace_back_path(d,str1.length,str2.length,str1,str2);
-		
-		
+		var path = trace_back_path2(str1.length,str2.length);
 		for(var k=0;k<path.length;k++){
-			$("#ttt").html($("#ttt").html()+path[k][0]+"<br>");
-			$("#ttt").html($("#ttt").html()+path[k][1]+"<br>");
-			$("#ttt").html($("#ttt").html()+"====== <br>");
-			
+			console.log(path[k][0]);
+			console.log(path[k][1]);
+			console.log("======");
 		}
-		
-	});
+	}
 	/* trace back the path */
-	function trace_back_path(d,i,j,str1,str2){
-		var path = [["",""]];
-		console.log(i,j);
-		s = [];
+	function trace_back_path(i,j){
+		var s = new Array(0);
+		if (i===0 && j===0) return [["",""]];
 		if (i>0 && j>0){
-			x = min(d[i-1][j-1],d[i-1][j],d[i][j-1]);
+			var x = min(d[i-1][j-1],d[i-1][j],d[i][j-1]);
 			if(	x === d[i-1][j-1] && (
 					(d[i-1][j-1]   === d[i][j] && str1[i-1] === str2[j-1]) || 
 					(d[i-1][j-1]+1 === d[i][j] && str1[i-1] !== str2[j-1])
 				)
 			){
-				A = trace_back_path(d,i-1,j-1,str1,str2);
+				A = trace_back_path(i-1,j-1);
 				for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+str2[j-1]]);
 			}if(x === d[i-1][j] && d[i-1][j]+1 === d[i][j]){
-				A = trace_back_path(d,i-1,j,str1,str2);
+				A = trace_back_path(i-1,j);
 				for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+"-"]);
 			}if(x === d[i][j-1] && d[i][j-1]+1 === d[i][j]){
-				A = trace_back_path(d,i,j-1,str1,str2);
+				A = trace_back_path(i,j-1);
 				for (var k=0;k<A.length;k++) s.push([A[k][0]+"-",A[k][1]+str2[j-1]]);
 			}
 		}
-		else if (i>0){
-			A = trace_back_path(d,i-1,0,str1,str2);
+		else if (i>0 && j===0){
+			A = trace_back_path(i-1,0);
 			for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+"-"]);
 		}
-		else if (j>0){
-			A = trace_back_path(d,0,j-1,str1,str2);
+		else if (j>0 && i===0){
+			A = trace_back_path(0,j-1);
 			for (var k=0;k<A.length;k++) s.push([A[k][0]+"-",A[k][1]+str2[j-1]]);
-		}else{
-			s.push(["",""]);
 		}
 		return s;
 	}
-	
-	
+	/* easier method without multiple solutions where conflict first */
+	function trace_back_path2(i,j){
+		var s = new Array(0);
+		if (i===0 && j===0) return [["",""]];
+		if (i>0 && j>0){
+			var x = min(d[i-1][j-1],d[i-1][j],d[i][j-1]);
+			if(	x === d[i-1][j-1] && (
+					(d[i-1][j-1]   === d[i][j] && str1[i-1] === str2[j-1]) || 
+					(d[i-1][j-1]+1 === d[i][j] && str1[i-1] !== str2[j-1])
+				)
+			){
+				A = trace_back_path(i-1,j-1);
+				for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+str2[j-1]]);
+			}else if(x === d[i-1][j] && d[i-1][j]+1 === d[i][j]){
+				A = trace_back_path(i-1,j);
+				for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+"-"]);
+			}else if(x === d[i][j-1] && d[i][j-1]+1 === d[i][j]){
+				A = trace_back_path(i,j-1);
+				for (var k=0;k<A.length;k++) s.push([A[k][0]+"-",A[k][1]+str2[j-1]]);
+			}
+		}
+		else if (i>0 && j===0){
+			A = trace_back_path(i-1,0);
+			for (var k=0;k<A.length;k++) s.push([A[k][0]+str1[i-1],A[k][1]+"-"]);
+		}
+		else if (j>0 && i===0){
+			A = trace_back_path(0,j-1);
+			for (var k=0;k<A.length;k++) s.push([A[k][0]+"-",A[k][1]+str2[j-1]]);
+		}
+		return s;
+	}
 		
 	
 	function display_processor(x){
