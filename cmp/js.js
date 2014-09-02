@@ -117,10 +117,13 @@ $(document).ready(function(){
 		for(var i=0;i<str1.length+1;i++) console.log(d[i]);
 		/* trace back the path */
 		var path = trace_back_path2(str1.length,str2.length);
+		$('#disp1').empty();
 		for(var k=0;k<path.length;k++){
 			console.log(path[k][0]);
 			console.log(path[k][1]);
-			
+			$('<div/>',{
+				text: "result "+k +":",
+			}).appendTo('#disp1');
 			$('<div/>',{
 				text: path[k][1],
 			}).appendTo('#disp1');
