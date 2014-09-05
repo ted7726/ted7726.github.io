@@ -15,7 +15,7 @@ $(document).ready(function(){
 		for(i=0;i<input.length;i++){
 			var matches = input[i].split("	");
 			quotes[i]=matches[0];
-			quotes_weight[i]=parseInt(matches[2]);
+			quotes_weight[i]=parseFloat(matches[2]);
 			
 		}
 
@@ -50,7 +50,7 @@ $(document).ready(function(){
 		get_quotes_data(url,quotes_weight);
 		window.setInterval(function() {
 			get_quotes_data(url,quotes_weight);
-		}, 5000);
+		}, 4000);
 	});
 	function get_quotes_data(url,quotes_weight){
 		
@@ -71,8 +71,8 @@ $(document).ready(function(){
 					y[4].innerHTML=data[i].lt;
 					if(typeof(data[i].ecp ) !== "undefined") y[5].innerHTML=(data[i].ecp>0? "<red>"+data[i].ecp+"%</red>" : "<green>"+data[i].ecp+"%</green>");
 					if(typeof(data[i].elt ) !== "undefined")y[6].innerHTML=data[i].elt;
-					console.log(quotes_weight[i]);
 					weighted_changes_p += data[i].cp*quotes_weight[i];
+					
 				}
 				console.log(weighted_changes_p);
 				$("#summary").html(weighted_changes_p >0?"<green>"+Math.round(weighted_changes_p*10)/1000+"%</green>":"<red>"+Math.round(weighted_changes_p)*10/1000+"%</red>");
