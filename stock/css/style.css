@@ -193,6 +193,7 @@ textarea{
 .datagrid table td, .datagrid table th {
 	padding: 5px 5px;
 }
+
 .datagrid table thead th {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );
 	background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );
@@ -231,6 +232,21 @@ textarea{
 }
 .datagrid table tbody tr:last-child td {
 	border-bottom: none;
+}
+
+.cmp_class{
+	width:40%;
+	height:100px;
+}
+
+#summary{
+	padding:5px;
+}
+#summary green{
+	color:green;
+}
+#summary red{
+	color:red;
 }
 
 body.loading {
