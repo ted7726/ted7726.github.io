@@ -5,7 +5,12 @@ $(document).ready(function(){
 
 	
 	$("#submit").click(function(){
-		var quotes = ['CSIQ','TSL','YGE', 'JKS', 'DQ',  'JASO','HSOL','SOL'];
+		console.log($("#text1").val());
+
+
+		// var quotes = ['CSIQ','TSL','YGE', 'JKS', 'DQ',  'JASO','HSOL','SOL'];
+		// CSIQ,TSL,YGE,JKS,DQ,JASO,HSOL,SOL
+		var quotes = $("#text1").val().split(",");
 		if (quotes.length<1) return;
 		// create table
 		var column = 7;

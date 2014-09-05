@@ -245,8 +245,9 @@ body,
 html {
 	margin:0;
 	padding:0;
-	//font-family: 'Open Sans';
+
 	font-family: Calibri;
+	font-family: 'Open Sans';
 	font-size: medium;
 	color:black;
 	//overflow: hidden;
