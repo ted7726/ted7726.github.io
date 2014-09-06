@@ -32,33 +32,35 @@
 #nav div a:hover {
     color:#FAFAFA;
 }
-.wrap {
-    width:93%;
-    margin:0.5% auto 0% auto;
-    background: linear-gradient( #EEEEEE,#CCC);
-    padding: 1% 1% 0%;
-	border-top:1px solid white;
-	border:1px solid #CCC;
-	border-bottom: none;
-    border-top-right-radius:5px;
-    border-top-left-radius:5px;
+
+
+#sidebar{
+	margin:1% 0% 1% 1%;
+    width:20%;
+	float:left;
+    padding: 1% 0%;
+    border-radius:3px;
+	color:#A0A0A0;
+	box-shadow: 0px 0px 4px #333333;
+	background:FBFBFB;
 }
+#sidebar div{
+	
+}
+
 
 #main {
-	width:95%;
+	float:right;
+	width:75%;
 	height: 820px;
 	background: #FBFBFB;
-	padding: 1% 0%;
-	border:1px solid #CCC;
-	border-top:none;
-	margin: auto;
-}
-#main h{
-	font-weight:bold;
+	padding: 1% 1%;
+	margin:1%;
+	box-shadow: 0px 0px 4px #333333;
+	display:inline-block;
 }
 
-#submit{
-
+.button{
 	background: linear-gradient( #9DCE2C,#8BB82B);
 	color:white;
 	padding:0.5%;
@@ -72,7 +74,9 @@
 	text-shadow:1px 1px 0px #689324;
 	font-size:large;
 	margin:0% 1% 1%;
-	
+}
+.button:hover{
+	font-weight:bold;
 }
 
 
@@ -108,73 +112,6 @@ textarea{
 	font-family: Inconsolata;
 	color: #333333;
 } 
-.display{
-	display:inline-block;
-	color:#333333;
-	margin: 0 0 0.5% 0.5%;
-	width:99%;
-	height: 350px;
-	font-family:Inconsolata;
-	font-size: 16px;
-	background: #EFEFEF;
-}
-
-
-
-.buttonA{
-	color:black;
-	width:40%;
-	display:inline-block;
-	border-top-right-radius:5px;
-    border-top-left-radius:5px;
-	text-align:center;
-	padding: 1% 1% 2%;
-	background:transparent;
-	cursor:pointer;
-	//font-weight:bold;
-	
-	-webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: 	all 0.3s ease-in-out;
-    -o-transition: 		all 0.3s ease-in-out;
-    -ms-transition: 	all 0.3s ease-in-out;
-    transition: 		all 0.3s ease-in-out;
-	
-}
-.buttonA:hover{
-	background:#EFEFEF;
-}
-
-.buttonB{
-	background:#FBFBFB;
-	color:#333333;
-
-
-	height:auto;
-	width:40%;
-	border-top-right-radius:5px;
-    border-top-left-radius:5px;
-	border:1px solid #CCC;
-	border-bottom:none;
-	display:inline-block;
-	text-align:center;
-	padding: 1% 1% 2%;
-	
-	
-}
-
-.modal {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .7 ) 
-                url('loading.gif') 
-                50% 50% 
-                no-repeat;
-}
 
 .datagrid table {
 	border-collapse: collapse;
@@ -235,8 +172,8 @@ textarea{
 }
 
 .cmp_class{
-	width:40%;
-	height:100px;
+	width:99%;
+	
 }
 
 #summary{
@@ -249,20 +186,12 @@ textarea{
 	color:red;
 }
 
-body.loading {
-    overflow: hidden;   
-}
-
-body.loading .modal {
-    display: block;
-}
-
 body,
 html {
 	margin:0;
 	padding:0;
 
-	font-family: Calibri;
+	//font-family: Calibri;
 	font-family: 'Open Sans';
 	font-size: medium;
 	color:black;
