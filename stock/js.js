@@ -28,7 +28,11 @@ $(document).ready(function(){
 	
 	
 	$("#ChinaSolar").click(function(){
-		getMotifs("China Solar");
+		getMotifs("ChinaSolar");
+	});
+	
+	$("#ChinaInternet").click(function(){
+		getMotifs("ChinaInternet");
 	});
 	
 });
