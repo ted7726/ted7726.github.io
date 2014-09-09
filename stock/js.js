@@ -25,22 +25,20 @@ $(document).ready(function(){
 		
 	});	
 		
-	$("#submit2").click(function(){
-		$(".datagrid table thead,tbody").fadeToggle();
+	$("#fold").click(function(){
+		$(".datagrid table").fadeOut();
 	});
-	
-	$("#ChinaSolar").click(function(){
-		getMotifs("ChinaSolar");
-		
+	$("#unfold").click(function(){
+		$(".datagrid table").fadeIn();
 	});
-	
-	$("#ChinaInternet").click(function(){
-		getMotifs("ChinaInternet");
-		
-	});
-	
-	
-	
+	$("#ChinaSolar").click(function(){		getMotifs("ChinaSolar");			});
+	$("#ChinaInternet").click(function(){	getMotifs("ChinaInternet");			});
+	$("#RecentIPO").click(function(){		getMotifs("RecentIPO");				});
+	$("#Obamacare").click(function(){		getMotifs("Obamacare");				});
+	$("#PreciousMetals").click(function(){	getMotifs("PreciousMetals");		});
+	$("#BigData").click(function(){			getMotifs("BigData");				});
+	$("#SoftwareService").click(function(){	getMotifs("SoftwareService");		});
+	$("#OnlineGamingWorld").click(function(){	getMotifs("OnlineGamingWorld");	});
 });
 
 
@@ -57,38 +55,44 @@ function combination(qs,qs_weight,t){
 	var row = Array(column+1).join("<td></td>")+"</tr>";
 	var rows = "<tbody>";
 	// var title = "<tbody><tr><td>Motif 1</td><tr></tbody>";
-	for(i=0;i<quotes.length;i++){
+	for(i=0;i<this.quotes.length;i++){
 		if(i%2===1) rows+="<tr>"+row;
 		else 		rows+="<tr class = \"alt\">"+row;
 	}
 	rows += "</tbody>";
 	this.tableID = "myTable"+tableid++;
-	var table = '<div class="title">'+t+'</div><table id="'+this.tableID+'"><thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th></tr></thead>'+rows+'</table>';
+	
+	var table = '<table id="'+this.tableID+'"><thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th></tr></thead>'+rows+'</table>';
 	
 	$("#"+curr_table).after(table);
-	curr_table = this.tableID;
-	this.url = 'http://finance.google.com/finance/info?client=ig&q='+quotes[0];
-	for(i=1;i<quotes.length;i++){
-		this.url += ","+quotes[i];
-	}
+	$("#"+curr_table).after($('<div/>', {
+		'class':'caption',
+		'html':'<div>'+t+'</span>',
+		'click':toggleCaption
+    }));
 	
-	get_quotes_data();
-	window.setInterval(function() {
-		get_quotes_data();
-	}, 3000);
+	
+	curr_table = this.tableID;
+	this.url = 'http://finance.google.com/finance/info?client=ig&q='+this.quotes[0];
+	for(i=1;i<this.quotes.length;i++){
+		this.url += ","+this.quotes[i];
+	}
 	
 	
 	this.get_quotes_data = function(){
+		
 		var tID = this.tableID;
 		var wt = this.weight;
 		var title = this.title;
+		// console.log(title);
 		var return_data = $.ajax({
 			url: this.url,
 			dataType: "jsonp",
 			success: function (data){
-				console.log(data);
+				
 				var x=document.getElementById(tID).rows;
 				var weighted_changes_p=0;
+				
 				for(i=0;i<data.length;i++){
 					y=x[i+1].cells;
 					
@@ -97,25 +101,36 @@ function combination(qs,qs_weight,t){
 					y[2].innerHTML=(data[i].c>0? "<red>"+data[i].c+"</red>" : "<green>"+data[i].c+"</green>");
 					y[3].innerHTML=(data[i].cp>0? "<red>"+data[i].cp+"%</red>" : "<green>"+data[i].cp+"%</green>");
 					y[4].innerHTML=data[i].lt;
-					if(typeof(data[i].ecp ) !== "undefined") y[5].innerHTML=(data[i].ecp>0? "<red>"+data[i].ecp+"%</red>" : "<green>"+data[i].ecp+"%</green>");
+					// if(typeof(data[i].ecp ) !== "undefined") y[5].innerHTML=(data[i].ecp>0? "<red>"+data[i].ecp+"%</red>" : "<green>"+data[i].ecp+"%</green>");
+					if(data[i].ecp) y[5].innerHTML=(data[i].ecp>0? "<red>"+data[i].ecp+"%</red>" : "<green>"+data[i].ecp+"%</green>");
 					if(typeof(data[i].elt ) !== "undefined")y[6].innerHTML=data[i].elt;
 					// console.log(wt[i]);
 					weighted_changes_p += data[i].cp*wt[i];
 				}
-				// console.log(weighted_changes_p);
-				$("#"+tID).prev().html(
-					(weighted_changes_p >0?"<green>"+Math.round(weighted_changes_p*10)/1000+"%</green>":"<red>"+Math.round(weighted_changes_p)*10/1000+"%</red>")+title
+				weighted_changes_p = Math.round(weighted_changes_p*10)/1000;
+				var element_caption = $("#"+tID).prev();
+				var matches = element_caption.html().match(/\<.*\>(-{0,1}\d{1,2}\.{0,1}\d{0,3})\%/);
+				// background color change
+				if (matches){
+					var updateP = parseFloat(matches[1]);
+					if		(updateP>weighted_changes_p){
+						element_caption				.animate( {backgroundColor:'#00AA00'},50);
+						element_caption.delay(100)	.animate({ backgroundColor:'#fff'});
+					}else if(updateP<weighted_changes_p){
+						element_caption				.animate( {backgroundColor:'#CC0000'},50);
+						element_caption.delay(100)	.animate({ backgroundColor:'#fff'});
+					}
+				}
+				element_caption.html(
+					(weighted_changes_p >0?"<green>"+weighted_changes_p+"%</green>":"<red>"+weighted_changes_p+"%</red>")+title
 				);
-				
-				
 			}
 		});
 	};
 	
 }
 
-
-function get_quotes_data(url,quotes_weight){
-	
-	
+function toggleCaption(){
+	$(this).next().fadeToggle();
 }
+

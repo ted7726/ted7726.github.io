@@ -143,12 +143,17 @@ textarea{
 .datagrid table td, .datagrid table th {
 	padding: 5px 5px;
 }
-.datagrid div{
+
+.datagrid div.caption{
 	text-align:center;
 	padding: 5px 5px;
 	font-size:18px;
+	border-top:1px;
+	border-top-color: black;
+	
 	width:100%;
-	//box-shadow: 1px 0px 1px #222222;
+	background:#FEFEFE;
+	//box-shadow: 1px 0px 1px #000000;
 	cursor:pointer;
 }
 .datagrid div green {
