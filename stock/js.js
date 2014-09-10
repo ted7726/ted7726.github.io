@@ -20,7 +20,7 @@ $(document).ready(function(){
 				quotes_weight[i] = 100/quotes.length;
 			}
 		}
-		combination(quotes,quotes_weight,"Customized" + tableid);
+		Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
 		
 		
 	});	

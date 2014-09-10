@@ -76,7 +76,7 @@
 .button{
 	background: linear-gradient( #9DCE2C,#8BB82B);
 	color:white;
-	padding:0.5%;
+	padding:1%;
 	display:inline-block;
 	border-radius:4px;
 	border-color:83C41A;
@@ -85,7 +85,7 @@
 	text-decoration:none;
 	text-align:center;
 	text-shadow:1px 1px 0px #689324;
-	font-size:large;
+	//font-size:large;
 	margin:0% 1% 1%;
 }
 .button:hover{
