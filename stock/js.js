@@ -4,7 +4,7 @@ var curr_table = "myTable0";
 $(document).ready(function(){
 	$("#submit").click(function(){
 		// analysis input
-		if($("#text1").val() ===""){
+		if($("#text2").val() !==""){
 			var input = $("#text2").val().split("\n");
 			var quotes = new Array(input.length);
 			var quotes_weight = new Array(input.length);
@@ -13,14 +13,17 @@ $(document).ready(function(){
 				quotes[i]=matches[0];
 				quotes_weight[i]=parseInt(matches[2]);
 			}
-		}else{
+		}else if($("#text1").val() !==""){
 			var quotes = $("#text1").val().split(",");
 			var quotes_weight = new Array(quotes.length);
 			for(i=0;i<quotes.length;i++){
 				quotes_weight[i] = 100/quotes.length;
 			}
 		}
-		Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
+		if(quotes){
+			Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
+		}
+		
 		
 		
 	});	
