@@ -72,6 +72,15 @@ function getMotifs(motif){
 		Motifs.push(x);
 	}
 	
+	else if (motif === "CleantechEverywhere"){
+		var x = new combination(
+			["SUNE","FSLR","SCTY","SPWR","GTAT","JASO","YGE","HSOL","TSL","TSLA","BMI","ESE","OPWR","POWR","ENOC","CREE","RBCN","RVLT","CPST","FCEL","BLDP","MXWL","ORA","PEGI","MY"],
+			[8.84,6.79,6.36,3.84,1.46,1.22,1.20,0.98,0.94,21.53,6.24,5.73,4.55,1.32,1.06,10.43,1.00,0.72,1.86,1.59,1.30,0.84,5.53,3.21,1.45],
+			"Cleantech Everywhere"
+		);
+		Motifs.push(x);
+	}
+	
 
 	
 	

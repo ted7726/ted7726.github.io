@@ -39,6 +39,21 @@ $(document).ready(function(){
 	$("#BigData").click(function(){			getMotifs("BigData");				});
 	$("#SoftwareService").click(function(){	getMotifs("SoftwareService");		});
 	$("#OnlineGamingWorld").click(function(){	getMotifs("OnlineGamingWorld");	});
+	$("#CleantechEverywhere").click(function(){	getMotifs("CleantechEverywhere");	});
+	/* Facebook and Google+ like button: */
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	
+	(function() {
+		var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+		po.src = 'https://apis.google.com/js/platform.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	})();
 });
 
 
@@ -133,4 +148,7 @@ function combination(qs,qs_weight,t){
 function toggleCaption(){
 	$(this).next().fadeToggle();
 }
+
+
+
 
