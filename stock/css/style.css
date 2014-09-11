@@ -142,10 +142,11 @@
 
 textarea{
 	resize:none;
-	background:transparent;
+	height:2em;
 	font-size: 16px;
 	font-family: Inconsolata;
 	color: #333333;
+	width:98%;
 } 
 
 .datagrid table {
@@ -177,10 +178,8 @@ textarea{
 	cursor:pointer;
 }
 
-.datagrid div.caption0{
-	background: #E1EEf4;
-}
-.datagrid div.caption1{
+
+.datagrid div.caption{
 	background: white;
 }
 .datagrid div green {
@@ -258,9 +257,6 @@ textarea{
 }
 
 
-.cmp_class{
-	width:99%;
-}
 
 #summary{
 	padding:5px;
