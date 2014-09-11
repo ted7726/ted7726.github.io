@@ -211,7 +211,6 @@ textarea{
 	border-left: 1px solid #E1EEF4;
 	font-size: 12px;
 	font-weight: normal;
-	
 }
 .datagrid table tbody .alt{
 	background: #E1EEf4;
@@ -239,7 +238,7 @@ textarea{
 	left:22%;
 }
 .datagrid table tbody tr:hover{
-	background: #FCFCFC;
+	background: #F2F2F2;
 }
 .datagrid table tbody .alt:hover{
 	background: #D1DEE4;
@@ -251,11 +250,11 @@ textarea{
 	padding:0.5%;
 	box-shadow: 0px 0px 4px 0px black;
 	background:white;
-	-webkit-transition: all 0.3s ease-out;
-    -moz-transition: 	all 0.3s ease-out;
-    -o-transition: 		all 0.3s ease-out;
-    -ms-transition: 	all 0.3s ease-out;
-    transition: 		all 0.3s ease-out;
+	-webkit-transition: all 0.2s ease-out;
+    -moz-transition: 	all 0.2s ease-out;
+    -o-transition: 		all 0.2s ease-out;
+    -ms-transition: 	all 0.2s ease-out;
+    transition: 		all 0.2s ease-out;
 }
 
 
