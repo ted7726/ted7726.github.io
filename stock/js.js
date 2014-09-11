@@ -25,19 +25,11 @@ $(document).ready(function(){
 		if(quotes){
 			Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
 		}
-		
-		
-		
 	});	
 	
 		
-	$("td").mouseenter(function(){
-		console.log("!");
-		$("#chart").attr('src','http://chart.finance.yahoo.com/z?s=GOOG&t=1d&p=v');
-	});
-	$("#test2").click(function(){
-		$("#chart").attr('src','http://chart.finance.yahoo.com/z?s=YHOO&t=1d&p=v');
-	});
+	
+	
 	$("#fold").click(function(){
 		$(".datagrid table").fadeOut();
 	});
