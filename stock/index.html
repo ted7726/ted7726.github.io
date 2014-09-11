@@ -6,7 +6,6 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="jquery-ui.js"></script>
 	<script src="js.js"></script>
-	<script src="motifs.js"></script>
 	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 	
 	
@@ -17,7 +16,8 @@
 			<div id="about">About</div>
         </div style="width:100%">
 		<div>
-			<div id="sidebar">
+			<div id="leftsidebar" class="sidebar">
+				<div class = "caption">Popular Motifs:</div>
 				<div id="ChinaSolar" class="list">China Solar</div>
 				<div id="ChinaInternet" class="list">China Internet</div>
 				<div id="RecentIPO" class="list">Recent IPO</div>
@@ -29,6 +29,7 @@
 				<div id="CleantechEverywhere" class="list">Cleantech Everywhere</div>
 				<div id="BearInternationalMarket" class="list">Bear International Market</div>
 				<div id="SocialNetworking" class="list">Social Networking</div>
+				<div id="WearableTech" class="list">WearableTech</div>
 			</div>
 			<div id="main" ><div id="ttt" style = "font-family:consolas;"></div>
 				
@@ -44,10 +45,18 @@
 				<div id="submit" class="button">Add</div>
 				<div id="fold" class="button">fold</div>
 				<div id="unfold" class="button">unfold</div>
+				<div id="test1" class="button">img1</div>
+				<div id="test2" class="button">img2</div>
 				
 				<div class="datagrid" >
 					<div id="myTable0"></div>
 				</div>
+				
+			</div>
+			<div id="rightsidebar" class="sidebar">
+				<div class="chart"><a href="finance.yahoo.com/echarts?s=%5EGSPC+Interactive#symbol=%5EGSPC;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eGSPC&amp;lang=en-US&amp;region=US&amp;width=300&amp;height=180" alt="S&amp;P 500 (^GSPC)" width="300" height="180"></a></div>
+				<div class="chart"><a href="finance.yahoo.com/echarts?s=%5EIXIC+Interactive#symbol=%5EIXIC;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eIXIC&amp;lang=en-US&amp;region=US&amp;width=300&amp;height=180" alt="S&amp;P 500 (^IXIC)" width="300" height="180"></a></div>
+				<div class="chart"><a href="finance.yahoo.com/echarts?s=%5EDJI+Interactive#symbol=%5EDJI;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eDJI&amp;lang=en-US&amp;region=US&amp;width=300&amp;height=180" alt="S&amp;P 500 (^DJI)" width="300" height="180"></a></div>
 				
 			</div>
 			

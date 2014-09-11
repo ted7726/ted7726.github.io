@@ -1,6 +1,7 @@
 var tableid=1;
 var curr_table = "myTable0";
 var Motifs = [];
+var force_refresh = true;
 
 $(document).ready(function(){
 	$("#submit").click(function(){
@@ -28,7 +29,15 @@ $(document).ready(function(){
 		
 		
 	});	
+	
 		
+	$("td").mouseenter(function(){
+		console.log("!");
+		$("#chart").attr('src','http://chart.finance.yahoo.com/z?s=GOOG&t=1d&p=v');
+	});
+	$("#test2").click(function(){
+		$("#chart").attr('src','http://chart.finance.yahoo.com/z?s=YHOO&t=1d&p=v');
+	});
 	$("#fold").click(function(){
 		$(".datagrid table").fadeOut();
 	});
@@ -46,6 +55,7 @@ $(document).ready(function(){
 	$("#CleantechEverywhere").click(function(){	getMotifs("CleantechEverywhere");	});
 	$("#BearInternationalMarket").click(function(){	getMotifs("BearInternationalMarket");	});
 	$("#SocialNetworking").click(function(){	getMotifs("SocialNetworking");	});
+	$("#WearableTech").click(function(){	getMotifs("WearableTech");	});
 	/* Facebook and Google+ like button: */
 	(function(d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];
@@ -73,21 +83,22 @@ function combination(qs,qs_weight,t){
 	if (this.quotes.length<1) return;
 	// create table
 	var column = 7;
-	var row = Array(column+1).join("<td></td>")+"</tr>";
+	var row = Array(column+1).join("<td></td>");
 	var rows = "<tbody>";
 	// var title = "<tbody><tr><td>Motif 1</td><tr></tbody>";
 	for(i=0;i<this.quotes.length;i++){
 		if(i%2===1) rows+="<tr>"+row;
 		else 		rows+="<tr class = \"alt\">"+row;
+		rows+="<td href=\"\">"+qs_weight[i]+"%</td><td><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&p=v\"></td></tr>";
 	}
 	rows += "</tbody>";
 	this.tableID = "myTable"+tableid++;
 	
-	var table = '<table id="'+this.tableID+'"><thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th></tr></thead>'+rows+'</table>';
+	var table = '<table id="'+this.tableID+'"><thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th><th>Weight</th><th></th></tr></thead>'+rows+'</table>';
 	
 	$("#"+curr_table).after(table);
 	$("#"+curr_table).after($('<div/>', {
-		'class':'caption',
+		'class':'caption'+(tableid%2),
 		'html':'<div>'+t+'</span>',
 		'click':toggleCaption
     }));
@@ -130,16 +141,17 @@ function combination(qs,qs_weight,t){
 				}
 				weighted_changes_p = Math.round(weighted_changes_p*10)/1000;
 				var element_caption = $("#"+tID).prev();
+				var curr_background = element_caption.css('backgroundColor');
 				var matches = element_caption.html().match(/\<.*\>(-{0,1}\d{1,2}\.{0,1}\d{0,3})\%/);
 				// background color change
 				if (matches){
 					var updateP = parseFloat(matches[1]);
 					if		(parseFloat(updateP)<parseFloat(weighted_changes_p)){
 						element_caption				.animate( {backgroundColor:'#88FF88'},50);
-						element_caption.delay(100)	.animate({ backgroundColor:'#fff'});
+						element_caption.delay(100)	.animate({ backgroundColor:curr_background});
 					}else if(parseFloat(updateP)>parseFloat(weighted_changes_p)){
 						element_caption				.animate( {backgroundColor:'#FF8888'},50);
-						element_caption.delay(100)	.animate({ backgroundColor:'#fff'});
+						element_caption.delay(100)	.animate({ backgroundColor:curr_background});
 					}
 				}
 				element_caption.html(
@@ -254,6 +266,15 @@ function getMotifs(motif){
 		);
 		Motifs.push(x);
 	}
+	else if (motif === "WearableTech"){
+		var x = new combination(
+			["GPRO","GRMN","GOOG","AAPL","ARMH","MXIM","MCHP","TXN","SLAB","STM","SMTC","INVN","ADI","SYNA","HIMX","CY","KN","QCOM","BRCM","SWKS","GLW","LPL","AUO","TNDM","PODD"],
+			[13.85,12.34,12.02,11.56,3.43,3.01,3.01,3.01,2.40,1.89,1.54,3.57,3.48,3.10,2.18,2.17,1.16,3.70,3.45,2.83,1.43,1.31,0.99,1.50,1.06],
+			"Wearable Tech"
+		);
+		Motifs.push(x);
+	}
+	
 	
 	$(".datagrid").fadeIn();
 }
@@ -262,6 +283,11 @@ window.setInterval(function() {
 	for(var i=0;i<Motifs.length;i++){
 		Motifs[i].get_quotes_data();
 	}
+	
+	$("img").attr('src',$(this).attr('src'));
+	
+	
+
 }, 2000);
 
 
