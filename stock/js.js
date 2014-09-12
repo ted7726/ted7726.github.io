@@ -36,23 +36,24 @@ $(document).ready(function(){
 	$("#unfold").click(function(){
 		$(".datagrid table").fadeIn();
 	});
-	$("#test").click(function(){
-		
-	});
 	
-	$("#ChinaSolar")	.click(function(){	getMotifs("ChinaSolar");			});
-	$("#ChinaInternet")	.click(function(){	getMotifs("ChinaInternet");			});
-	$("#RecentIPO")		.click(function(){	getMotifs("RecentIPO");				});
-	$("#Obamacare")		.click(function(){	getMotifs("Obamacare");				});
-	$("#PreciousMetals").click(function(){	getMotifs("PreciousMetals");		});
-	$("#BigData")		.click(function(){	getMotifs("BigData");				});
-	$("#WearableTech")	.click(function(){	getMotifs("WearableTech");			});
-	$("#SoftwareService").click(function(){	getMotifs("SoftwareService");		});
-	$("#OnlineGamingWorld")		.click(function(){	getMotifs("OnlineGamingWorld");		});
-	$("#CleantechEverywhere")	.click(function(){	getMotifs("CleantechEverywhere");	});
-	$("#SocialNetworking")		.click(function(){	getMotifs("SocialNetworking");		});
-	$("#BearInternationalMarket").click(function(){	getMotifs("BearInternationalMarket");	});
-	
+	$(".list")	.click(function(){	getMotifs(this.id);			});
+	$("#testSearch").autocomplete({
+		source: [
+			"China Solar",
+			"China Internet",
+			"Recent IPO",
+			"Obama Care",
+			"Precious Metals",
+			"Big Data",
+			"Wearable Tech",
+			"Software Service",
+			"Online Gaming World",
+			"Cleantech Everywhere",
+			"Social Networking",
+			"Bear International Market"
+		]
+    });
 	
 	/* Facebook and Google+ like button: */
 	(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));
