@@ -78,7 +78,7 @@ function combination(qs,qs_weight,t){
 	for(i=0;i<this.quotes.length;i++){
 		if(i%2===1) rows+="<tr>"+row;
 		else 		rows+="<tr class = \"alt\">"+row;
-		rows+="<td href=\"\">"+qs_weight[i]+"%</td><td><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&p=v\"></td></tr>";
+		rows+="<td href=\"\">"+qs_weight[i]+"%</td><td><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></td></tr>";
 	}
 	rows += "</tbody>";
 	this.tableID = "myTable"+tableid++;
@@ -273,6 +273,15 @@ function getMotifs(motif){
 			["GPRO","GRMN","GOOG","AAPL","ARMH","MXIM","MCHP","TXN","SLAB","STM","SMTC","INVN","ADI","SYNA","HIMX","CY","KN","QCOM","BRCM","SWKS","GLW","LPL","AUO","TNDM","PODD"],
 			[13.85,12.34,12.02,11.56,3.43,3.01,3.01,3.01,2.40,1.89,1.54,3.57,3.48,3.10,2.18,2.17,1.16,3.70,3.45,2.83,1.43,1.31,0.99,1.50,1.06],
 			"Wearable Tech"
+		);
+		this.DashBoard[motif] = true;
+		Motifs.push(x);
+	}
+	else if (motif === "GoldBearGRR" && !this.DashBoard[motif]){
+		var x = new combination(
+			["DGLD","DUST","JDST","DZZ","DGZ","GLL"],
+			[19.27,15.72,10.44,18.47,17.61,18.49],
+			"Gold Bear GRR"
 		);
 		this.DashBoard[motif] = true;
 		Motifs.push(x);
