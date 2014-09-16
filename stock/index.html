@@ -13,12 +13,21 @@
 	<body>
 		<div id="nav">
 			<div><a href="http://ted7726.github.io/stock/index.html">Instant Stock price Monitor</a></div>
-			<div id="about">About</div>
+			<div id="about">About</div><br>
+			
+			
         </div style="width:100%">
+		<div class="INDEXs">
+			S&P500:<div id="SP500"></div>
+			NASDAQ:<div id="NASDAQ"></div>
+			DOW:<div id="Dow"></div>
+		</div>
+				
 		<div>
 			<div id="leftsidebar" class="sidebar">
+				<div class = "caption">Search Motif:</div>
 				<div style="padding:5%;font-size:large">
-				Search Motif:
+				
 				<input id="testSearch" ></input>
 				</div>
 				
@@ -26,7 +35,7 @@
 				<div id="ChinaSolar" class="list">China Solar</div>
 				<div id="ChinaInternet" class="list">China Internet</div>
 				<div id="RecentIPO" class="list">Recent IPO</div>
-				<div id="Obamacare" class="list">Obama Care</div>
+				<div id="ObamaCare" class="list">Obama Care</div>
 				<div id="PreciousMetals" class="list">Precious Metals</div>
 				<div id="BigData" class="list">Big Data</div>
 				<div id="SoftwareService" class="list">Software As a Service</div>
@@ -35,15 +44,15 @@
 				<div id="BearInternationalMarket" class="list">Bear International Market</div>
 				<div id="SocialNetworking" class="list">Social Networking</div>
 				<div id="WearableTech" class="list">Wearable Tech</div>
-				<div id="GoldBearGRR" class="list">Gold Bear GRR</div>
+				<div id="BearUSMarket" class="list">Bear US Market</div>
 			</div>
 			<div id="main" ><div id="ttt" style = "font-family:consolas;"></div>
 				
-				<textarea 	id="text1" 
-							placeholder="Symbols separated by ','"></textarea>
+				<input 	id="text1" 
+							placeholder="Symbols separated by ','"></input>
 				<br>
-				<textarea 	id="text2" 
-							placeholder="Custom Motif"></textarea>
+				<input 	id="text2" 
+							placeholder="Custom Motif"></input>
 				<br>
 				
 				<div id="submit" class="button">Add</div>
@@ -57,6 +66,7 @@
 				
 			</div>
 			<div id="rightsidebar" class="sidebar">
+
 				<div class="chart"><a href="https://finance.yahoo.com/echarts?s=%5EGSPC+Interactive#symbol=%5EGSPC;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eGSPC&amp;lang=en-US&amp;region=US&amp;width=300&amp;height=180?" alt="S&amp;P 500 (^GSPC)" width="300" height="180"></a></div>
 				<div class="chart"><a href="https://finance.yahoo.com/echarts?s=%5EIXIC+Interactive#symbol=%5EIXIC;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eIXIC&amp;lang=en-US&amp;region=US&amp;width=300&amp;height=180?" alt="S&amp;P 500 (^IXIC)" width="300" height="180"></a></div>
 				<div class="chart"><a href="https://finance.yahoo.com/echarts?s=%5EDJI+Interactive#symbol=%5EDJI;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eDJI&amp;lang=en-US&amp;region=US&amp;width=300&amp;height=180?" alt="S&amp;P 500 (^DJI)" width="300" height="180"></a></div>

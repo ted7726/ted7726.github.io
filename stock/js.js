@@ -4,28 +4,23 @@ var Motifs = [];
 var force_refresh = true;
 
 $(document).ready(function(){
+	$('#text1').keyup(function(e){
+		if(e.keyCode == 13){
+			addCustom();
+		}
+	});
 	$("#submit").click(function(){
-		// analysis input
-		if($("#text2").val() !==""){
-			var input = $("#text2").val().split("\n");
-			var quotes = new Array(input.length);
-			var quotes_weight = new Array(input.length);
-			for(i=0;i<input.length;i++){
-				var matches = input[i].split("	");
-				quotes[i]=matches[0];
-				quotes_weight[i]=parseInt(matches[2]);
-			}
-		}else if($("#text1").val() !==""){
-			var quotes = $("#text1").val().split(",");
-			var quotes_weight = new Array(quotes.length);
-			for(i=0;i<quotes.length;i++){
-				quotes_weight[i] = 100/quotes.length;
-			}
-		}
-		if(quotes){
-			Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
-		}
+		addCustom();
 	});	
+	$('#testSearch').keyup(function(e){
+		if(e.keyCode == 13){
+			getMotifs($(this).val().replace(/\s/g,""));
+			$(this).val("");
+		}
+		
+	});
+	
+	
 	
 	
 	
@@ -60,6 +55,28 @@ $(document).ready(function(){
 	(function() {var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;po.src = 'https://apis.google.com/js/platform.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);	})();
 
 });
+function addCustom(){
+	// analysis input
+	if($("#text2").val() !==""){
+		var input = $("#text2").val().split("\n");
+		var quotes = new Array(input.length);
+		var quotes_weight = new Array(input.length);
+		for(i=0;i<input.length;i++){
+			var matches = input[i].split("	");
+			quotes[i]=matches[0];
+			quotes_weight[i]=parseInt(matches[2]);
+		}
+	}else if($("#text1").val() !==""){
+		var quotes = $("#text1").val().split(",");
+		var quotes_weight = new Array(quotes.length);
+		for(i=0;i<quotes.length;i++){
+			quotes_weight[i] = 100/quotes.length;
+		}
+	}
+	if(quotes){
+		Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
+	}
+}
 
 
 
@@ -78,7 +95,7 @@ function combination(qs,qs_weight,t){
 	for(i=0;i<this.quotes.length;i++){
 		if(i%2===1) rows+="<tr>"+row;
 		else 		rows+="<tr class = \"alt\">"+row;
-		rows+="<td href=\"\">"+qs_weight[i]+"%</td><td><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></td></tr>";
+		rows+="<td href=\"\">"+qs_weight[i]+"%</td><td><div><a href = \"http://finance.yahoo.com/echarts?s="+qs[i]+"\"><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></div></td></tr>";
 	}
 	rows += "</tbody>";
 	this.tableID = "myTable"+tableid++;
@@ -104,7 +121,7 @@ function combination(qs,qs_weight,t){
 		var wt = this.weight;
 		var title = this.title;
 		// console.log(title);
-		var return_data = $.ajax({
+		$.ajax({
 			url: this.url,
 			dataType: "jsonp",
 			success: function (data){
@@ -160,8 +177,8 @@ function getMotifs(motif){
 	}
 	if (motif === "ChinaSolar" && !this.DashBoard[motif]){
 		var x = new combination(
-			["CSIQ","TSL","YGE","JKS","DQ","JASO","HSOL","SOL"],
-			[25.25,17.51,13.54,12.99,3.82,14.16,8.07,4.66],
+			["TSL","CSIQ","JKS","YGE","DQ","JASO","HSOL","SOL"],
+			[21.51,18.97,15.03,13.02,4.45,14.88,7.33,4.81],
 			"China Solar"
 		);
 		this.DashBoard[motif] = true;
@@ -188,7 +205,7 @@ function getMotifs(motif){
 		Motifs.push(x);
 	}
 	
-	else if (motif === "Obamacare" && !this.DashBoard[motif]){
+	else if (motif === "ObamaCare" && !this.DashBoard[motif]){
 		var x = new combination(
 				["UHS","HCA","LPNT","CYH","SEM","HLS","SCAI","THC","KND","ACT","TARO","IPXL","SGNT","LCI","CERN","ATHN","CPSI","QSII","MDRX","ESRX","CTRX","CNC","MOH","HMSY","EHTH"],
 				[7.72,7.05,5.97,3.02,2.89,1.58,1.32,1.18,1.06,16.95,4.43,1.76,1.71,1.55,10.48,2.55,2.55,1.44,1.18,7.21,4.64,4.49,3.25,3.19,0.85],
@@ -277,11 +294,11 @@ function getMotifs(motif){
 		this.DashBoard[motif] = true;
 		Motifs.push(x);
 	}
-	else if (motif === "GoldBearGRR" && !this.DashBoard[motif]){
+	else if (motif === "BearUSMarket" && !this.DashBoard[motif]){
 		var x = new combination(
-			["DGLD","DUST","JDST","DZZ","DGZ","GLL"],
-			[19.27,15.72,10.44,18.47,17.61,18.49],
-			"Gold Bear GRR"
+			["QID","SDS","DXD","TWM","MZZ"],
+			[20.20,19.55,17.44,23.02,19.80],
+			"Bear US Market"
 		);
 		this.DashBoard[motif] = true;
 		Motifs.push(x);
@@ -295,6 +312,7 @@ window.setInterval(function() {
 	for(var i=0;i<Motifs.length;i++){
 		Motifs[i].get_quotes_data();
 	}
+	update_INDEXs();
 }, 2000);
 window.setInterval(function() {
 	$("img").attr('src',function(){
@@ -309,7 +327,39 @@ window.setInterval(function() {
 
 
 
-
+function update_INDEXs(){
+	$.ajax({
+		url: "http://finance.google.com/finance/info?client=ig&q=INDEXSP:.INX,INDEXDJX:.DJI,INDEXNASDAQ:.IXIC",
+		dataType: "jsonp",
+		success: function (data){
+			var title;
+			var changes_p;
+			for(var i=0;i<3;i++){
+				if(i===0) title = "SP500";
+				else if(i===1) title = "Dow";
+				else if(i===2) title = "NASDAQ";
+				var element_caption = $("#"+title);
+				changes_p = Math.round(data[i].cp*100)/100;	
+				var matches = element_caption.html().match(/.*\<.*\>(-{0,1}\d{1,2}\.{0,1}\d{0,3})\%/);
+				// background color change
+				if (matches){
+					var updateP = parseFloat(matches[1]);
+					if		(parseFloat(updateP)<parseFloat(changes_p)){
+						element_caption				.animate( {backgroundColor:'#88FF88'},50);
+						element_caption.delay(100)	.animate({ backgroundColor:'transparent'});
+					}else if(parseFloat(updateP)>parseFloat(changes_p)){
+						element_caption				.animate( {backgroundColor:'#FF8888'},50);
+						element_caption.delay(100)	.animate({ backgroundColor:'transparent'});
+					}
+				}
+				element_caption.html(
+					"<h>"+data[i].l+"</h>"+(changes_p>0?"<green>"+changes_p+"%</green>":"<red>"+changes_p+"%</red>")
+				);
+			}
+		}
+	});
+	
+}
 
 
 
