@@ -180,7 +180,7 @@ f.write("	}\n")
 f.write("	if( typeof(this.db) === 'undefined'){\n")
 f.write("		this.db = {};\n")
 f.close()
-		
+
 for fileName in motifs1:
 	try:
 		print "loading file: " +fileName+".xlsx"
@@ -189,7 +189,7 @@ for fileName in motifs1:
 		sheet = book.sheet_by_index(0)
 		f.write('		db["'+re.sub('-','',fileName)+'"]={\n')
 		f.write('			"quotes":'+re.sub('u','',str( [sheet.cell(i,1).value for i in range(2,sheet.nrows)]))+",\n")
-		f.write('			"weight":'+str( [sheet.cell(i,3).value*100 for i in range(2,sheet.nrows)])+",\n")
+		f.write('			"weight":'+str( [round(sheet.cell(i,3).value*100,2) for i in range(2,sheet.nrows)])+",\n")
 		f.write('			"name":"'+re.sub('-',' ',fileName)+'"};\n')
 		f.close()
 	except :
