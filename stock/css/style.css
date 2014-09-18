@@ -14,7 +14,7 @@
 	font-weight:bold;
 }
 #nav div{
-    margin:0;
+    margin:0 1%;
     text-align:center;
 	text-shadow:1px 1px 0px #1570cd;
 	font-size:30px;
@@ -45,7 +45,7 @@
 	padding:1%;
 	float:right;
 	box-shadow: 0px 0px 3px #222222;
-	background:FBFBFB;
+	background:white;
 }
 
 
@@ -62,7 +62,6 @@
 	border-radius:3px;
 	color:white;
 	font-size:large;
-	
 	background:linear-gradient(#22568a, #224b6e);
 	box-shadow: 0px 1px 5px #BBBBBB;
 }
@@ -86,22 +85,24 @@
 
 
 .INDEXs{
-	padding: 5px 20% 0;
+	padding: 5px 20%;
 	font-size:medium;
-	width:100%;
+	width:60%;
+	background: #252525;
+	color: white;
 }
 .INDEXs div{
 	display:inline-block;
-	margin: 0 1em 0 0;
+	margin: 0 5% 0 0;
 }
 
 	
 .INDEXs green{
-	color:green;
+	color:#00FF00;
 	padding: 5px;
 }
 .INDEXs red{
-	color:red;
+	color:#FF0000;
 	padding: 5px;
 }
 
@@ -115,15 +116,33 @@
 	margin:1%;
 	border-radius:3px;
 	box-shadow: 0px 0px 3px #222222;
-	//background:FBFBFB;
+	background:white;
 	display:inline-block;
 }
 
 
-input{
-	font-size:1em;
-	font-family:'Open Sans';
-	width:100%;
+input, textarea{
+	height:30px;
+	font-size: 1em;
+	width:85%;
+	font-family: 'Open Sans';
+	font-size: 16px;
+	margin: 1px;
+	resize:none;
+	color: #333333;
+}
+
+
+.icon{
+	padding:0;
+	width:30px;
+	height:30px;
+	vertical-align:top;
+	margin: 0 0 0 3px;
+	cursor:pointer;
+}
+.icon:hover{
+	Opacity:0.8;
 }
 
 .ui-menu{
@@ -149,22 +168,22 @@ input{
 
 
 .button{
-	background: linear-gradient( #9DCE2C,#8BB82B);
+	font-family: inherit;
+	font-size:100%;
+	padding: .5em 1em;
+	background: #1CB841;
 	color:white;
-	padding:1%;
 	display:inline-block;
-	border-radius:4px;
-	border-color:83C41A;
+	border-radius:3px;
 	cursor:pointer;
-	box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+	//box-shadow:inset 0px 1px 0px 0px #c1ed9c;
 	text-decoration:none;
 	text-align:center;
-	text-shadow:1px 1px 0px #689324;
-	//font-size:large;
-	margin:0% 1% 1%;
+	width:8%;
+	margin:.5%;
 }
 .button:hover{
-	font-weight:bold;
+	background: #0BA730;
 }
 
 
@@ -192,15 +211,76 @@ input{
 #footer:hover{
 	height: 80px;
 }
+#copyright{
+	width:80%;
+	color:#0F0F0F;
+	float:none;
+	background:white;
+	box-shadow: 0px 0px 3px black;
+	clear:both;
+	padding:2% 10%;
+}
 
-textarea{
-	resize:none;
-	height:2em;
-	font-size: 16px;
-	font-family: Inconsolata;
-	color: #333333;
-	width:98%;
-} 
+#copyright a{
+	text-decoration: none;
+	color:black;
+	font-weight:bold;
+}
+#copyright a:hover{
+	text-decoration: underline;
+	
+}
+#dim{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:200%;
+	display:none;
+	background:transparent;
+	
+}
+.dimPiece{
+	position:absolute;
+	background:black;
+	Opacity:0.8;
+	
+}
+#tour{
+	//background:transparent;
+	font-size:20px;
+	color:white;
+	position:absolute;
+	width:100%;
+	height:50%;
+	left:0;
+	top:0;
+	display:none;
+	text-align:center;
+}
+#tour div{
+	//display:inline-block;
+}
+.step{
+	position:absolute;
+	display:none;
+}
+#step1{
+	display:block;
+}
+#step1, #step2{
+	width:40%;
+	top:25%;
+	left:30%;
+}
+#step3{
+	top:8em;
+	left:21%;
+}
+
+
+
+
 
 .datagrid table {
 	
@@ -311,16 +391,6 @@ textarea{
 
 
 
-#summary{
-	padding:5px;
-}
-#summary green{
-	color:green;
-}
-#summary red{
-	color:red;
-}
-
 body,
 html {
 	margin:0;
@@ -332,7 +402,7 @@ html {
 	color:black;
 	//overflow: hidden;
 	//background: linear-gradient( white,#858585 );
-	background: #FBFBFB;
+	background: #F9F9F9;
 }
 
 

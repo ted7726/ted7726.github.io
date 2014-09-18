@@ -1,7 +1,7 @@
 
 <html>
 	<head>
-    <title>Instant Stock price Monitor</title>
+    <title>Real Time Stock Price Monitor</title>
 	<link rel="stylesheet" href="css/style.css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="jquery-ui.js"></script>
@@ -13,7 +13,7 @@
 </head>
 	<body>
 		<div id="nav">
-			<div><a href="http://ted7726.github.io/stock/index.html">Instant Stock price Monitor</a></div>
+			<div><a href="http://ted7726.github.io/stock/index.html">Real Time Stock Price Monitor</a></div>
 			<div id="about">About</div><br>
 			
 			
@@ -24,15 +24,14 @@
 			DOW:<div id="Dow"></div>
 		</div>
 				
-		<div>
+		
 			<div id="leftsidebar" class="sidebar">
-				<div class = "caption">Search Motif:</div>
+				<div class = "caption">Search Motif</div>
 				<div style="padding:5%;font-size:large">
 				
-				<input id="testSearch" ></input>
+				<input id="testSearch" ></input><img id="iconSearch" class="icon" src="img/rightArrow.png">
 				</div>
-				
-				<div class = "caption">Popular Motifs:</div>
+				<div class = "caption">Popular Motifs</div>
 				<div id="ChineseSolar" class="list">Chinese Solar</div>
 				<div id="ChinaInternet" class="list">China Internet</div>
 				<div id="RecentIPOs" class="list">Recent IPO</div>
@@ -51,16 +50,16 @@
 			<div id="main" ><div id="ttt" style = "font-family:consolas;"></div>
 				
 				<input 	id="text1" 
-							placeholder="Symbols separated by ','"></input>
+							placeholder="Symbols separated by ',' Ex. GOOG,YHOO,AAPL"></input>
 				<br>
-				<input 	id="text2" 
-							placeholder="Custom Motif"></input>
+				<textarea 	id="text2" 
+							placeholder="Custom Motif"></textarea><img id="help" class="icon" src="img/question.png">
 				<br>
 				
 				<div id="submit" class="button">Add</div>
-				<div id="fold" class="button">fold</div>
-				<div id="unfold" class="button">unfold</div>
-				<div id="test" class="button">test</div>
+				<div id="fold" class="button">Fold</div>
+				<div id="unfold" class="button">Unfold</div>
+				
 				
 				<div class="datagrid" >
 					<div id="myTable0"></div>
@@ -79,7 +78,36 @@
 			</div>
 			
 		</div>
+		
+		<div id="copyright">
+			The Exchange Traded Funds prospectus contains its investment objectives, risks, charges, expenses and other important information you should read and consider carefully prior to making an investment decision.<br>
+			<br><h><b>DICLAIMER</b></h><br>
+			All the information, quotes, charts, prices and data contained in this website is for general information purposes only. The information is provided by Motifinvesting.com, Google finance API and Yahoo finance API. While we endeavour to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk.<br>
+			<br>
+			Each weight of Motif referenced by <a href="https://www.motifinvesting.com">motifinvesting.com</a> updates everyday <br>
+			Quotes are updated automatically every 2 seconds supplied by <a href="https://developers.google.com/finance/">Google finance API</a>. Historical chart data updates every minutes supplied by <a href="https://code.google.com/p/yahoo-finance-managed/wiki/miscapiImageDownload">Yahoo finance API</a><br>
+			These information are provided for your convenience. This website does not control or guarantee the accuracy, relevance, timeliness, completeness or existence of this outside information<br>
+			<br>
+			The website names, links, and information contained in this website, and in the websites I design, are subject to change, without notice.
+			If you have any questions, comments, or concerns, please E-Mail me at <a href="mailto:ted7726@gmail.com">ted7726@gmail.com</a>
+		</div>
+		<div id="dim">
+			<div id="leftPiece" class="dimPiece" style="left:0;top:0;width:21%;height:200%"></div>
+			<div id="rightPiece" class="dimPiece" style="left:70%;top:0;width:30%;height:200%"></div>
+			<div id="topPiece" class="dimPiece" style="left:21%;top:0;width:49%;height:0%"></div>
+			<div id="bottomPiece" class="dimPiece" style="left:21%;top:0%;width:49%;height:160%"></div>
 			
+		</div>
+		<div id="tour">
+			<div id="next" class="button">next</div><div id="previous" class="button">previous</div><div id="close" class="button">Close</div><br>
+			<div id = "step1" class="step"> 1. Download the Motif Excel Spreadsheet from Motifinvesting.com<br><br><img src='img/t1.png' width="100%"></div>
+			<div id = "step2" class="step"> 2. Select all the stocks from column Symbol to Weight<br><br><img src='img/t2.png' width="100%"><br></div>
+			<div id = "step3" class="step"> 3. Paste into " Custom Motif " textarea<br>4. click Add</div>
+			
+			
+			
+
+		</div>
 		<div id="footer">
 			<div class="fb-like" data-href="http://ted7726.github.io" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br>
 			<div class="g-plusone" data-annotation="inline" data-width="300"></div>

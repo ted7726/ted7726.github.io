@@ -2,12 +2,14 @@ var tableid=1;
 var curr_table = "myTable0";
 var Motifs = [];
 var force_refresh = true;
+var step=1;
 
 $(document).ready(function(){
 	$('#text1').keyup(function(e){
-		if(e.keyCode == 13){
-			addCustom();
-		}
+		if(e.keyCode == 13){ addCustom(); }
+	});
+	$('#text2').keyup(function(e){
+		if(e.keyCode == 13){ addCustom(); }
 	});
 	
 	$("#submit").click(function(){
@@ -18,12 +20,40 @@ $(document).ready(function(){
 			getMotifs($(this).val().replace(/\s/g,""));
 			$(this).val("");
 		}
-		
+	});
+	$('#iconSearch').click(function(){
+		getMotifs($('#testSearch').val().replace(/\s/g,""));
+		$('#testSearch').val("");
 	});
 	
 	
-	
-	
+	tourOpen();
+	$('#help').click(function(){
+		tourOpen();
+	});
+	$('#close').click(function(){
+		tourClose();
+	});
+	$('#next').click(function(){
+		if(step===3){
+			// toggleDim($('#text2'));
+			toggleDim($('#submit'));
+			// tourClose();
+			step=1;
+			$('#step1').delay(200).fadeIn();
+			$('#step3').delay(200).fadeOut();
+		}else{
+			$('#step'+(step++).toString()).fadeOut();
+			$('#step'+step.toString()).fadeIn();
+		}
+	});
+	$('#previous').click(function(){
+		if(step===1) tourClose();
+		else{
+			$('#step'+(step--).toString()).fadeOut();
+			$('#step'+step.toString()).fadeIn();
+		}
+	});
 	
 	
 	$("#fold").click(function(){
@@ -44,6 +74,30 @@ $(document).ready(function(){
 	(function() {var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;po.src = 'https://apis.google.com/js/platform.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);	})();
 
 });
+
+function toggleDim(obj){
+	
+	$('#topPiece').animate({height:obj.offset().top});
+	$('#bottomPiece').animate({top:(obj.offset().top+obj.outerHeight())});
+	$('#leftPiece').animate({width:obj.offset().left});
+	$('#rightPiece').animate({left:(obj.offset().left+obj.outerWidth())});
+	
+	$('#topPiece').animate({left:obj.offset().left});
+	$('#topPiece').animate({width:obj.outerWidth()});
+	$('#bottomPiece').animate({left:obj.offset().left});
+	$('#bottomPiece').animate({width:obj.outerWidth()});
+	
+	
+}
+
+function tourOpen(){
+	$('#tour').fadeIn();
+	$('#dim') .fadeIn();
+}
+function tourClose(){
+	$('#tour').fadeOut();
+	$('#dim') .fadeOut();
+}
 function addCustom(){
 	// analysis input
 	if($("#text2").val() !==""){
@@ -65,6 +119,8 @@ function addCustom(){
 	if(quotes){
 		Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
 	}
+	$("#text1").val("");
+	
 }
 
 
@@ -198,10 +254,10 @@ function update_INDEXs(){
 				if (matches){
 					var updateP = parseFloat(matches[1]);
 					if		(parseFloat(updateP)<parseFloat(changes_p)){
-						element_caption				.animate( {backgroundColor:'#88FF88'},50);
+						element_caption				.animate( {backgroundColor:'#008800'},50);
 						element_caption.delay(100)	.animate({ backgroundColor:'transparent'});
 					}else if(parseFloat(updateP)>parseFloat(changes_p)){
-						element_caption				.animate( {backgroundColor:'#FF8888'},50);
+						element_caption				.animate( {backgroundColor:'#880000'},50);
 						element_caption.delay(100)	.animate({ backgroundColor:'transparent'});
 					}
 				}
