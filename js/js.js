@@ -172,7 +172,8 @@ function combination(qs,qs_weight,t){
 	for(i=0;i<this.quotes.length;i++){
 		if(i%2===1) rows+="<tr>"+row;
 		else 		rows+="<tr class = \"alt\">"+row;
-		rows+="<td href=\"\">"+qs_weight[i]+"%</td><td><div><a href = \"http://finance.yahoo.com/echarts?s="+qs[i]+"\"><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></div></td></tr>";
+		
+		rows+="<td href=\"\">"+Math.round(qs_weight[i]*10)/10+"%</td><td><div><a href = \"http://finance.yahoo.com/echarts?s="+qs[i]+"\"><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></div></td></tr>";
 	}
 	rows += "</tbody>";
 	this.tableID = "myTable"+tableid++;
