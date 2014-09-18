@@ -27,7 +27,7 @@ $(document).ready(function(){
 	});
 	
 	
-	tourOpen();
+	// tourOpen();
 	$('#help').click(function(){
 		tourOpen();
 	});
