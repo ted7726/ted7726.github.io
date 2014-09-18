@@ -56,7 +56,7 @@
 	//box-shadow: 0px 0px 2px #333333;
 	//background:FBFBFB;
 }
-.sidebar .caption{
+.sidebar .menu{
 	padding: 3% 3%;
 	text-align:center;
 	border-radius:3px;
@@ -132,6 +132,19 @@ input, textarea{
 	color: #333333;
 }
 
+#text2:hover ~ #help_label{
+	left:65%;
+}
+#help_label{
+	position:absolute;
+	padding:1%;
+	left:-9999px;
+	box-shadow: 0px 0px 5px rgba(0,0,0,.8);
+	background:#F0F0F0;
+	font-size:16px;
+}
+
+
 
 .icon{
 	padding:0;
@@ -168,7 +181,6 @@ input, textarea{
 
 
 .button{
-	font-family: inherit;
 	font-size:100%;
 	padding: .5em 1em;
 	background: #1CB841;
@@ -184,6 +196,24 @@ input, textarea{
 }
 .button:hover{
 	background: #0BA730;
+}
+
+.button2{
+	font-size:100%;
+	padding: .5em 1em;
+	background: #0078e7;
+	color:white;
+	display:inline-block;
+	border-radius:3px;
+	cursor:pointer;
+	//box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+	text-decoration:none;
+	text-align:center;
+	width:8%;
+	margin:.5%;
+}
+.button2:hover{
+	background: #0067d6;
 }
 
 
@@ -212,6 +242,7 @@ input, textarea{
 	height: 80px;
 }
 #copyright{
+	font-size:medium;
 	width:80%;
 	color:#0F0F0F;
 	float:none;
@@ -230,6 +261,18 @@ input, textarea{
 	text-decoration: underline;
 	
 }
+#aboutPage{
+	position:absolute;
+	left:15%;
+	top:6em;
+	display:none;
+	width:40%;
+	padding:5% 10%;
+	font-size:medium;
+	z-index:3;
+	background:white;
+	box-shadow: 0 0 5px rgba(0,0,0,0.8);
+}	
 #dim{
 	position:absolute;
 	left:0;
@@ -246,6 +289,17 @@ input, textarea{
 	Opacity:0.8;
 	
 }
+#leftPiece	{	left:0;		top:0;	width:20%;	height:200%;}
+#rightPiece	{	left:70%;	top:0;	width:100%;	height:200%;}
+#topPiece	{	left:20%;	top:0;	width:50%;	height:0;	}
+#bottomPiece{	left:20%;	top:0;	width:50%;	height:200%;}
+#maskPiece{
+	position:absolute;
+	background:transparent;
+	Opacity:0.8;
+	box-shadow: 0 0 5px 5px black inset;
+}
+
 #tour{
 	//background:transparent;
 	font-size:20px;
@@ -265,6 +319,14 @@ input, textarea{
 	position:absolute;
 	display:none;
 }
+
+.step img{
+	background:white;
+	border-radius:5px;
+	padding:10px;
+	box-shadow: 0 0 20px rgba(0,0,0,.9) inset;
+
+}
 #step1{
 	display:block;
 }
@@ -273,10 +335,7 @@ input, textarea{
 	top:25%;
 	left:30%;
 }
-#step3{
-	top:8em;
-	left:21%;
-}
+
 
 
 

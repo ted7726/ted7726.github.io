@@ -15,6 +15,13 @@ $(document).ready(function(){
 	$("#submit").click(function(){
 		addCustom();
 	});	
+	
+	$('#about').click(function(){
+		$('#aboutPage').fadeIn();
+	});
+	$('#back').click(function(){
+		$('#aboutPage').fadeOut();
+	});
 	$('#testSearch').keyup(function(e){
 		if(e.keyCode == 13){
 			getMotifs($(this).val().replace(/\s/g,""));
@@ -27,7 +34,7 @@ $(document).ready(function(){
 	});
 	
 	
-	// tourOpen();
+	
 	$('#help').click(function(){
 		tourOpen();
 	});
@@ -35,21 +42,33 @@ $(document).ready(function(){
 		tourClose();
 	});
 	$('#next').click(function(){
-		if(step===3){
-			// toggleDim($('#text2'));
-			toggleDim($('#submit'));
-			// tourClose();
+		if(step===2){
+			$('#step2').fadeOut();
+			toggleDim($('#text2'),$('#step3'));
+			step++;
+		}else if(step===3){
+			$('#step3').fadeOut();
+			toggleDim($('#submit'),$('#step4'));
+			step++;
+		}else if(step===4){
+			AllDim();
+			tourClose();
 			step=1;
 			$('#step1').delay(200).fadeIn();
-			$('#step3').delay(200).fadeOut();
+			$('#step4').delay(200).fadeOut();
 		}else{
 			$('#step'+(step++).toString()).fadeOut();
 			$('#step'+step.toString()).fadeIn();
 		}
 	});
 	$('#previous').click(function(){
+		if(step===3) AllDim();
 		if(step===1) tourClose();
-		else{
+		else if(step === 4){
+			$('#step4').fadeOut();
+			toggleDim($('#text2'),$('#step3'));
+			step--;
+		}else{
 			$('#step'+(step--).toString()).fadeOut();
 			$('#step'+step.toString()).fadeIn();
 		}
@@ -75,19 +94,32 @@ $(document).ready(function(){
 
 });
 
-function toggleDim(obj){
+function toggleDim(obj,label){
 	
-	$('#topPiece').animate({height:obj.offset().top});
-	$('#bottomPiece').animate({top:(obj.offset().top+obj.outerHeight())});
-	$('#leftPiece').animate({width:obj.offset().left});
-	$('#rightPiece').animate({left:(obj.offset().left+obj.outerWidth())});
+	$('#topPiece').css({height:obj.offset().top-10});
+	$('#bottomPiece').css({top:(obj.offset().top+obj.outerHeight())+10});
+	$('#leftPiece').css({width:obj.offset().left-10});
+	$('#rightPiece').css({left:(obj.offset().left+obj.outerWidth())+10});
 	
-	$('#topPiece').animate({left:obj.offset().left});
-	$('#topPiece').animate({width:obj.outerWidth()});
-	$('#bottomPiece').animate({left:obj.offset().left});
-	$('#bottomPiece').animate({width:obj.outerWidth()});
+	$('#topPiece').css({left:obj.offset().left-10});
+	$('#topPiece').css({width:obj.outerWidth()+20});
+	$('#bottomPiece').css({left:obj.offset().left-10});
+	$('#bottomPiece').css({width:obj.outerWidth()+20});
 	
-	
+	$('#maskPiece').css({
+		left:obj.offset().left-10,
+		top:obj.offset().top-10,
+		width:obj.outerWidth()+20,
+		height:obj.outerHeight()+20
+	});
+	$('#maskPiece').show();
+	label.css({left:obj.offset().left,top:obj.offset().top-label.outerHeight()-10});
+	label.fadeIn();
+}
+function AllDim(){
+	$('#maskPiece').hide();
+	$('#topPiece').css({height:0});
+	$('#bottomPiece').css({top:0,height:'200%'});
 }
 
 function tourOpen(){
