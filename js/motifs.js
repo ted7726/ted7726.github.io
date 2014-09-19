@@ -4,6 +4,10 @@ function getMotifs(motif){
 	}
 	if( typeof(this.db) === 'undefined'){
 		this.db = {};
+		db["Alibaba"]={
+			"quotes":['BABA'],
+			"weight":[100],
+			"name":"Alibaba"};
 		db["ShaleOil"]={
 			"quotes":['HES', 'CLR', 'WLL', 'NOG', 'OAS', 'HK', 'TPLM', 'EOX', 'PXD', 'PE', 'ATHL', 'LPI', 'AXAS', 'CWEI', 'RSPP', 'FANG', 'CPE', 'AREX', 'BCEI', 'PDCE', 'EPE', 'PVA', 'CRZO', 'SN', 'ECR'],
 			"weight":[23.18, 7.87, 6.12, 5.25, 3.96, 1.48, 1.02, 0.93, 15.43, 6.82, 3.64, 1.56, 1.04, 1.02, 1.01, 1.0, 0.97, 0.97, 4.88, 3.11, 3.86, 1.87, 1.02, 0.97, 1.01],
