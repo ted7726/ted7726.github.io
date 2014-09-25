@@ -22,9 +22,6 @@ $(document).ready(function(){
 	$('#back').click(function(){
 		$('#aboutPage').fadeOut();
 	});
-	$('#closeChart').click(function(){
-		$('#detail').hide();
-	});
 	$('#testSearch').keyup(function(e){
 		if(e.keyCode == 13){
 			getMotifs($(this).val().replace(/\s/g,""));
@@ -83,20 +80,6 @@ $(document).ready(function(){
 	});
 	$("#unfold").click(function(){
 		$(".datagrid table").fadeIn();
-	});
-	$("#test").click(function(){
-		$.ajaxSetup({
-			scriptCharset: "utf-8", //maybe "ISO-8859-1"
-			contentType: "application/json; charset=utf-8"
-		});
-		$.getJSON('http://whateverorigin.org/get?url=' + 
-			encodeURIComponent('http://finance.yahoo.com/') + '&callback=?',
-			function(data) {
-				console.log(data);
-			}
-		);
-		
-		
 	});
 	
 	$(".list")	.click(function(){	getMotifs(this.id);	});
@@ -184,22 +167,18 @@ function combination(qs,qs_weight,t){
 	// create table
 	var column = 7;
 	var row = Array(column+1).join("<td></td>");
-	var rows = $('<tbody/>');
+	var rows = "<tbody>";
+	// var title = "<tbody><tr><td>Motif 1</td><tr></tbody>";
 	for(i=0;i<this.quotes.length;i++){
-		rows.append($('<tr/>',{
-			'class':(i%2===1?'alt':''),
-			// 'html':(row+"<td href=\"\">"+Math.round(qs_weight[i]*10)/10+"%</td><td><div><a href = \"http://finance.yahoo.com/echarts?s="+qs[i]+"\"><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></div></td>"),
-			'html':(row+"<td href=\"\">"+Math.round(qs_weight[i]*10)/10+"%</td><td></td>"),
-			'click':rowClick
-		}));
+		if(i%2===1) rows+="<tr>"+row;
+		else 		rows+="<tr class = \"alt\">"+row;
+		
+		rows+="<td href=\"\">"+Math.round(qs_weight[i]*10)/10+"%</td><td><div><a href = \"http://finance.yahoo.com/echarts?s="+qs[i]+"\"><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></div></td></tr>";
 	}
+	rows += "</tbody>";
 	this.tableID = "myTable"+tableid++;
 	
-	var table = $('<table/>',{
-		'id':this.tableID,
-		'html':'<thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th><th>Weight</th></tr></thead>'
-	});
-	table.append(rows);
+	var table = '<table id="'+this.tableID+'"><thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th><th>Weight</th><th></th></tr></thead>'+rows+'</table>';
 	$("#"+curr_table).after(table);
 	$("#"+curr_table).after($('<div/>', {
 		'class':'caption',
@@ -263,16 +242,6 @@ function combination(qs,qs_weight,t){
 		});
 	};
 	
-}
-function rowClick(){
-	var SYM = $(this).context.firstChild.innerText;
-	$('#chart').attr('src','http://chart.finance.yahoo.com/z?s='+SYM+'&t=1d&q=c&z=l&p=v');
-	$('#detail').css({
-		left:$(this).offset().left,
-		top:($(this).offset().top+$(this).outerHeight()+4)
-	});
-	$('#detail').show();
-	console.log("!");
 }
 
 function toggleCaption(){

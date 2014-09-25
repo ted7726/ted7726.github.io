@@ -179,11 +179,6 @@ f.write("		this.DashBoard = {};\n")
 f.write("	}\n")
 f.write("	if( typeof(this.db) === 'undefined'){\n")
 f.write("		this.db = {};\n")
-f.write("		db[\"Alibaba\"]={")
-f.write("					\"quotes\":['BABA'],")
-f.write("					\"weight\":[100],")
-f.write("					\"name\":\"Alibaba\"};")
-
 f.close()
 
 for fileName in motifs1:
