@@ -444,7 +444,9 @@ input, textarea{
     transition: 		all 0.2s ease-out;
 	display:none;
 	text-align:center;
+	
 }
+
 #detail img{
 	width:100%;
 }

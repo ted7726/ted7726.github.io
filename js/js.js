@@ -3,8 +3,15 @@ var curr_table = "myTable0";
 var Motifs = [];
 var force_refresh = true;
 var step=1;
+// http://dev.markitondemand.com/
+
+$.ajaxSetup({
+	scriptCharset: "utf-8", //maybe "ISO-8859-1"
+	contentType: "application/json; charset=utf-8"
+});
 
 $(document).ready(function(){
+	
 	$('#text1').keyup(function(e){
 		if(e.keyCode == 13){ addCustom(); }
 	});
@@ -84,20 +91,7 @@ $(document).ready(function(){
 	$("#unfold").click(function(){
 		$(".datagrid table").fadeIn();
 	});
-	$("#test").click(function(){
-		$.ajaxSetup({
-			scriptCharset: "utf-8", //maybe "ISO-8859-1"
-			contentType: "application/json; charset=utf-8"
-		});
-		$.getJSON('http://whateverorigin.org/get?url=' + 
-			encodeURIComponent('http://finance.yahoo.com/') + '&callback=?',
-			function(data) {
-				console.log(data);
-			}
-		);
-		
-		
-	});
+	
 	
 	$(".list")	.click(function(){	getMotifs(this.id);	});
 	$("#testSearch").autocomplete({
@@ -173,6 +167,17 @@ function addCustom(){
 }
 
 
+function crossDomain(url){
+	
+	$.getJSON('http://whateverorigin.org/get?url=' + 
+		encodeURIComponent(url) + '&callback=?',
+		function(data) {
+			console.log(data);
+		}
+	);
+	
+}
+
 
 function combination(qs,qs_weight,t){
 	
@@ -189,7 +194,7 @@ function combination(qs,qs_weight,t){
 		rows.append($('<tr/>',{
 			'class':(i%2===1?'alt':''),
 			// 'html':(row+"<td href=\"\">"+Math.round(qs_weight[i]*10)/10+"%</td><td><div><a href = \"http://finance.yahoo.com/echarts?s="+qs[i]+"\"><img src=\"http://chart.finance.yahoo.com/z?s="+qs[i]+"&t=1d&q=c&p=v\"></div></td>"),
-			'html':(row+"<td href=\"\">"+Math.round(qs_weight[i]*10)/10+"%</td><td></td>"),
+			'html':(row+"<td href=\"\">"+Math.round(qs_weight[i]*10)/10+"%</td>"),
 			'click':rowClick
 		}));
 	}
@@ -267,12 +272,13 @@ function combination(qs,qs_weight,t){
 function rowClick(){
 	var SYM = $(this).context.firstChild.innerText;
 	$('#chart').attr('src','http://chart.finance.yahoo.com/z?s='+SYM+'&t=1d&q=c&z=l&p=v');
+	$('#frame').attr('src','https://www.yahoo.com/finance?q='+SYM);
 	$('#detail').css({
 		left:$(this).offset().left,
 		top:($(this).offset().top+$(this).outerHeight()+4)
 	});
 	$('#detail').show();
-	console.log("!");
+	
 }
 
 function toggleCaption(){
