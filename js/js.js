@@ -1,10 +1,11 @@
+// http://dev.markitondemand.com/
 var tableid=1;
 var curr_table = "myTable0";
 var Motifs = [];
 var force_refresh = true;
 var step=1;
 var detail_SYM='GOOG';
-// http://dev.markitondemand.com/
+
 
 $.ajaxSetup({
 	scriptCharset: "utf-8", //maybe "ISO-8859-1"
