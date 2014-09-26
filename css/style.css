@@ -466,7 +466,7 @@ input, textarea{
 #detail-wrap{
 	width:75%;
 	padding:0 2%;
-	display:inline-block;
+	display:none;
 }
 
 #detail-SYM{

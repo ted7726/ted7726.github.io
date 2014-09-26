@@ -104,9 +104,7 @@ $(document).ready(function(){
 	$("#unfold").click(function(){
 		$(".datagrid table").fadeIn();
 	});
-	$('#test').click(function(){
-		update_detail();
-	});
+	
 	
 	
 	$(".list")	.click(function(){	getMotifs(this.id);	});
@@ -295,7 +293,7 @@ function rowClick(){
 		left:$(this).offset().left,
 		top:($(this).offset().top+$(this).outerHeight()+4)
 	});
-	update_detail();
+	// update_detail();
 	$('#detail').show();
 
 	
@@ -312,7 +310,7 @@ window.setInterval(function() {
 		Motifs[i].get_quotes_data();
 	}
 	update_INDEXs();
-	update_detail();
+	// update_detail();
 }, 2000);
 window.setInterval(function() {
 	$("img").attr('src',function(){
