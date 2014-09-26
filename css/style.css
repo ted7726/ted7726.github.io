@@ -36,11 +36,12 @@
 #leftsidebar{
 	margin:1% 0% 1% 1%;
 	float:left;
+	width:18%;
 	
 }
 #rightsidebar{
 	margin:1% 1% 1% 0%;
-	width:16%;
+	width:22%;
 	
 	padding:1%;
 	float:right;
@@ -50,14 +51,14 @@
 
 
 .sidebar{
-    width:18%;
+    
     padding: 0% 0%;
 	border-radius:3px;
 	//box-shadow: 0px 0px 2px #333333;
 	//background:FBFBFB;
 }
 .sidebar .menu{
-	padding: 3% 3%;
+	padding: 1.5% 3%;
 	text-align:center;
 	border-radius:3px;
 	color:white;
@@ -110,7 +111,7 @@
 #main {
 	float:left;
 	left: 20%;
-	width:58%;
+	width:52%;
 	//height: 820px;
 	padding: 1% 1%;
 	margin:1%;
@@ -133,15 +134,31 @@ input, textarea{
 }
 
 #text2:hover ~ #help_label{
-	left:65%;
+	left: 60%;
+}
+#triangle{
+	width: 0; 
+	height: 0; 
+	border-bottom: 8px solid rgba(0,0,0,.8); 
+	border-left: 8px solid transparent; 
+	border-right: 8px solid transparent; 
+	margin:0 0 0 100px;
+}
+
+#square{
+	box-shadow: 0px 2px 5px rgba(0,0,0,.8);
+	padding:10px;
+	background:rgba(0,0,0,.8);
+	font-size:14px;
+	border-radius:4px;
+	width:200px;
+	text-align:center;
 }
 #help_label{
+	color:white;
 	position:absolute;
-	padding:1%;
-	left:-9999px;
-	box-shadow: 0px 0px 5px rgba(0,0,0,.8);
-	background:#F0F0F0;
-	font-size:16px;
+	display:none;
+	
 }
 
 
@@ -433,7 +450,7 @@ input, textarea{
 }
 #detail{
 	position:absolute;
-	padding:0.5%;
+	padding:1%;
 	box-shadow: 0px 0px 4px 0px black;
 	background:white;
 	border-radius:3px;
@@ -443,13 +460,48 @@ input, textarea{
     -ms-transition: 	all 0.2s ease-out;
     transition: 		all 0.2s ease-out;
 	display:none;
-	text-align:center;
+	//text-align:center;
 	
 }
+#detail-wrap{
+	width:75%;
+	padding:0 2%;
+	display:inline-block;
+}
 
+#detail-SYM{
+	display:inline-block;
+	font-size:28px;
+	font-weight:bold;
+	
+}
+#detail-text{
+	display:inline-block;
+	font-size:24px;
+	
+	
+}
+#detail-text red{
+	color:red;
+	padding:0 2%;
+}
+#detail-text green{
+	color:green;
+	padding:0 2%;
+}
+#detail-table{
+	width:100%;
+}
+#detail-table tr td{
+	//font-weight:bold;
+}
+.detail-table-caption{
+	color:#505050;
+}
 #detail img{
 	width:100%;
 }
+
 
 
 

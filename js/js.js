@@ -3,6 +3,7 @@ var curr_table = "myTable0";
 var Motifs = [];
 var force_refresh = true;
 var step=1;
+var detail_SYM='GOOG';
 // http://dev.markitondemand.com/
 
 $.ajaxSetup({
@@ -15,8 +16,19 @@ $(document).ready(function(){
 	$('#text1').keyup(function(e){
 		if(e.keyCode == 13){ addCustom(); }
 	});
-	$('#text2').keyup(function(e){
+	$('#text2')
+	.keyup(function(e){
 		if(e.keyCode == 13){ addCustom(); }
+	})
+	.mouseenter(function(){
+		$('#help_label').css({
+			left:$('#help').offset().left-94,
+			top:($('#help').offset().top+$('#help').outerHeight())
+		});
+		$('#help_label').show();
+	})
+	.mouseleave(function(){
+		$('#help_label').hide();
 	});
 	
 	$("#submit").click(function(){
@@ -90,6 +102,9 @@ $(document).ready(function(){
 	});
 	$("#unfold").click(function(){
 		$(".datagrid table").fadeIn();
+	});
+	$('#test').click(function(){
+		update_detail();
 	});
 	
 	
@@ -187,7 +202,7 @@ function combination(qs,qs_weight,t){
 	
 	if (this.quotes.length<1) return;
 	// create table
-	var column = 7;
+	var column = 5;
 	var row = Array(column+1).join("<td></td>");
 	var rows = $('<tbody/>');
 	for(i=0;i<this.quotes.length;i++){
@@ -202,7 +217,8 @@ function combination(qs,qs_weight,t){
 	
 	var table = $('<table/>',{
 		'id':this.tableID,
-		'html':'<thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th><th>Weight</th></tr></thead>'
+		// 'html':'<thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>change % after</th><th>Last Trade Time after</th><th>Weight</th></tr></thead>'
+		'html':'<thead><tr><th>Symbol</th><th>Price</th><th>Change</th><th>Change %</th><th>Last Trade Time</th><th>Weight</th></tr></thead>'
 	});
 	table.append(rows);
 	$("#"+curr_table).after(table);
@@ -242,8 +258,8 @@ function combination(qs,qs_weight,t){
 					y[3].innerHTML=(data[i].cp>0? "<red>"+data[i].cp+"%</red>" : "<green>"+data[i].cp+"%</green>");
 					y[4].innerHTML=data[i].lt;
 					// if(typeof(data[i].ecp ) !== "undefined") y[5].innerHTML=(data[i].ecp>0? "<red>"+data[i].ecp+"%</red>" : "<green>"+data[i].ecp+"%</green>");
-					if(data[i].ecp) y[5].innerHTML=(data[i].ecp>0? "<red>"+data[i].ecp+"%</red>" : "<green>"+data[i].ecp+"%</green>");
-					if(typeof(data[i].elt ) !== "undefined")y[6].innerHTML=data[i].elt;
+					// if(data[i].ecp) y[5].innerHTML=(data[i].ecp>0? "<red>"+data[i].ecp+"%</red>" : "<green>"+data[i].ecp+"%</green>");
+					// if(typeof(data[i].elt ) !== "undefined")y[6].innerHTML=data[i].elt;
 					// console.log(wt[i]);
 					weighted_changes_p += data[i].cp*wt[i];
 				}
@@ -271,13 +287,16 @@ function combination(qs,qs_weight,t){
 }
 function rowClick(){
 	var SYM = $(this).context.firstChild.innerText;
+	detail_SYM = SYM;
 	$('#chart').attr('src','http://chart.finance.yahoo.com/z?s='+SYM+'&t=1d&q=c&z=l&p=v');
 	$('#frame').attr('src','https://www.yahoo.com/finance?q='+SYM);
 	$('#detail').css({
 		left:$(this).offset().left,
 		top:($(this).offset().top+$(this).outerHeight()+4)
 	});
+	update_detail();
 	$('#detail').show();
+
 	
 }
 
@@ -292,6 +311,7 @@ window.setInterval(function() {
 		Motifs[i].get_quotes_data();
 	}
 	update_INDEXs();
+	update_detail();
 }, 2000);
 window.setInterval(function() {
 	$("img").attr('src',function(){
@@ -308,7 +328,7 @@ window.setInterval(function() {
 
 function update_INDEXs(){
 	$.ajax({
-		url: "http://finance.google.com/finance/info?client=ig&q=INDEXSP:.INX,INDEXDJX:.DJI,INDEXNASDAQ:.IXIC",
+		url: "http://finance.google.com/finance/info?client=ig&q=INDEXSP:.INX,INDEXDJX:.DJI,INDEXNASDAQ:.IXIC,"+detail_SYM,
 		dataType: "jsonp",
 		success: function (data){
 			var title;
@@ -331,13 +351,49 @@ function update_INDEXs(){
 						element_caption.delay(100)	.animate({ backgroundColor:'transparent'});
 					}
 				}
-				element_caption.html(
+			element_caption.html(
 					"<h>"+data[i].l+"</h>"+(changes_p>0?"<green>"+changes_p+"%</green>":"<red>"+changes_p+"%</red>")
 				);
 			}
 		}
 	});
-	
+}
+
+function update_detail(){
+	$.ajax({
+		url: "http://dev.markitondemand.com/Api/v2/Quote/jsonp?symbol="+detail_SYM,
+		dataType: "jsonp",
+		success: function (data){
+			$('#detail-SYM').text(data.Name+"("+detail_SYM+")");
+			var element_caption = $('#detail-text');
+			var tRows=document.getElementById("detail-table").rows;
+			changes_p = Math.round(data.ChangePercent*100)/100;	
+			var matches = element_caption.html().match(/.*\<.*\>(-{0,1}\d{1,2}\.{0,1}\d{0,3})\%/);
+			// background color change
+			if (matches){
+				var updateP = parseFloat(matches[1]);
+				if		(parseFloat(updateP)<parseFloat(changes_p)){
+					element_caption				.animate( {backgroundColor:'#008800'},50);
+					element_caption.delay(100)	.animate({ backgroundColor:'transparent'});
+				}else if(parseFloat(updateP)>parseFloat(changes_p)){
+					element_caption				.animate( {backgroundColor:'#880000'},50);
+					element_caption.delay(100)	.animate({ backgroundColor:'transparent'});
+				}
+			}
+			element_caption.html(data.LastPrice+(changes_p>0?
+				"<green>"+Math.round(data.Change*100)/100+"("+changes_p+")"+"%</green>":
+				"<red>"+Math.round(data.Change*100)/100+"("+changes_p+")"+"%</red>"
+			));
+			
+			tRows[0].cells[1].innerHTML = data.Open;
+			tRows[1].cells[1].innerHTML = data.High;
+			tRows[2].cells[1].innerHTML = data.Low;
+			tRows[0].cells[3].innerHTML = data.Volume;
+			tRows[1].cells[3].innerHTML = Math.round(data.MarketCap/1000)/1000+"M";
+			tRows[2].cells[3].innerHTML = data.Timestamp;
+			
+		}
+	});
 }
 
 
