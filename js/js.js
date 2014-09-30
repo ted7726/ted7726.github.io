@@ -291,7 +291,6 @@ function rowClick(){
 	var SYM = $(this).context.firstChild.innerText;
 	detail_SYM = SYM;
 	$('#chart').attr('src','http://chart.finance.yahoo.com/z?s='+SYM+'&t=1d&q=c&p=v');
-	$('#frame').attr('src','https://www.yahoo.com/finance?q='+SYM);
 	$('#detail').css({
 		left:$(this).offset().left,
 		top:($(this).offset().top+$(this).outerHeight()+4)
