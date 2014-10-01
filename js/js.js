@@ -291,9 +291,10 @@ function rowClick(){
 	var SYM = $(this).context.firstChild.innerText;
 	detail_SYM = SYM;
 	// $('#chart').attr('src','http://chart.finance.yahoo.com/z?s='+SYM+'&t=1d&q=c&p=v');
+	
 	$('#detail').css({
-		left:($(this).offset().left+$(this).context.firstChild.offsetLeft+$(this).context.firstChild.offsetWidth),
-		top:($(this).offset().top)
+		left:($(this).offset().left),
+		top:($(this).offset().top+$(this).outerHeight()+4)
 	});
 	IntraDayChart();
 	$('#detail').show();
@@ -451,7 +452,7 @@ function IntraDayChart() {
 						title: {
 							text: data.meta["Company-Name"] +"("+detail_SYM+")",
 							style:{
-								'font-size':'28px'
+								'font-size':'22px'
 							}
 						},
 						subtitle: {
@@ -459,7 +460,7 @@ function IntraDayChart() {
 						q.Change+"("+
 						Math.round(q.Change/(q.LastTradePriceOnly-q.Change)*10000)/100+"%)"+
 						(q.Change>0?'</green>':'</red>')+'</div><div>'+
-						'<table id="detail-table"><tr><td class="detail-table-caption">Open</td><td>'+(q.LastTradePriceOnly-q.Change)+
+						'<table id="detail-table"><tr><td class="detail-table-caption">Open</td><td>'+Math.round((q.LastTradePriceOnly-q.Change)*100)/100+
 						'</td><td class="detail-table-caption">Volume/Avg Vol</td><td>'+q.Volume+'/'+q.AverageDailyVolume+
 						'</td></tr><tr><td class="detail-table-caption">High</td><td>'+q.DaysHigh+
 						'</td><td class="detail-table-caption">Market Cap</td><td>'+q.MarketCapitalization+
@@ -468,7 +469,7 @@ function IntraDayChart() {
 						'</td></tr></table></div>'
 						,
 							style:{
-								'font-size':'20px',
+								'font-size':'16px',
 								'width':'500px',
 								'text-align':'center'
 							},
@@ -482,7 +483,7 @@ function IntraDayChart() {
 								x: -3
 							},
 							title: {
-								text: 'OHLC'
+								text: 'Price'
 							},
 							height: '75%',
 							lineWidth: 2,
