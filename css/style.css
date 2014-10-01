@@ -451,7 +451,7 @@ input, textarea{
 #detail{
 	position:absolute;
 	padding:1%;
-	box-shadow: 0px 0px 4px 0px black;
+	box-shadow: 0px 0px 5px 0px black;
 	background:white;
 	border-radius:3px;
 	-webkit-transition: all 0.2s ease-out;
@@ -461,39 +461,27 @@ input, textarea{
     transition: 		all 0.2s ease-out;
 	display:none;
 	//text-align:center;
+	width:60%;
 	
-}
-#detail-wrap{
-	width:75%;
-	padding:0 2%;
-	display:none;
 }
 
-#detail-SYM{
-	//display:inline-block;
-	font-size:28px;
-	font-weight:bold;
-	
-}
-#detail-text{
-	//display:inline-block;
-	font-size:24px;
-	
-	
-}
-#detail-text red{
+
+#detail red{
 	color:red;
 	padding:0 2%;
 }
-#detail-text green{
+#detail green{
 	color:green;
 	padding:0 2%;
 }
 #detail-table{
-	width:100%;
+	width:500px;
+	font-size:14px;
+	text-align:left;
 }
 #detail-table tr td{
 	//font-weight:bold;
+	padding:0 0%;
 }
 .detail-table-caption{
 	color:#505050;
@@ -501,7 +489,14 @@ input, textarea{
 #detail img{
 	width:100%;
 }
-
+#detailChart{
+	width:100%;
+	height:800px;
+}
+#closeChart{	
+	position:relative;
+	top:-800px;
+}
 
 
 
