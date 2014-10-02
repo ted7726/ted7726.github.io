@@ -1,10 +1,12 @@
 // http://dev.markitondemand.com/
+// global variable
 var tableid=1;
 var curr_table = "myTable0";
 var Motifs = [];
 var force_refresh = true;
 var step=1;
 var detail_SYM='GOOG';
+
 
 
 $.ajaxSetup({
@@ -106,9 +108,8 @@ $(document).ready(function(){
 	});
 	
 	$("#test").click(function(){
-		yqlQuotes('GPRO');
+		updateChart();
 	});
-	
 	
 	$(".list")	.click(function(){	getMotifs(this.id);	});
 	$("#testSearch").autocomplete({
@@ -119,8 +120,13 @@ $(document).ready(function(){
 	/* Facebook and Google+ like button: */
 	(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));
 	(function() {var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;po.src = 'https://apis.google.com/js/platform.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);	})();
-
+	
 });
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Toggle Functions
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 function toggleDim(obj,label){
 	
@@ -158,6 +164,12 @@ function tourClose(){
 	$('#tour').fadeOut();
 	$('#dim') .fadeOut();
 }
+
+function toggleCaption(){
+	$(this).next().fadeToggle();
+}
+
+
 function addCustom(){
 	// analysis input
 	if($("#text2").val() !==""){
@@ -183,6 +195,24 @@ function addCustom(){
 	
 }
 
+function rowClick(){
+	var SYM = $(this).context.firstChild.innerText;
+	detail_SYM = SYM;
+	// $('#chart').attr('src','http://chart.finance.yahoo.com/z?s='+SYM+'&t=1d&q=c&p=v');
+	
+	$('#detail').css({
+		left:($(this).offset().left),
+		top:($(this).offset().top+$(this).outerHeight()+4)
+	});
+	IntraDayChart();
+	$('#detail').show();
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Test Functions
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 function crossDomain(url){
 	$.getJSON('http://whateverorigin.org/get?url=' + 
@@ -194,7 +224,9 @@ function crossDomain(url){
 }
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Add Motif Functions
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 function combination(qs,qs_weight,t){
 	
@@ -287,26 +319,11 @@ function combination(qs,qs_weight,t){
 	};
 	
 }
-function rowClick(){
-	var SYM = $(this).context.firstChild.innerText;
-	detail_SYM = SYM;
-	// $('#chart').attr('src','http://chart.finance.yahoo.com/z?s='+SYM+'&t=1d&q=c&p=v');
-	
-	$('#detail').css({
-		left:($(this).offset().left),
-		top:($(this).offset().top+$(this).outerHeight()+4)
-	});
-	IntraDayChart();
-	$('#detail').show();
-
-	
-}
-
-function toggleCaption(){
-	$(this).next().fadeToggle();
-}
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Timer			
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 window.setInterval(function() {
 	for(var i=0;i<Motifs.length;i++){
@@ -317,7 +334,7 @@ window.setInterval(function() {
 	// update_detail();
 }, 2000);
 window.setInterval(function() {
-	$("img").attr('src',function(){
+	$(".chart img").attr('src',function(){
 		var img_url = $(this).attr('src');
 		if (img_url.charAt(img_url.length-1) === '?'){
 			return img_url.substring(0,img_url.length-1);
@@ -325,9 +342,12 @@ window.setInterval(function() {
 			return $(this).attr('src')+"?";
 		}
 	});
-	IntraDayChart();
-}, 30000);
+	updateChart();
+}, 15000);
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Update Functions
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 function update_INDEXs(){
@@ -364,170 +384,124 @@ function update_INDEXs(){
 }
 
 function update_detail(){
-	
-	// var yqlURL = "http://query.yahooapis.com/v1/public/yql?q=";
-	// var dataFormat = "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-	// var query = 'select * from yahoo.finance.quote where symbol in ("'+detail_SYM+'")';
-	// $.getJSON(yqlURL + encodeURIComponent(query) + dataFormat,
-		// function(data) {
-			// var q = data.query.results.quote;
-			// $('#detail-SYM').text(q.Name+"("+detail_SYM+")");
-			// var element_caption = $('#detail-text');
-			// var tRows=document.getElementById("detail-table").rows;
-			// changes_p = Math.round(data.ChangePercent*100)/100;	
-			// element_caption.html(data.LastPrice+(changes_p>0?
-				// "<green>"+Math.round(data.Change*100)/100+"("+changes_p+")"+"%</green>":
-				// "<red>"+Math.round(data.Change*100)/100+"("+changes_p+")"+"%</red>"
-			// ));
-			
-			// tRows[0].cells[1].innerHTML = data.Open;
-			// tRows[1].cells[1].innerHTML = q.DaysHigh;
-			// tRows[2].cells[1].innerHTML = q.DaysLow;
-			// tRows[0].cells[3].innerHTML = Math.round(q.Volume/1000)/1000+"M";
-			// tRows[1].cells[3].innerHTML = q.MarketCapitalization;
-			// tRows[2].cells[3].innerHTML = data.Timestamp;
-			
-		// }
-	// );
-	IntraDayChart();
-
-
 }
 
-
-function IntraDayChart() {
+function yqlUpdate(SYM){
 	var yqlURL = "http://query.yahooapis.com/v1/public/yql?q=";
 	var dataFormat = "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-	var query = 'select * from yahoo.finance.quote where symbol in ("'+detail_SYM+'")';
+	var query = 'select * from yahoo.finance.quote where symbol in ("'+SYM+'")';
 	var q;
 	$.getJSON(yqlURL + encodeURIComponent(query) + dataFormat,
 		function(data) {
-			q = data.query.results.quote;
-			$.ajax({
-				url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
-				dataType:"jsonp",
-				success: function (data){
-					d=data.series;
-					
-					// console.log(q);
-					// console.log(data.meta);
-					// console.log(data);
-					// split the data set into ohlc and volume
-					var ohlc = [],
-					volume = [],
-					dataLength = d.length,
-					gmtoffset = data.meta.gmtoffset;
-					// set the allowed units for data grouping
-					groupingUnits = [
-					['minute',	[1, 2, 5, 10, 15, 30]],
-					['hour',	[1, 2, 3, 4, 6]],
-					['day',		[1]]];
-					
-					for (var i=0; i < d.length; i++) {
-						ohlc.push([
-							(d[i].Timestamp+gmtoffset)*1000, // the date
-							d[i].open, // open
-							d[i].high, // high
-							d[i].low, // low
-							d[i].close // close
-						]);
-						volume.push([
-							(d[i].Timestamp+gmtoffset)*1000, // the date
-							d[i].volume, // the date
-						]);
-					}
-					
-					// create the chart
-					$('#detailChart').highcharts('StockChart', {
-					
-						rangeSelector : {
-							buttons : [
-							{type : 'hour',count : 1,text : '1h'},
-							{type : 'hour',count : 2,text : '2h'},
-							{type : 'all' ,count : 1,text : 'Day'}
-							],
-							selected : 2,
-							inputEnabled : false
-						},
-						title: {
-							text: data.meta["Company-Name"] +"("+detail_SYM+")",
-							style:{
-								'font-size':'22px'
-							}
-						},
-						subtitle: {
-							text: '<div>'+q.LastTradePriceOnly+(q.Change>0?'<green>':'<red>')+
-						q.Change+"("+
-						Math.round(q.Change/(q.LastTradePriceOnly-q.Change)*10000)/100+"%)"+
-						(q.Change>0?'</green>':'</red>')+'</div><div>'+
-						'<table id="detail-table"><tr><td class="detail-table-caption">Open</td><td>'+Math.round((q.LastTradePriceOnly-q.Change)*100)/100+
-						'</td><td class="detail-table-caption">Volume/Avg Vol</td><td>'+q.Volume+'/'+q.AverageDailyVolume+
-						'</td></tr><tr><td class="detail-table-caption">High</td><td>'+q.DaysHigh+
-						'</td><td class="detail-table-caption">Market Cap</td><td>'+q.MarketCapitalization+
-						'</td></tr><tr><td class="detail-table-caption">Low</td><td>'+q.DaysLow+
-						'</td> <td class="detail-table-caption">Day Range</td><td>'+q.DaysRange+
-						'</td></tr></table></div>'
-						,
-							style:{
-								'font-size':'16px',
-								'width':'500px',
-								'text-align':'center'
-							},
-							useHTML:true,
-							
-						},
-						
-						yAxis: [{
-							labels: {
-								align: 'right',
-								x: -3
-							},
-							title: {
-								text: 'Price'
-							},
-							height: '75%',
-							lineWidth: 2,
-							plotLines : [{
-								value : data.meta.previous_close,
-								color : 'red',
-								dashStyle : 'longdash',
-								width : 1
-							}]
-						}, {
-							labels: {
-								align: 'right',
-								x: -3
-							},
-							title: {
-								text: 'Volume'
-							},
-							top: '80%',
-							height: '20%',
-							offset: 0,
-							lineWidth: 2
-						}],
-						series: [{
-							type: 'candlestick',
-							name: detail_SYM,
-							data: ohlc,
-							dataGrouping: {
-								units: groupingUnits
-							}
-						}, {
-							type: 'column',
-							name: 'Volume',
-							data: volume,
-							yAxis: 1,
-							dataGrouping: {
-								units: groupingUnits
-							}
-						}]
-					});
-				}
-			});
+			console.log(data);
 		}
 	);
-	
+}
+
+function IntraDayChart() {
+	$.ajax({
+		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
+		dataType:"jsonp",
+		success: function (data){
+			d=data.series;
+			$('#detailText').text(data.meta["Company-Name"] +"("+detail_SYM+")");
+			var ohlc = [],
+			volume = [],// split the data set into ohlc and volume
+			dataLength = d.length,
+			gmtoffset = data.meta.gmtoffset;
+			// set the allowed units for data grouping
+			groupingUnits = [
+			['minute',	[1, 2, 5, 10, 15, 30]],
+			['hour',	[1, 2, 3, 4, 6]],
+			['day',		[1]]];
+			
+			for (var i=0; i < d.length; i++) {
+				ohlc.push([
+					(d[i].Timestamp+gmtoffset)*1000, // the date
+					d[i].open, // open
+					d[i].high, // high
+					d[i].low, // low
+					d[i].close // close
+				]);
+				volume.push([
+					(d[i].Timestamp+gmtoffset)*1000, // the date
+					d[i].volume, // the date
+				]);
+			}
+			// create the chart
+			$('#detailChart').highcharts('StockChart', {
+				rangeSelector : {
+					buttons : [
+						{type : 'hour',count : 1,text : '1h'},
+						{type : 'hour',count : 2,text : '2h'},
+						{type : 'all' ,count : 1,text : 'Day'}
+					],
+					selected : 2,
+					inputEnabled : false
+				},
+				yAxis: [{
+					labels: { align: 'right', x: -3 },
+					title: 	{ text: 'Price' },
+					height: '75%',
+					lineWidth: 2,
+					plotLines : [{
+						value : data.meta.previous_close,
+						color : 'red',
+						dashStyle : 'longdash',
+						width : 1
+					}]
+				}, {
+					labels: { align: 'right', x: -3 },
+					title: 	{ text: 'Volume' },
+					top: '80%',
+					height: '20%',
+					offset: 0,
+					lineWidth: 2
+				}],
+				series: [{
+					type: 'candlestick',
+					name: detail_SYM,
+					data: ohlc,
+					dataGrouping: {	units: groupingUnits }
+				}, {
+					type: 'column',
+					name: 'Volume',
+					data: volume,
+					yAxis: 1,
+					dataGrouping: { units: groupingUnits }
+				}]
+			});
+		}
+	});
+}
+
+function updateChart(){
+	$.ajax({
+		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
+		dataType:"jsonp",
+		success: function (data){
+			var ohlc = [],
+				volume = [],
+				gmtoffset = data.meta.gmtoffset,
+				d = data.series;
+			for (var i=0; i < d.length; i++) {
+				ohlc.push([
+					(d[i].Timestamp+gmtoffset)*1000, // the date
+					d[i].open, // open
+					d[i].high, // high
+					d[i].low, // low
+					d[i].close, // close
+				]);
+				volume.push([
+					(d[i].Timestamp+gmtoffset)*1000, // the date
+					d[i].volume, // the volume
+				]);
+			}
+			($('#detailChart').highcharts()).series[0].setData(ohlc);
+			($('#detailChart').highcharts()).series[1].setData(volume);
+			// set the allowed units for data grouping
+		}
+	});
 }
 
 
