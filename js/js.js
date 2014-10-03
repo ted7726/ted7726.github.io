@@ -108,7 +108,7 @@ $(document).ready(function(){
 	});
 	
 	$("#test").click(function(){
-		createMotifChart("ShaleOil");
+		createMotifChart("BigData");
 	});
 	
 	$(".list")	.click(function(){	addMotif(this.id);	});
@@ -428,64 +428,69 @@ function yqlUpdate(SYM){
 
 function createMotifChart(motifName){
 	var q=getMotifs(motifName);
-	
-	// for(var k=0;k<q.quotes.length;k++){
-	for(var k=0;k<1;k++){
+	var x,dt,d,gmtoffset,weight,preClose,newData = [];
+	for(var k=0;k<q.quotes.length;k++){
 		$.ajax({
 			url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+q.quotes[k]+'/chartdata;type=quote;range=1d/json',
 			dataType:"jsonp",
 			success: function (data){
-				var x,dt,
-					d = data.series
-					gmtoffset = data.meta.gmtoffset;
-					weight = q.weight[k];
-				if (typeof(newData) === 'undefined'){
-					this.newData = [];
+				
+				d = data.series;
+				gmtoffset = data.meta.gmtoffset;
+				weight = q.weight[k];
+				preClose = data.meta.previous_close;
+				if (newData.length<2){
+					
 					var time = new Date((d[0].Timestamp)*1000);
 					time.setHours(2);
+					time.setMinutes(30);
 					time.setSeconds(0);
 					time.setMilliseconds(0);
-					time = time.valueOf()/1000;
-					for (var i=0,j=0; i < 391; i++) {
-						time += 60;
-						dt = new Date((d[j++].Timestamp+gmtoffset)*1000);
-						x = dt.getHours()*60+dt.getMinutes()-150;
-						console.log(dt);
-						// break;
-						if(x>i || j===d.length)j--;
-						this.newData.push({
-							open:	(d[j].open*weight),
-							close:	(d[j].close*weight),
-							high:	(d[j].high*weight),
-							low:	(d[j].low*weight),
+
+				}
+				for (var i=0,j=0; i < 391; i++) {
+					dt = new Date((d[j++].Timestamp+gmtoffset)*1000);
+					x = dt.getHours()*60+dt.getMinutes()-150;
+					if(x>i || j===d.length)j--;
+					if (newData.length<391){
+						time += 60000;
+						newData.push({
+							open:	((d[j].open-preClose)/preClose)*weight,
+							close:	((d[j].close-preClose)/preClose)*weight,
+							high:	((d[j].high-preClose)/preClose)*weight,
+							low:	((d[j].low-preClose)/preClose)*weight,
+							volume:	(d[j].volume*weight),
 							Timestamp:	time
 						});
+					}else{
+						newData[i].open += ((d[j].open-preClose)/preClose)*weight;
+						newData[i].close += ((d[j].close-preClose)/preClose)*weight;
+						newData[i].high += ((d[j].high-preClose)/preClose)*weight;
+						newData[i].low += ((d[j].low-preClose)/preClose)*weight;
 					}
 					
 				}
-				
-				
 			}
 		});
-		
 	}
-	
-	
-	
-	
+	IntraDayChart(newData,motifName,gmtoffset,0);
 }
+	
+	
+	
+	
+
 
 
 function IntraDayChart(d,companyName,gmtoffset,previous_close) {
 	$('#detailText').text( companyName+"("+detail_SYM+")");
 	var ohlc = [],
 		volume = [],// split the data set into ohlc and volume
-		dataLength = d.length,
 	// set the allowed units for data grouping
-	groupingUnits = [
-	['minute',	[1, 2, 5, 10, 15, 30]],
-	['hour',	[1, 2, 3, 4, 6]],
-	['day',		[1]]];
+		groupingUnits = [
+		['minute',	[1, 2, 5, 10, 15, 30]],
+		['hour',	[1, 2, 3, 4, 6]],
+		['day',		[1]]];
 	
 	for (var i=0; i < d.length; i++) {
 		ohlc.push([
