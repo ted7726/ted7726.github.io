@@ -174,9 +174,6 @@ f=open('motifs.js','w')
 
 
 f.write("function getMotifs(motif){\n")
-f.write("	if( typeof(this.DashBoard) === 'undefined'){\n")
-f.write("		this.DashBoard = {};\n")
-f.write("	}\n")
 f.write("	if( typeof(this.db) === 'undefined'){\n")
 f.write("		this.db = {};\n")
 f.close()
@@ -197,15 +194,7 @@ for fileName in motifs1:
 
 f=open('motifs.js','a')
 f.write('	}\n')
-f.write('	var q = db[motif];\n')
-f.write('	if (q !== "undefined" && !this.DashBoard[motif]){\n')
-f.write('		var x = new combination(\n')
-f.write('			q.quotes,q.weight,q.name\n')
-f.write('		);\n')
-f.write('		this.DashBoard[motif] = true;\n')
-f.write('		Motifs.push(x);\n')
-f.write('	}\n')
-f.write('	$(".datagrid").fadeIn();\n')
+f.write('	return db[motif];')
 f.write('}\n')
 f.close()
 

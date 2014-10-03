@@ -49,12 +49,12 @@ $(document).ready(function(){
 	});
 	$('#testSearch').keyup(function(e){
 		if(e.keyCode == 13){
-			getMotifs($(this).val().replace(/\s/g,""));
+			addMotif($(this).val().replace(/\s/g,""));
 			$(this).val("");
 		}
 	});
 	$('#iconSearch').click(function(){
-		getMotifs($('#testSearch').val().replace(/\s/g,""));
+		addMotif($('#testSearch').val().replace(/\s/g,""));
 		$('#testSearch').val("");
 	});
 	
@@ -108,10 +108,10 @@ $(document).ready(function(){
 	});
 	
 	$("#test").click(function(){
-		updateChart();
+		createMotifChart("ShaleOil");
 	});
 	
-	$(".list")	.click(function(){	getMotifs(this.id);	});
+	$(".list")	.click(function(){	addMotif(this.id);	});
 	$("#testSearch").autocomplete({
 		source: [	"Shale Oil","Frack Attack","Finding Momo","Dr Copper","Black Gold","Big Data","Bear International Market","Bear US Market","Bear US Sectors","Shale Gas","No Glass Ceilings","Biotech Breakthroughs","Social Networking","High Spirits","Natural Gas Glut","Onward Online Ads","Drug Patent Cliffs","Office Space","Online Gaming World","Energetic MLPs","Battling Cancer","Used Car Tune up","Recycled Steel","Hot Retail","Low Beta","Tablet Takeover","Precious Metals","Repeal Obamacare","Dividend Stars","Caffeine Fix","Junk Foods","Income Inequality","Defensive Dividends","Home Improvement","Dogs of the Dow","Discount Nation","China Internet","Chinese Solar","Cleantech Everywhere","Couch Commerce","Rest In Peace","Retiring 2055","High Yield Dividends","Sell in May","Retiring 2050","New Era Portfolio","7Twelve Core Portfolio","Utility Bills","Bullet Proof Balance Sheets","Retiring 2045","All American","Classic 60 40","Retiring 2040","Nuclear Renaissance","Cash Flow Kings","Lots of Likes","Fossil Free","On The Road","Modern Warfare","Growing Dividends","Retiring 2035","Renter Nation","Digital Dollars","Ivy League","BRICS Building","Retiring 2030","Socially Responsible","Pet Passion","Online Video","No Brainer Portfolio","Higher Highs","Healthy and Tasty","Retiring 2025","Lazy 3 Portfolio","Electronic Trading","Vanity Flair","Senior Care","Disappointing the Street","Content is King","Horizon Model 5 Year Aggressive","Horizon Model 15 Year Aggressive","Horizon Model 1 Year Aggressive","Horizon Model 5 Year Moderate","Horizon Model 1 Year Moderate","Horizon Model 15 Year Moderate","Index Fans","GARP","Childs Play","Robotic Revolution","Transporting America","Small Cap Stars","Democratic Donors","World of Sports","No Brainer Portfolio","No Glass Ceilings","Nuclear Renaissance","Obamacare","Office Space","Online Gaming World","Online Video","On The Road","Onward Online Ads","Permanent Strategy","Pet Passion","Precious Metals","Private Equity","Property Casualty Insurance","QE Japan","Recent IPOs","Recycled Steel","Renter Nation","Repeal Obamacare","Republican Donors","Rest In Peace","Retiring 2020","Retiring 2025","Retiring 2030","Retiring 2035","Retiring 2040","Retiring 2045","Retiring 2050","Retiring 2055","Rising Food Prices1","Rising Interest Rates","Robotic Revolution","Senior Care","Seven Deadly Sins","Shale Gas","Shale Oil","Small Cap Stars","Smart Grid","Socially Responsible","Social Networking","Software as a Service","Spinoffs","Stable Earnings","Tablet Takeover","Taking Flight","Tax Inversion Targets","Tech Takeout Targets","That New Car Smell","Too Big to Fail","Transporting America","Used Car Tune up","US Treasury Ladder","Utility Bills","Vanity Flair","Wall Street","Water Shortage","Wearable Tech","World of Sports"]
     });
@@ -192,7 +192,20 @@ function addCustom(){
 		Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
 	}
 	$("#text1").val("");
-	
+}
+function addMotif(motif){
+	if( typeof(this.DashBoard) === 'undefined'){
+		this.DashBoard = {};
+	}
+	var q = getMotifs(motif);
+	if (q !== "undefined" && !this.DashBoard[motif]){
+		var x = new combination(
+			q.quotes,q.weight,q.name
+		);
+		this.DashBoard[motif] = true;
+		Motifs.push(x);
+	}
+	$(".datagrid").fadeIn();
 }
 
 function rowClick(){
@@ -204,8 +217,15 @@ function rowClick(){
 		left:($(this).offset().left),
 		top:($(this).offset().top+$(this).outerHeight()+4)
 	});
-	IntraDayChart();
-	$('#detail').show();
+	
+	
+	$.ajax({
+		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
+		dataType:"jsonp",
+		success: function (data){
+			IntraDayChart(data.series,data.meta["Company-Name"],data.meta.gmtoffset,data.meta.previous_close);
+		}
+	});$('#detail').show();
 
 }
 
@@ -330,7 +350,7 @@ window.setInterval(function() {
 		Motifs[i].get_quotes_data();
 	}
 	update_INDEXs();
-	
+
 	// update_detail();
 }, 2000);
 window.setInterval(function() {
@@ -342,7 +362,15 @@ window.setInterval(function() {
 			return $(this).attr('src')+"?";
 		}
 	});
-	updateChart();
+	
+	$.ajax({
+		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
+		dataType:"jsonp",
+		success: function (data){
+			updateChart(data.series,data.meta.gmtoffset);
+		}
+	});
+	
 }, 15000);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,111 +426,145 @@ function yqlUpdate(SYM){
 	);
 }
 
-function IntraDayChart() {
-	$.ajax({
-		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
-		dataType:"jsonp",
-		success: function (data){
-			d=data.series;
-			$('#detailText').text(data.meta["Company-Name"] +"("+detail_SYM+")");
-			var ohlc = [],
-			volume = [],// split the data set into ohlc and volume
-			dataLength = d.length,
-			gmtoffset = data.meta.gmtoffset;
-			// set the allowed units for data grouping
-			groupingUnits = [
-			['minute',	[1, 2, 5, 10, 15, 30]],
-			['hour',	[1, 2, 3, 4, 6]],
-			['day',		[1]]];
-			
-			for (var i=0; i < d.length; i++) {
-				ohlc.push([
-					(d[i].Timestamp+gmtoffset)*1000, // the date
-					d[i].open, // open
-					d[i].high, // high
-					d[i].low, // low
-					d[i].close // close
-				]);
-				volume.push([
-					(d[i].Timestamp+gmtoffset)*1000, // the date
-					d[i].volume, // the date
-				]);
+function createMotifChart(motifName){
+	var q=getMotifs(motifName);
+	
+	// for(var k=0;k<q.quotes.length;k++){
+	for(var k=0;k<1;k++){
+		$.ajax({
+			url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+q.quotes[k]+'/chartdata;type=quote;range=1d/json',
+			dataType:"jsonp",
+			success: function (data){
+				var x,dt,
+					d = data.series
+					gmtoffset = data.meta.gmtoffset;
+					weight = q.weight[k];
+				if (typeof(newData) === 'undefined'){
+					this.newData = [];
+					var time = new Date((d[0].Timestamp)*1000);
+					time.setHours(2);
+					time.setSeconds(0);
+					time.setMilliseconds(0);
+					time = time.valueOf()/1000;
+					for (var i=0,j=0; i < 391; i++) {
+						time += 60;
+						dt = new Date((d[j++].Timestamp+gmtoffset)*1000);
+						x = dt.getHours()*60+dt.getMinutes()-150;
+						console.log(dt);
+						// break;
+						if(x>i || j===d.length)j--;
+						this.newData.push({
+							open:	(d[j].open*weight),
+							close:	(d[j].close*weight),
+							high:	(d[j].high*weight),
+							low:	(d[j].low*weight),
+							Timestamp:	time
+						});
+					}
+					
+				}
+				
+				
 			}
-			// create the chart
-			$('#detailChart').highcharts('StockChart', {
-				rangeSelector : {
-					buttons : [
-						{type : 'hour',count : 1,text : '1h'},
-						{type : 'hour',count : 2,text : '2h'},
-						{type : 'all' ,count : 1,text : 'Day'}
-					],
-					selected : 2,
-					inputEnabled : false
-				},
-				yAxis: [{
-					labels: { align: 'right', x: -3 },
-					title: 	{ text: 'Price' },
-					height: '75%',
-					lineWidth: 2,
-					plotLines : [{
-						value : data.meta.previous_close,
-						color : 'red',
-						dashStyle : 'longdash',
-						width : 1
-					}]
-				}, {
-					labels: { align: 'right', x: -3 },
-					title: 	{ text: 'Volume' },
-					top: '80%',
-					height: '20%',
-					offset: 0,
-					lineWidth: 2
-				}],
-				series: [{
-					type: 'candlestick',
-					name: detail_SYM,
-					data: ohlc,
-					dataGrouping: {	units: groupingUnits }
-				}, {
-					type: 'column',
-					name: 'Volume',
-					data: volume,
-					yAxis: 1,
-					dataGrouping: { units: groupingUnits }
-				}]
-			});
-		}
-	});
-}
-
-function updateChart(){
-	$.ajax({
-		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
-		dataType:"jsonp",
-		success: function (data){
-			var ohlc = [],
-				volume = [],
-				gmtoffset = data.meta.gmtoffset,
-				d = data.series;
-			for (var i=0; i < d.length; i++) {
-				ohlc.push([
-					(d[i].Timestamp+gmtoffset)*1000, // the date
-					d[i].open, // open
-					d[i].high, // high
-					d[i].low, // low
-					d[i].close, // close
-				]);
-				volume.push([
-					(d[i].Timestamp+gmtoffset)*1000, // the date
-					d[i].volume, // the volume
-				]);
-			}
-			($('#detailChart').highcharts()).series[0].setData(ohlc);
-			($('#detailChart').highcharts()).series[1].setData(volume);
-			// set the allowed units for data grouping
-		}
-	});
+		});
+		
+	}
+	
+	
+	
+	
 }
 
 
+function IntraDayChart(d,companyName,gmtoffset,previous_close) {
+	$('#detailText').text( companyName+"("+detail_SYM+")");
+	var ohlc = [],
+		volume = [],// split the data set into ohlc and volume
+		dataLength = d.length,
+	// set the allowed units for data grouping
+	groupingUnits = [
+	['minute',	[1, 2, 5, 10, 15, 30]],
+	['hour',	[1, 2, 3, 4, 6]],
+	['day',		[1]]];
+	
+	for (var i=0; i < d.length; i++) {
+		ohlc.push([
+			(d[i].Timestamp+gmtoffset)*1000, // the date
+			d[i].open, // open
+			d[i].high, // high
+			d[i].low, // low
+			d[i].close // close
+		]);
+		volume.push([
+			(d[i].Timestamp+gmtoffset)*1000, // the date
+			d[i].volume, // the date
+		]);
+	}
+	// create the chart
+	$('#detailChart').highcharts('StockChart', {
+		rangeSelector : {
+			buttons : [
+				{type : 'hour',count : 1,text : '1h'},
+				{type : 'hour',count : 2,text : '2h'},
+				{type : 'all' ,count : 1,text : 'Day'}
+			],
+			selected : 2,
+			inputEnabled : false
+		},
+		yAxis: [{
+			labels: { align: 'right', x: -3 },
+			title: 	{ text: 'Price' },
+			height: '75%',
+			lineWidth: 2,
+			plotLines : [{
+				value : previous_close,
+				color : 'red',
+				dashStyle : 'longdash',
+				width : 1
+			}]
+		}, {
+			labels: { align: 'right', x: -3 },
+			title: 	{ text: 'Volume' },
+			top: '80%',
+			height: '20%',
+			offset: 0,
+			lineWidth: 2
+		}],
+		series: [{
+			type: 'candlestick',
+			name: detail_SYM,
+			data: ohlc,
+			dataGrouping: {	units: groupingUnits }
+		}, {
+			type: 'column',
+			name: 'Volume',
+			data: volume,
+			yAxis: 1,
+			dataGrouping: { units: groupingUnits }
+		}]
+	});
+}
+
+function updateChart(d,gmtoffset){
+	
+	var ohlc = [],
+		volume = [];
+	
+	for (var i=0; i < d.length; i++) {
+		ohlc.push([
+			(d[i].Timestamp+gmtoffset)*1000, // the date
+			d[i].open, // open
+			d[i].high, // high
+			d[i].low, // low
+			d[i].close, // close
+		]);
+		volume.push([
+			(d[i].Timestamp+gmtoffset)*1000, // the date
+			d[i].volume, // the volume
+		]);
+	}
+	($('#detailChart').highcharts()).series[0].setData(ohlc);
+	($('#detailChart').highcharts()).series[1].setData(volume);
+	// set the allowed units for data grouping
+}
 
