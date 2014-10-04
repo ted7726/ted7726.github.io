@@ -6,6 +6,7 @@ var Motifs = [];
 var force_refresh = true;
 var step=1;
 var detail_SYM='GOOG';
+var newData=[];
 
 
 
@@ -165,10 +166,6 @@ function tourClose(){
 	$('#dim') .fadeOut();
 }
 
-function toggleCaption(){
-	$(this).next().fadeToggle();
-}
-
 
 function addCustom(){
 	// analysis input
@@ -225,9 +222,21 @@ function rowClick(){
 		success: function (data){
 			IntraDayChart(data.series,data.meta["Company-Name"],data.meta.gmtoffset,data.meta.previous_close);
 		}
-	});$('#detail').show();
-
+	});
+	$('#detail').show();
 }
+
+function toggleCaption(){
+	$('#detail').css({
+		left:($(this).offset().left),
+		top:($(this).offset().top+$(this).outerHeight()+4)
+	});
+	
+	createMotifChart(($(this).text().replace(/-{0,1}\d{1,2}\.\d{0,3}\%(.*)/g,"$1")).replace(/\s/g,""));
+	// $(this).next().fadeToggle();
+	$('#detail').show();
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -363,13 +372,13 @@ window.setInterval(function() {
 		}
 	});
 	
-	$.ajax({
-		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
-		dataType:"jsonp",
-		success: function (data){
-			updateChart(data.series,data.meta.gmtoffset);
-		}
-	});
+	// $.ajax({
+		// url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+detail_SYM+'/chartdata;type=quote;range=1d/json',
+		// dataType:"jsonp",
+		// success: function (data){
+			// updateChart(data.series,data.meta.gmtoffset);
+		// }
+	// });
 	
 }, 15000);
 
@@ -428,52 +437,57 @@ function yqlUpdate(SYM){
 
 function createMotifChart(motifName){
 	var q=getMotifs(motifName);
-	var x,dt,d,gmtoffset,weight,preClose,newData = [];
-	for(var k=0;k<q.quotes.length;k++){
+	newData=[];
+	createMotifChartAjax(q.quotes,q.weight,q.quotes.length,q.name);
+}
+function createMotifChartAjax(quote,weight,k,motifName){
+	
+	
+	if(k--<1){
+		IntraDayChart(newData,motifName,-14400,0);
+	}else{
 		$.ajax({
-			url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+q.quotes[k]+'/chartdata;type=quote;range=1d/json',
-			dataType:"jsonp",
-			success: function (data){
+		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+quote[k]+'/chartdata;type=quote;range=1d/json',
+		dataType:"jsonp",
+		success: function (data){
+			
+			var d = data.series, time
+			gmtoffset = data.meta.gmtoffset,
+			preClose = data.meta.previous_close;
+			if (newData.length<2){
+				time = new Date((d[0].Timestamp)*1000);
+				time.setHours(6);
+				time.setMinutes(30);
+				time.setSeconds(0);
+				time.setMilliseconds(0);
+				time = time.valueOf()/1000;
+			}
+			for (var i=0,j=0; i < 391; i++) {
+				dt = new Date((d[j++].Timestamp+gmtoffset)*1000);
+				x = dt.getHours()*60+dt.getMinutes()-150;
+				if(x>i || j===d.length)j--;
 				
-				d = data.series;
-				gmtoffset = data.meta.gmtoffset;
-				weight = q.weight[k];
-				preClose = data.meta.previous_close;
-				if (newData.length<2){
-					
-					var time = new Date((d[0].Timestamp)*1000);
-					time.setHours(2);
-					time.setMinutes(30);
-					time.setSeconds(0);
-					time.setMilliseconds(0);
-
-				}
-				for (var i=0,j=0; i < 391; i++) {
-					dt = new Date((d[j++].Timestamp+gmtoffset)*1000);
-					x = dt.getHours()*60+dt.getMinutes()-150;
-					if(x>i || j===d.length)j--;
-					if (newData.length<391){
-						time += 60000;
-						newData.push({
-							open:	((d[j].open-preClose)/preClose)*weight,
-							close:	((d[j].close-preClose)/preClose)*weight,
-							high:	((d[j].high-preClose)/preClose)*weight,
-							low:	((d[j].low-preClose)/preClose)*weight,
-							volume:	(d[j].volume*weight),
-							Timestamp:	time
-						});
-					}else{
-						newData[i].open += ((d[j].open-preClose)/preClose)*weight;
-						newData[i].close += ((d[j].close-preClose)/preClose)*weight;
-						newData[i].high += ((d[j].high-preClose)/preClose)*weight;
-						newData[i].low += ((d[j].low-preClose)/preClose)*weight;
-					}
-					
+				if (newData.length<391){
+					time += 60;
+					newData.push({
+						open:	Math.round((d[j].open-preClose)/preClose*weight[k]*1000)/1000,
+						close:	Math.round((d[j].close-preClose)/preClose*weight[k]*1000)/1000,
+						high:	Math.round((d[j].high-preClose)/preClose*weight[k]*1000)/1000,
+						low:	Math.round((d[j].low-preClose)/preClose*weight[k]*1000)/1000,
+						volume:	d[j].volume*weight[k],
+						Timestamp:	time
+					});
+				}else{
+					newData[i].open		+= Math.round((d[j].open-preClose)/preClose*weight[k]*1000)/1000;
+					newData[i].close	+= Math.round((d[j].close-preClose)/preClose*weight[k]*1000)/1000;
+					newData[i].high		+= Math.round((d[j].high-preClose)/preClose*weight[k]*1000)/1000;
+					newData[i].low		+= Math.round((d[j].low-preClose)/preClose*weight[k]*1000)/1000;
+					newData[i].volume	+= (d[j].volume*weight[k]);
 				}
 			}
-		});
-	}
-	IntraDayChart(newData,motifName,gmtoffset,0);
+			createMotifChartAjax(quote,weight,k,motifName);
+		}
+	});}
 }
 	
 	
@@ -483,6 +497,7 @@ function createMotifChart(motifName){
 
 
 function IntraDayChart(d,companyName,gmtoffset,previous_close) {
+	
 	$('#detailText').text( companyName+"("+detail_SYM+")");
 	var ohlc = [],
 		volume = [],// split the data set into ohlc and volume
@@ -518,7 +533,7 @@ function IntraDayChart(d,companyName,gmtoffset,previous_close) {
 		},
 		yAxis: [{
 			labels: { align: 'right', x: -3 },
-			title: 	{ text: 'Price' },
+			title: 	{ text: (previous_close===0?'%':'Price') },
 			height: '75%',
 			lineWidth: 2,
 			plotLines : [{
