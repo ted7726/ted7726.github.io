@@ -193,6 +193,10 @@ for fileName in motifs1:
 		print "Loading error:" + fileName+"\n"
 
 f=open('motifs.js','a')
+f.write('		db["CustomDrugPatentCliffs"]={\n')
+f.write('			"quotes":["ACT","PRGO","MYL","RDY","HSP","TARO","LCI","AKRX","IPXL","SGNT","TKMR","BCRX","NNVC","SRPT","GSK","JNJ","NLNK","INO"],\n')
+f.write('			"weight":[25.58,8.17,7.39,3.48,3.48,2.58,2.34,2.34,2.34,2.34,6.76,6.32,5.88,5.32,4.80,4.76,3.80,2.32],\n')
+f.write('			"name":"Custom Drug Patent Cliffs"};\n')
 f.write('	}\n')
 f.write('	return db[motif];')
 f.write('}\n')
@@ -200,3 +204,9 @@ f.close()
 
 
 os.system("del *.xlsx")
+
+
+
+
+
+
