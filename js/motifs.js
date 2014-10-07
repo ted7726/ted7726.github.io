@@ -601,13 +601,11 @@ function getMotifs(motif){
 			"quotes":['GPRO', 'GOOGL', 'GRMN', 'AAPL', 'ARMH', 'TXN', 'MXIM', 'MCHP', 'SLAB', 'STM', 'SMTC', 'ADI', 'INVN', 'SYNA', 'HIMX', 'CY', 'KN', 'QCOM', 'BRCM', 'SWKS', 'GLW', 'LPL', 'AUO', 'TNDM', 'PODD'],
 			"weight":[17.63, 11.83, 11.54, 11.42, 3.14, 2.93, 2.88, 2.87, 2.23, 1.78, 1.53, 3.31, 3.09, 2.82, 2.43, 1.99, 0.98, 3.62, 3.29, 2.78, 1.28, 1.21, 0.85, 1.39, 1.16],
 			"name":"Wearable Tech"};
-		db["WorldofSports"]={
-			"quotes":['NKE', 'VFC', 'UA', 'FL', 'COLM', 'LULU', 'HIBB', 'FINL', 'DECK', 'NLS', 'JAH', 'WWW', 'DIS', 'MSG', 'ISCA', 'LTM', 'CODI', 'BC', 'MBUU', 'ELY', 'SNOW', 'BDE', 'DKS', 'BGFV', 'SPWH'],
-			"weight":[23.23, 15.48, 9.41, 7.84, 4.79, 2.2, 1.63, 1.61, 1.13, 1.05, 0.98, 0.91, 12.61, 6.33, 0.95, 1.35, 0.94, 0.91, 0.88, 0.82, 0.78, 0.66, 2.02, 0.76, 0.72],
-			"name":"World of Sports"};
-		db["CustomDrugPatentCliffs"]={
-			"quotes":["ACT","PRGO","MYL","RDY","HSP","TARO","LCI","AKRX","IPXL","SGNT","TKMR","BCRX","NNVC","SRPT","GSK","JNJ","NLNK","INO"],
-			"weight":[25.58,8.17,7.39,3.48,3.48,2.58,2.34,2.34,2.34,2.34,6.76,6.32,5.88,5.32,4.80,4.76,3.80,2.32],
-			"name":"Custom Drug Patent Cliffs"};
+		db["ETFs"]={
+			"quotes":["VTI","IVV","DIA","SPLV","IWB","VXUS","YCS","TECL","ERX","SYLD","UDOW","SOXL","CURE","XIV","MLPL","ZIV","DGZ","MMP","UPRO"],
+			"weight":[6.30,6.10,6.00,6.00,5.80,5.20,5.10,4.97,4.96,4.90,4.90,4.80,4.80,4.80,4.80,4.70,4.70,6.00,5.17],
+			"name":"ETFs"};
+
+
 	}
 	return db[motif];}
