@@ -6,7 +6,7 @@ var Motifs = [];
 var force_refresh = true;
 var step=1;
 var detail_SYM='GOOG';
-var newData=[];
+// var newData=[];
 
 
 
@@ -436,60 +436,66 @@ function yqlUpdate(SYM){
 }
 
 function createMotifChart(motifName){
+	var q=getMotifs(motifName)
+		quote = q.quotes,
+		newData=[];
 	
-	var q=getMotifs(motifName);
-	
-	newData=[];
-	createMotifChartAjax(q.quotes,q.weight,q.quotes.length,q.name);
-}
-function createMotifChartAjax(quote,weight,k,motifName){
-	
-	
-	if(k--<1){
-		IntraDayChart(newData,motifName,-14400,0);
-	}else{
-		$.ajax({
-		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+quote[k]+'/chartdata;type=quote;range=1d/json',
-		dataType:"jsonp",
-		success: function (data){
-			
-			var d = data.series, time
-			gmtoffset = data.meta.gmtoffset,
-			preClose = data.meta.previous_close;
-			if (newData.length<2){
-				time = new Date((d[0].Timestamp)*1000);
-				time.setHours(6);
-				time.setMinutes(30);
-				time.setSeconds(0);
-				time.setMilliseconds(0);
-				time = time.valueOf()/1000;
-			}
-			for (var i=0,j=0; i < 391; i++) {
-				dt = new Date((d[j++].Timestamp+gmtoffset)*1000);
-				x = dt.getHours()*60+dt.getMinutes()-150;
-				if(x>i || j===d.length)j--;
-				
-				if (newData.length<391){
-					time += 60;
-					newData.push({
-						open:	Math.round((d[j].open-preClose)/preClose*weight[k]*1000)/1000,
-						close:	Math.round((d[j].close-preClose)/preClose*weight[k]*1000)/1000,
-						high:	Math.round((d[j].high-preClose)/preClose*weight[k]*1000)/1000,
-						low:	Math.round((d[j].low-preClose)/preClose*weight[k]*1000)/1000,
-						volume:	d[j].volume*weight[k],
-						Timestamp:	time
-					});
-				}else{
-					newData[i].open		+= Math.round((d[j].open-preClose)/preClose*weight[k]*1000)/1000;
-					newData[i].close	+= Math.round((d[j].close-preClose)/preClose*weight[k]*1000)/1000;
-					newData[i].high		+= Math.round((d[j].high-preClose)/preClose*weight[k]*1000)/1000;
-					newData[i].low		+= Math.round((d[j].low-preClose)/preClose*weight[k]*1000)/1000;
-					newData[i].volume	+= (d[j].volume*weight[k]);
+	for (var i=0;i<quote.length;i++){
+		(function(i){
+			$.ajax({
+				url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+quote[i]+'/chartdata;type=quote;range=1d/json',
+				dataType:"jsonp",
+				success: function (data){
+					data ['weight'] =  q.weight[i];
+					newData.push(data);
+					if(i===quote.length-1) createMotifChartAjax(q.name,newData);
 				}
+			});
+		})(i);
+	}
+}
+// function createMotifChartAjax(quote,weight,k,motifName){
+
+function createMotifChartAjax(motifName,newData){
+	var minTimestamp = Number.MAX_VALUE,
+		maxTimestamp = 0,
+		maxLength = 0,
+		step,i,d,time,preClose,chartData=[];
+	// console.log(newData);
+	for(i=0;i<newData.length;i++){
+		if (newData[i].Timestamp.min<minTimestamp) minTimestamp = newData[i].Timestamp.min;
+		if (newData[i].Timestamp.max>maxTimestamp) maxTimestamp = newData[i].Timestamp.max;
+		if (newData[i].series.length>maxLength) maxLength = newData[i].series.length;
+	}
+	step = Math.round((maxTimestamp - minTimestamp)/maxLength);
+	for(i=0;i<newData.length;i++){
+		d = newData[i].series;
+		time = minTimestamp;
+		preClose = newData[i].meta.previous_close;
+		// console.log(maxLength);
+		for(var j=0,k=0;k<maxLength;k++){
+			time+=step;
+			if(d[j].Timestamp<time && j<d.length-1)j++;
+			if (chartData.length<maxLength){
+				chartData.push({
+					open:	Math.round((d[j].open-preClose)/preClose*newData[i].weight*1000)/1000,
+					close:	Math.round((d[j].close-preClose)/preClose*newData[i].weight*1000)/1000,
+					high:	Math.round((d[j].high-preClose)/preClose*newData[i].weight*1000)/1000,
+					low:	Math.round((d[j].low-preClose)/preClose*newData[i].weight*1000)/1000,
+					volume:	d[j].volume*d[j].open,
+					Timestamp:	time
+				});
+			}else{
+				chartData[k].open	+= Math.round((d[j].open-preClose)/preClose*newData[i].weight*1000)/1000;
+				chartData[k].close	+= Math.round((d[j].close-preClose)/preClose*newData[i].weight*1000)/1000;
+				chartData[k].high	+= Math.round((d[j].high-preClose)/preClose*newData[i].weight*1000)/1000;
+				chartData[k].low	+= Math.round((d[j].low-preClose)/preClose*newData[i].weight*1000)/1000;
+				chartData[k].volume	+= (d[j].volume*newData[i].weight);
 			}
-			createMotifChartAjax(quote,weight,k,motifName);
+			
 		}
-	});}
+	}
+	IntraDayChart(chartData,motifName,newData[0].meta.gmtoffset,0);
 }
 	
 	
@@ -499,7 +505,7 @@ function createMotifChartAjax(quote,weight,k,motifName){
 
 
 function IntraDayChart(d,companyName,gmtoffset,previous_close) {
-	
+	if(previous_close===0)detail_SYM = companyName;
 	$('#detailText').text( companyName+"("+detail_SYM+")");
 	var ohlc = [],
 		volume = [],// split the data set into ohlc and volume
