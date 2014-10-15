@@ -605,7 +605,9 @@ function getMotifs(motif){
 			"quotes":["VTI","IVV","DIA","SPLV","IWB","VXUS","YCS","TECL","ERX","SYLD","UDOW","SOXL","CURE","XIV","MLPL","ZIV","DGZ","MMP","UPRO"],
 			"weight":[6.30,6.10,6.00,6.00,5.80,5.20,5.10,4.97,4.96,4.90,4.90,4.80,4.80,4.80,4.80,4.70,4.70,6.00,5.17],
 			"name":"ETFs"};
-
-
+		db["CostumBear"]={
+			"quotes":["DUG","FXP","BZQ","EPV","SKF","EEV","SRS","EWV","SMN","DXD","SDS","QID","MZZ","TWM"],
+			"weight":[6.30,6.28,6.28,6.25,6.23,6.22,6.19,6.18,6.18,10.36,10.01,9.91,6.82,6.80],
+			"name":"CostumBear"};
 	}
 	return db[motif];}
