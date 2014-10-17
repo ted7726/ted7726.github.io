@@ -363,7 +363,7 @@ window.setInterval(function() {
 	update_INDEXs();
 
 	// update_detail();
-}, 16000);
+}, 2000);
 window.setInterval(function() {
 	$(".chart img").attr('src',function(){
 		var img_url = $(this).attr('src');
