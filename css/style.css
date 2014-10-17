@@ -385,11 +385,27 @@ input, textarea{
 	width:100%;
 	//box-shadow: 1px 0px 1px #000000;
 	cursor:pointer;
+	
 }
 
 
 .datagrid div.caption{
 	background: white;
+	//display:inline-block;
+}
+
+
+.datagrid #expand{
+	width:20px;
+	height:20px;
+	float:right;
+	margin:0 10px 0 0;
+	//position:relative;
+	//left:95%;
+	transform:rotate(-90deg);
+}
+.datagrid #expand:hover{
+	background:#E5E5E5;
 }
 .datagrid div green {
 	padding: 2px;

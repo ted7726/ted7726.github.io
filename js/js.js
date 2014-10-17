@@ -202,6 +202,7 @@ function addMotif(motif){
 		this.DashBoard[motif] = true;
 		Motifs.push(x);
 	}
+	x.get_quotes_data();
 	$(".datagrid").fadeIn();
 }
 
@@ -341,6 +342,7 @@ function combination(qs,qs_weight,t){
 					}
 				}
 				element_caption.html(
+					"<img src='img/accordion.png' id='expand'>"+
 					(weighted_changes_p >0?"<green>"+weighted_changes_p+"%</green>":"<red>"+weighted_changes_p+"%</red>")+title
 				);
 			}
@@ -361,7 +363,7 @@ window.setInterval(function() {
 	update_INDEXs();
 
 	// update_detail();
-}, 2000);
+}, 16000);
 window.setInterval(function() {
 	$(".chart img").attr('src',function(){
 		var img_url = $(this).attr('src');
