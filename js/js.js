@@ -7,8 +7,7 @@ var force_refresh = true;
 var step=1;
 var detail_SYM='GOOG';
 // var newData=[];
-
-
+var YAHOO = { Finance: { SymbolSuggest: {} }};
 
 $.ajaxSetup({
 	scriptCharset: "utf-8", //maybe "ISO-8859-1"
@@ -17,9 +16,33 @@ $.ajaxSetup({
 
 $(document).ready(function(){
 	
+	//string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1")
 	$('#text1').keyup(function(e){
 		if(e.keyCode == 13){ addCustom(); }
+		var queryString = (($('#text1').val()).replace(/.*,(\w*)/,"$1"));
+		$.ajax({
+			type: "GET",
+			url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc",
+			data: {query: queryString},
+			dataType: "jsonp",
+			jsonp : "callback",
+			jsonpCallback: "YAHOO.Finance.SymbolSuggest.ssCallback",
+		});
+
+		YAHOO.Finance.SymbolSuggest.ssCallback = function (data) {
+			var queryResult = data.ResultSet.Result;
+			var autoCompleteArray = []
+			for(var i=0;i<queryResult.length;i++){
+				autoCompleteArray[i] = queryResult[i].name + "(" + queryResult[i].symbol + ")"
+			}
+			$("#text1").autocomplete({
+				source: autoCompleteArray
+		    });
+			
+		}
 	});
+
+
 	$('#text2')
 	.keyup(function(e){
 		if(e.keyCode == 13){ addCustom(); }
@@ -169,24 +192,39 @@ function tourClose(){
 
 function addCustom(){
 	// analysis input
+	var customTitle;
 	if($("#text2").val() !==""){
 		var input = $("#text2").val().split("\n");
 		var quotes = new Array(input.length);
 		var quotes_weight = new Array(input.length);
-		for(i=0;i<input.length;i++){
+		for(var i=0;i<input.length;i++){
 			var matches = input[i].split("	");
 			quotes[i]=matches[0];
 			quotes_weight[i]=parseInt(matches[2]);
 		}
+		customTitle = ("Custom " + tableid);
 	}else if($("#text1").val() !==""){
 		var quotes = $("#text1").val().split(",");
-		var quotes_weight = new Array(quotes.length);
-		for(i=0;i<quotes.length;i++){
-			quotes_weight[i] = 100/quotes.length;
+		var quotes_weight = new Array(quotes.length);	
+		if(quotes.length===1){
+			customTitle = quotes[0];
+			quotes[0] = quotes[0].replace(/.*\((\w*)\)/,"$1");
+			quotes_weight[0] = 100;
+		}else{
+			for(var i=0;i<quotes.length;i++){
+				quotes_weight[i] = 100/quotes.length;
+			}
+			customTitle = quotes[0];
+			for(var i=1;i<quotes.length && i<3;i++){
+				customTitle += ", " + quotes[i];
+			}
+			if (quotes.length >3)customTitle += "...";
 		}
 	}
+
+
 	if(quotes){
-		Motifs.push(new combination(quotes,quotes_weight,"Custom " + tableid));
+		Motifs.push(new combination(quotes,quotes_weight,customTitle));
 	}
 	$("#text1").val("");
 }
