@@ -204,22 +204,11 @@ function addCustom(){
 		}
 		customTitle = ("Custom " + tableid);
 	}else if($("#text1").val() !==""){
-		var quotes = $("#text1").val().split(",");
-		var quotes_weight = new Array(quotes.length);	
-		if(quotes.length===1){
-			customTitle = quotes[0];
-			quotes[0] = quotes[0].replace(/.*\((\w*)\)/,"$1");
-			quotes_weight[0] = 100;
-		}else{
-			for(var i=0;i<quotes.length;i++){
-				quotes_weight[i] = 100/quotes.length;
-			}
-			customTitle = quotes[0];
-			for(var i=1;i<quotes.length && i<3;i++){
-				customTitle += ", " + quotes[i];
-			}
-			if (quotes.length >3)customTitle += "...";
-		}
+		var quotes_weight = new Array(1);	
+		var quotes = new Array(1);
+		var customTitle = $("#text1").val();
+		quotes[0] = (customTitle).replace(/.*\((\w*)\)/,"$1");
+		quotes_weight[0] = 100;
 	}
 
 
