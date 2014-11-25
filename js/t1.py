@@ -2,7 +2,7 @@ import urllib
 import re
 import os
 from xlrd import open_workbook
-os.system("del *.xlsx")
+os.system("rm *.xlsx")
 
 motifs1 = [
 	"Shale-Oil",
