@@ -6,6 +6,9 @@ var Motifs = [];
 var force_refresh = true;
 var step=1;
 var detail_SYM='GOOG';
+var newsPage=0;
+var newsPageStep =4;
+var loadingNews = false;
 // var newData=[];
 var YAHOO = { Finance: { SymbolSuggest: {} }};
 
@@ -17,9 +20,9 @@ $.ajaxSetup({
 $(document).ready(function(){
 	
 	//string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1")
-	$('#text1').keyup(function(e){
+	$('#headerSearchText').keyup(function(e){
 		if(e.keyCode == 13){ addCustom(); }
-		var queryString = (($('#text1').val()).replace(/.*,(\w*)/,"$1"));
+		var queryString = (($('#headerSearchText').val()).replace(/.*,(\w*)/,"$1"));
 		$.ajax({
 			type: "GET",
 			url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc",
@@ -35,7 +38,7 @@ $(document).ready(function(){
 			for(var i=0;i<queryResult.length;i++){
 				autoCompleteArray[i] = queryResult[i].name + "(" + queryResult[i].symbol + ")"
 			}
-			$("#text1").autocomplete({
+			$("#headerSearchText").autocomplete({
 				source: autoCompleteArray
 		    });
 			
@@ -81,6 +84,7 @@ $(document).ready(function(){
 		addMotif($('#testSearch').val().replace(/\s/g,""));
 		$('#testSearch').val("");
 	});
+
 	
 	
 	
@@ -132,7 +136,13 @@ $(document).ready(function(){
 	});
 	
 	$("#test").click(function(){
-		createMotifChart("BigData");
+		console.log("use for testing!");
+		getMarketNews();
+		// $(".newsContainer").animate({display:'inline-block'});
+		// createMotifChart("BigData");
+	});
+	$("#main").click(function(){
+		// $(".newsContainer").animate({display:'block'});
 	});
 	
 	$(".list")	.click(function(){	addMotif(this.id);	});
@@ -140,11 +150,12 @@ $(document).ready(function(){
 		source: [	"Shale Oil","Frack Attack","Finding Momo","Dr Copper","Black Gold","Big Data","Bear International Market","Bear US Market","Bear US Sectors","Shale Gas","No Glass Ceilings","Biotech Breakthroughs","Social Networking","High Spirits","Natural Gas Glut","Onward Online Ads","Drug Patent Cliffs","Office Space","Online Gaming World","Energetic MLPs","Battling Cancer","Used Car Tune up","Recycled Steel","Hot Retail","Low Beta","Tablet Takeover","Precious Metals","Repeal Obamacare","Dividend Stars","Caffeine Fix","Junk Foods","Income Inequality","Defensive Dividends","Home Improvement","Dogs of the Dow","Discount Nation","China Internet","Chinese Solar","Cleantech Everywhere","Couch Commerce","Rest In Peace","Retiring 2055","High Yield Dividends","Sell in May","Retiring 2050","New Era Portfolio","7Twelve Core Portfolio","Utility Bills","Bullet Proof Balance Sheets","Retiring 2045","All American","Classic 60 40","Retiring 2040","Nuclear Renaissance","Cash Flow Kings","Lots of Likes","Fossil Free","On The Road","Modern Warfare","Growing Dividends","Retiring 2035","Renter Nation","Digital Dollars","Ivy League","BRICS Building","Retiring 2030","Socially Responsible","Pet Passion","Online Video","No Brainer Portfolio","Higher Highs","Healthy and Tasty","Retiring 2025","Lazy 3 Portfolio","Electronic Trading","Vanity Flair","Senior Care","Disappointing the Street","Content is King","Horizon Model 5 Year Aggressive","Horizon Model 15 Year Aggressive","Horizon Model 1 Year Aggressive","Horizon Model 5 Year Moderate","Horizon Model 1 Year Moderate","Horizon Model 15 Year Moderate","Index Fans","GARP","Childs Play","Robotic Revolution","Transporting America","Small Cap Stars","Democratic Donors","World of Sports","No Brainer Portfolio","No Glass Ceilings","Nuclear Renaissance","Obamacare","Office Space","Online Gaming World","Online Video","On The Road","Onward Online Ads","Permanent Strategy","Pet Passion","Precious Metals","Private Equity","Property Casualty Insurance","QE Japan","Recent IPOs","Recycled Steel","Renter Nation","Repeal Obamacare","Republican Donors","Rest In Peace","Retiring 2020","Retiring 2025","Retiring 2030","Retiring 2035","Retiring 2040","Retiring 2045","Retiring 2050","Retiring 2055","Rising Food Prices1","Rising Interest Rates","Robotic Revolution","Senior Care","Seven Deadly Sins","Shale Gas","Shale Oil","Small Cap Stars","Smart Grid","Socially Responsible","Social Networking","Software as a Service","Spinoffs","Stable Earnings","Tablet Takeover","Taking Flight","Tax Inversion Targets","Tech Takeout Targets","That New Car Smell","Too Big to Fail","Transporting America","Used Car Tune up","US Treasury Ladder","Utility Bills","Vanity Flair","Wall Street","Water Shortage","Wearable Tech","World of Sports","CustomDrugPatentCliffs"]
     });
 	
+	getMarketNews();
 	
 	/* Facebook and Google+ like button: */
 	(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));
 	(function() {var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;po.src = 'https://apis.google.com/js/platform.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);	})();
-	
+	documentDidLoad();
 });
 
 
@@ -203,10 +214,10 @@ function addCustom(){
 			quotes_weight[i]=parseInt(matches[2]);
 		}
 		customTitle = ("Custom " + tableid);
-	}else if($("#text1").val() !==""){
+	}else if($("#headerSearchText").val() !==""){
 		var quotes_weight = new Array(1);	
 		var quotes = new Array(1);
-		var customTitle = $("#text1").val();
+		var customTitle = $("#headerSearchText").val();
 		quotes[0] = (customTitle).replace(/.*\((\w*)\)/,"$1");
 		quotes_weight[0] = 100;
 	}
@@ -215,7 +226,7 @@ function addCustom(){
 	if(quotes){
 		Motifs.push(new combination(quotes,quotes_weight,customTitle));
 	}
-	$("#text1").val("");
+	$("#headerSearchText").val("");
 }
 function addMotif(motif){
 	if( typeof(this.DashBoard) === 'undefined'){
@@ -390,7 +401,7 @@ window.setInterval(function() {
 	update_INDEXs();
 
 	// update_detail();
-}, 2000);
+}, 5000);
 window.setInterval(function() {
 	$(".chart img").attr('src',function(){
 		var img_url = $(this).attr('src');
@@ -410,6 +421,59 @@ window.setInterval(function() {
 	// });
 	
 }, 15000);
+
+var lastScroll = 0;
+var navShown = false;
+$(window).scroll(function(handler){
+	var scroll = $(window).scrollTop();
+	var delta = scroll-lastScroll;
+	var height = $('body').outerHeight();
+	var screenHeight = window.innerHeight;
+	// console.log(scroll);
+	var newColor = new $.Color( 128, 128, 128,scroll/100 );
+	if(scroll > height*0.9 - screenHeight ){
+		getMarketNews();
+		console.log("end of table", scroll, height, screenHeight);
+	}
+	if(scroll< 240){
+		searchHeaderPosition(scroll);
+	}else{
+		searchHeaderPosition(240);
+	}
+	var navPosition = $('#nav').offset().top - scroll;
+	var navGapToShown = $('#nav').outerHeight() +navPosition;
+	
+	
+	if(delta < navGapToShown && navPosition - delta < 0){
+		// console.log(navGapToShown,delta);
+		$('#nav').css({top:navPosition-delta});
+
+	}else if(delta>0 && navShown){
+
+		$('#nav').css({top:-$('#nav').outerHeight()});
+		// $('#nav').animate({top:-$('#nav').outerHeight()},200);
+		navShown=false;
+		console.log("down");
+	}else if(delta<0 && !navShown){
+		$('#nav').animate({top:0});
+		// $('#nav').animate({top:0},200);
+		navShown=true;
+		console.log("up");
+	}
+	lastScroll = scroll;
+});
+
+function searchHeaderPosition(scroll){
+	$('#searchContainer').animate({
+		top:scroll/2
+	},0);
+	$('#headerSearchBackGroundImage').css({
+		'background-position': 'center '+(-scroll/2-120)+'px'
+	});
+	$('#headerSearch').css({
+		background: 'rgba(48,48,48,'+(0.5*(1-scroll/240) + 0.25)+')'
+	});
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //	Update Functions
@@ -526,12 +590,6 @@ function createMotifChartAjax(motifName,newData){
 	}
 	IntraDayChart(chartData,motifName,newData[0].meta.gmtoffset,0);
 }
-	
-	
-	
-	
-
-
 
 function IntraDayChart(d,companyName,gmtoffset,previous_close) {
 	if(previous_close===0)detail_SYM = companyName;
@@ -625,3 +683,153 @@ function updateChart(d,gmtoffset){
 	// set the allowed units for data grouping
 }
 
+function documentDidLoad(){
+	screenSizeChanged();
+	
+
+}
+// screen size changed
+$( window ).resize(function() {
+	screenSizeChanged();
+	
+  // $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
+});
+
+var animating = false;
+function screenSizeChanged(){
+	// $('#headerSearchBackGroundImage').css({
+	// 	'background-size':$('#header').innerWidth()
+	// });
+	// var mainWidth = $('#main').innerWidth();
+	// var containerWidth = $('.newsContainer').outerWidth();
+	// console.log(containerWidth);
+
+	// if(  680 < mainWidth && containerWidth < 640){
+	// 	$('.newsContainer').stop().animate({width:640},100);
+	// }else if( containerWidth > 400){
+	// 	$('.newsContainer').stop().animate({width:400},100);
+	// }
+}
+
+function getMarketNews(){
+	if(loadingNews){
+		return;
+	}
+	loadingNews = true;
+	var quoteKeywords = ["market_news","Yahoo finance"];
+
+	for(var i=0;i<quoteKeywords.length;i++){
+		var keywords = quoteKeywords[i];
+		console.log("http://ajax.googleapis.com/ajax/services/search/news?v=1.0&q="+keywords+"&");
+		getNews("http://ajax.googleapis.com/ajax/services/search/news?v=1.0&q="+keywords+"&");
+
+	}
+	newsPage = newsPage + 1;
+	
+
+
+}
+
+function getNews(news_url){
+
+    $.ajax({
+    url: news_url +"start=" + newsPage*newsPageStep,
+    dataType: 'jsonp',
+    success: function(data) {
+    	if(data["responseData"] == null){
+    		return;
+    	}
+    	var articles = data["responseData"]["results"];
+    	console.log(articles);
+    	var pages = data["responseData"]["cursor"]["pages"];
+    	
+    	newsPageStep = articles.length;
+    	for(var i=0;i<articles.length;i++){
+    		var article = articles[i];
+    		var hasImage = (article["image"] != null);
+    		var container = jQuery('<a/>', {
+				id: 'newsContainer',
+				class: 'newsContainer',
+				href: article["unescapedUrl"]
+			});
+			
+    		var title = jQuery('<div/>', {
+				id: 'news',
+				title: article["title"],
+				class: (hasImage?'newsImageTitle':'newsTitle'),
+				html: replaceBold(article["title"])
+			});
+
+			var publisher = jQuery('<div/>', {
+				id: 'publisher',
+				class: (hasImage?'newsImagePublisher':'newsPublisher'),
+				text: article["publisher"]
+			});
+			
+
+			var content = jQuery('<div/>', {
+				id: 'content',
+				class: 'newsContent',
+				html: replaceBold(article["content"])
+			});
+			var timeago = (jQuery.timeago(article["publishedDate"]));
+			var date = jQuery('<div/>', {
+				id: 'date',
+				class: 'newsDate',
+				html: timeago
+			});
+			container.prepend(content);
+			container.prepend(date);
+			if(hasImage){
+				var contentContainer = jQuery('<div/>', {
+					id: 'titleContainer',
+					class: 'newsTitleContainer'
+				});
+				contentContainer.prepend(title);
+				contentContainer.prepend(publisher);
+				container.prepend(contentContainer);
+			}else{
+				container.prepend(publisher);
+				container.prepend(title);
+			}
+			
+			
+
+			if (hasImage){
+				var imageMask = jQuery('<img/>', {
+					id: 'image',
+					class: 'newsImageMask',
+					src: article["image"]["url"]
+				});
+				
+				
+				var image = jQuery('<img/>', {
+					id: 'image',
+					class: 'newsImage',
+					src: article["image"]["url"]
+				});
+				container.prepend(image);
+				container.prepend(imageMask);
+			}
+    		container.appendTo('#news0');
+    		
+    		if(hasImage){
+    			date.css({'text-align':'left'});
+    			var titleOffset = - title.outerHeight() - publisher.outerHeight();
+    			contentContainer.css({top:titleOffset});
+    			
+    			
+    		}
+    		container.animate({opacity: 1,}, 400);
+
+    	}
+		
+    	loadingNews = false;
+    }
+  });
+
+}
+
+function replaceBold(str){
+	return str.replace(/\<b\>/g,"").replace(/\<\/b\>/g,"");
+}

@@ -2,14 +2,20 @@
 <html>
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
     <title>Real Time Stock Price Monitor</title>
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="shortcut icon" href="img/FantasyStock_128.png">
+
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/js.js"></script>
 	<script src="js/motifs.js"></script>
 	<script src="js/highstock.js"></script>
+	<script src="js/jquery.timeago.js" type="text/javascript"></script>
 	<script src="js/exporting.js"></script>
+	<script src="js/jquery.color-2.1.0.js"></script>
+	
 	
 	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 	
@@ -17,11 +23,26 @@
 </head>
 	<body>
 		<div id="nav">
+
 			<div><a href="http://ted7726.github.io/">Real Time Stock Price Monitor</a></div>
-			<div id="about">About</div><br>
+			<div id="about">About</div>
+			<!-- <img src = "img/wstr.jpg" id = "headerImage"></img> -->
+			
+				
+
 			
 			
         </div style="width:100%">
+        <div id="header">
+        	
+        	<div id="searchContainer">
+        		<div id="headerSearchBackGroundImage"></div>
+	        	<div id="headerSearch">
+	      			<h2>Search Your Quote Get Real-Time Price</h2><input id="headerSearchText" placeholder="Symbols separated by ',' Ex. GOOG,YHOO,AAPL" style = ""></input><div id="submit">Add</div>
+	    		</div>
+    		</div>
+
+        </div>
 		<div class="INDEXs">
 			S&P500:<div id="SP500"></div>
 			NASDAQ:<div id="NASDAQ"></div>
@@ -54,10 +75,6 @@
 				<div id="CostumBear" class="list">CostumBear</div>
 			</div>
 			<div id="main" ><div id="ttt" style = "font-family:consolas;"></div>
-				
-				<input 	id="text1" 
-							placeholder="Symbols separated by ',' Ex. GOOG,YHOO,AAPL"></input>
-				<br>
 				<textarea 	id="text2" 
 							placeholder="Custom Motif"></textarea>
 							<img id="help" class="icon" src="img/question.png" width='30' height = '30'>
@@ -66,7 +83,7 @@
 								<div id="square">how to add Custom Motif?<br>click the<img src='img/question.png' width='30' height = '30' style ="vertical-align:middle">to get the tour</div>
 							</div>
 				<br>
-				<div id="submit" class="button">Add</div>
+				
 				<div id="fold" class="button">Fold</div>
 				<div id="unfold" class="button">Unfold</div>
 				<div id="test" class="button">test</div>
@@ -84,13 +101,14 @@
 				<div class="datagrid" >
 					
 					<div id="myTable0"></div>
+
 					
 				</div>
-				
+				<div id="news0"></div>
 			</div>
 			<div id="rightsidebar" class="sidebar">
-				US stock:
-				<div class="chart"><a href="https://finance.yahoo.com/echarts?s=%5EGSPC+Interactive#symbol=%5EGSPC;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eGSPC&amp;lang=en-US&amp;region=US&amp;width=400&amp;height=240?" alt="S&amp;P 500 (^GSPC)" width="100%"></a></div>
+				United State:
+				<div id="chart1" class="chart"><a href="https://finance.yahoo.com/echarts?s=%5EGSPC+Interactive#symbol=%5EGSPC;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eGSPC&amp;lang=en-US&amp;region=US&amp;width=400&amp;height=240?" alt="S&amp;P 500 (^GSPC)" width="100%"></a></div>
 				<div class="chart"><a href="https://finance.yahoo.com/echarts?s=%5EIXIC+Interactive#symbol=%5EIXIC;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eIXIC&amp;lang=en-US&amp;region=US&amp;width=400&amp;height=240?" alt="S&amp;P 500 (^IXIC)" width="100%"></a></div>
 				<div class="chart"><a href="https://finance.yahoo.com/echarts?s=%5EDJI+Interactive#symbol=%5EDJI;range=1d" data-rapid_p="1"><img src="http://chart.finance.yahoo.com/t?s=%5eDJI&amp;lang=en-US&amp;region=US&amp;width=400&amp;height=240?" alt="S&amp;P 500 (^DJI)" width="100%"></a></div>
 				Asia:
