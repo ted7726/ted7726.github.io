@@ -11,11 +11,18 @@ var newsPageStep =4;
 var loadingNews = false;
 // var newData=[];
 var YAHOO = { Finance: { SymbolSuggest: {} }};
+var favoriteCacheKey = "RealTimeStockMonitorCache";
+
+ 
 
 $.ajaxSetup({
 	scriptCharset: "utf-8", //maybe "ISO-8859-1"
 	contentType: "application/json; charset=utf-8"
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Events Listener
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(function(){
 	
@@ -63,6 +70,9 @@ $(document).ready(function(){
 	
 	$("#submit").click(function(){
 		addCustom();
+
+
+
 	});	
 	
 	$('#about').click(function(){
@@ -134,10 +144,31 @@ $(document).ready(function(){
 	$("#unfold").click(function(){
 		$(".datagrid table").fadeIn();
 	});
+	$("#cleanFavorites").click(function(){
+		cleanFavorites();
+	});
+
+	
 	
 	$("#test").click(function(){
 		console.log("use for testing!");
-		getMarketNews();
+
+		// new quote("GOOG");
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+		
+////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		// console.log(localStorage.abcdefg );
+		// localStorage.symbols = "YHOO";
+		// delete localStorage.abcdefg;
+		// delete localStorage.name;
+		
+
+
+		
 		// $(".newsContainer").animate({display:'inline-block'});
 		// createMotifChart("BigData");
 	});
@@ -147,16 +178,87 @@ $(document).ready(function(){
 	
 	$(".list")	.click(function(){	addMotif(this.id);	});
 	$("#testSearch").autocomplete({
-		source: [	"Shale Oil","Frack Attack","Finding Momo","Dr Copper","Black Gold","Big Data","Bear International Market","Bear US Market","Bear US Sectors","Shale Gas","No Glass Ceilings","Biotech Breakthroughs","Social Networking","High Spirits","Natural Gas Glut","Onward Online Ads","Drug Patent Cliffs","Office Space","Online Gaming World","Energetic MLPs","Battling Cancer","Used Car Tune up","Recycled Steel","Hot Retail","Low Beta","Tablet Takeover","Precious Metals","Repeal Obamacare","Dividend Stars","Caffeine Fix","Junk Foods","Income Inequality","Defensive Dividends","Home Improvement","Dogs of the Dow","Discount Nation","China Internet","Chinese Solar","Cleantech Everywhere","Couch Commerce","Rest In Peace","Retiring 2055","High Yield Dividends","Sell in May","Retiring 2050","New Era Portfolio","7Twelve Core Portfolio","Utility Bills","Bullet Proof Balance Sheets","Retiring 2045","All American","Classic 60 40","Retiring 2040","Nuclear Renaissance","Cash Flow Kings","Lots of Likes","Fossil Free","On The Road","Modern Warfare","Growing Dividends","Retiring 2035","Renter Nation","Digital Dollars","Ivy League","BRICS Building","Retiring 2030","Socially Responsible","Pet Passion","Online Video","No Brainer Portfolio","Higher Highs","Healthy and Tasty","Retiring 2025","Lazy 3 Portfolio","Electronic Trading","Vanity Flair","Senior Care","Disappointing the Street","Content is King","Horizon Model 5 Year Aggressive","Horizon Model 15 Year Aggressive","Horizon Model 1 Year Aggressive","Horizon Model 5 Year Moderate","Horizon Model 1 Year Moderate","Horizon Model 15 Year Moderate","Index Fans","GARP","Childs Play","Robotic Revolution","Transporting America","Small Cap Stars","Democratic Donors","World of Sports","No Brainer Portfolio","No Glass Ceilings","Nuclear Renaissance","Obamacare","Office Space","Online Gaming World","Online Video","On The Road","Onward Online Ads","Permanent Strategy","Pet Passion","Precious Metals","Private Equity","Property Casualty Insurance","QE Japan","Recent IPOs","Recycled Steel","Renter Nation","Repeal Obamacare","Republican Donors","Rest In Peace","Retiring 2020","Retiring 2025","Retiring 2030","Retiring 2035","Retiring 2040","Retiring 2045","Retiring 2050","Retiring 2055","Rising Food Prices1","Rising Interest Rates","Robotic Revolution","Senior Care","Seven Deadly Sins","Shale Gas","Shale Oil","Small Cap Stars","Smart Grid","Socially Responsible","Social Networking","Software as a Service","Spinoffs","Stable Earnings","Tablet Takeover","Taking Flight","Tax Inversion Targets","Tech Takeout Targets","That New Car Smell","Too Big to Fail","Transporting America","Used Car Tune up","US Treasury Ladder","Utility Bills","Vanity Flair","Wall Street","Water Shortage","Wearable Tech","World of Sports","CustomDrugPatentCliffs"]
+		source: ["Shale Oil","Frack Attack","Finding Momo","Dr Copper","Black Gold","Big Data","Bear International Market","Bear US Market","Bear US Sectors","Shale Gas","No Glass Ceilings","Biotech Breakthroughs","Social Networking","High Spirits","Natural Gas Glut","Onward Online Ads","Drug Patent Cliffs","Office Space","Online Gaming World","Energetic MLPs","Battling Cancer","Used Car Tune up","Recycled Steel","Hot Retail","Low Beta","Tablet Takeover","Precious Metals","Repeal Obamacare","Dividend Stars","Caffeine Fix","Junk Foods","Income Inequality","Defensive Dividends","Home Improvement","Dogs of the Dow","Discount Nation","China Internet","Chinese Solar","Cleantech Everywhere","Couch Commerce","Rest In Peace","Retiring 2055","High Yield Dividends","Sell in May","Retiring 2050","New Era Portfolio","7Twelve Core Portfolio","Utility Bills","Bullet Proof Balance Sheets","Retiring 2045","All American","Classic 60 40","Retiring 2040","Nuclear Renaissance","Cash Flow Kings","Lots of Likes","Fossil Free","On The Road","Modern Warfare","Growing Dividends","Retiring 2035","Renter Nation","Digital Dollars","Ivy League","BRICS Building","Retiring 2030","Socially Responsible","Pet Passion","Online Video","No Brainer Portfolio","Higher Highs","Healthy and Tasty","Retiring 2025","Lazy 3 Portfolio","Electronic Trading","Vanity Flair","Senior Care","Disappointing the Street","Content is King","Horizon Model 5 Year Aggressive","Horizon Model 15 Year Aggressive","Horizon Model 1 Year Aggressive","Horizon Model 5 Year Moderate","Horizon Model 1 Year Moderate","Horizon Model 15 Year Moderate","Index Fans","GARP","Childs Play","Robotic Revolution","Transporting America","Small Cap Stars","Democratic Donors","World of Sports","No Brainer Portfolio","No Glass Ceilings","Nuclear Renaissance","Obamacare","Office Space","Online Gaming World","Online Video","On The Road","Onward Online Ads","Permanent Strategy","Pet Passion","Precious Metals","Private Equity","Property Casualty Insurance","QE Japan","Recent IPOs","Recycled Steel","Renter Nation","Repeal Obamacare","Republican Donors","Rest In Peace","Retiring 2020","Retiring 2025","Retiring 2030","Retiring 2035","Retiring 2040","Retiring 2045","Retiring 2050","Retiring 2055","Rising Food Prices1","Rising Interest Rates","Robotic Revolution","Senior Care","Seven Deadly Sins","Shale Gas","Shale Oil","Small Cap Stars","Smart Grid","Socially Responsible","Social Networking","Software as a Service","Spinoffs","Stable Earnings","Tablet Takeover","Taking Flight","Tax Inversion Targets","Tech Takeout Targets","That New Car Smell","Too Big to Fail","Transporting America","Used Car Tune up","US Treasury Ladder","Utility Bills","Vanity Flair","Wall Street","Water Shortage","Wearable Tech","World of Sports","CustomDrugPatentCliffs"]
     });
 	
 	getMarketNews();
+	var favorites = getFavorites();
+	for(var i=0;i<favorites.length;i++){
+		new quote(favorites[i]);
+	}
 	
 	/* Facebook and Google+ like button: */
 	(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));
 	(function() {var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;po.src = 'https://apis.google.com/js/platform.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);	})();
 	documentDidLoad();
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Favorites Stock
+////////////////////////////////////////////////////////////////////////////////////////////////
+function setFavorites(myFavorites){
+	localStorage.setItem(favoriteCacheKey,myFavorites);
+}
+
+function getFavorites(){
+	var favoriteStr = localStorage.getItem(favoriteCacheKey);
+	if(favoriteStr){
+		return favoriteStr.split(",");
+	}else{
+		favorites = [];
+		setFavorites(favorites);
+		return favorites;
+	}
+}
+
+function addFavorites(newQuote){
+	var favorites = getFavorites();
+	favorites.push(newQuote);
+	setFavorites(favorites);
+}
+function cleanFavorites(){
+	setFavorites([]);
+	$('.quoteContainer').fadeOut();
+
+}
+function removeFavorites(removeQuote, container){
+	var favorites = getFavorites();
+	var index = favorites.indexOf(removeQuote);
+	console.log(index);
+	if (index>-1){
+		favorites.splice(index,1);
+		console.log(favorites);
+		setFavorites(favorites);
+
+	}
+
+
+	container.fadeOut();
+	//container.css({opacity:0});
+	//for(var current = container;(current !=null && current.next() !=null);current = current.next()){
+	//	var next = current.next();
+	//	if(next.offset()==null){
+	//		break;
+	//	}
+	//	var translateStr = "translate("+(current.offset().left - next.offset().left)+"px,"+(current.offset().top- next.offset().top)+"px)";
+	//	console.log(translateStr,next);
+	//	next.css({
+	//		"-webkit-transform":translateStr,
+	//		"-ms-transform":translateStr,
+	//		"transform":translateStr
+	//	});
+    //
+	//}
+	//container.remove();
+	//container.delay(300).hide();
+	//console.log(container);
+
+
+
+	//});
+
+
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,6 +327,9 @@ function addCustom(){
 
 	if(quotes){
 		Motifs.push(new combination(quotes,quotes_weight,customTitle));
+		new quote(quotes);
+		addFavorites(quotes);
+		
 	}
 	$("#headerSearchText").val("");
 }
@@ -389,6 +494,128 @@ function combination(qs,qs_weight,t){
 	
 }
 
+function quote(tick){
+	this.tick = tick;
+
+	//this.quoteContainerFake = jQuery('<div/>', {
+	//	class: 'quoteContainerFake'
+	//});
+
+	this.quoteContainer = jQuery('<div/>', {
+		class: 'quoteContainer',
+		click: function(){
+			console.log('quoteClick' + tick);
+		}
+	});
+	//var quoteContainerFake	= this.quoteContainerFake;
+	var quoteContainer		= this.quoteContainer;
+
+
+	var header                 = jQuery('<div/>', {class: 'quoteTitle', text: tick});
+	this.quoteName             = jQuery('<div/>', {class: 'quoteName'});
+	this.priceChange           = jQuery('<div/>', {class: 'quotePriceChange'});
+	this.priceChangePercentage = jQuery('<div/>', {class: 'priceChangePercentage'});
+	this.price                 = jQuery('<div/>', {class: 'quotePrice'});
+	this.close				   = jQuery('<img/>', {class: 'quoteClose', src: 'img/close.png',
+		click: function(){
+			console.log('quote remove' + tick);
+
+			removeFavorites(tick, quoteContainer);
+
+		}
+	});
+
+	// var chart = jQuery('<img/>', {
+	// 	// src: "http://chart.finance.yahoo.com/t?s="+tick+"&amp;lang=en-US&amp;region=US&amp;width=400&amp;height=240?",
+	// 	src: "http://ichart.yahoo.com/t?s="+tick,
+	// 	href: "http://finance.yahoo.com/echarts?s="+tick,
+	// });
+
+	var chart = jQuery('<canvas/>', {
+		href: "http://finance.yahoo.com/echarts?s="+tick
+	});
+	
+
+	quoteContainer.prepend(this.close);
+	quoteContainer.prepend(chart);
+	quoteContainer.prepend(this.priceChangePercentage);
+	quoteContainer.prepend(this.priceChange);
+	quoteContainer.prepend(this.price);
+	quoteContainer.prepend('<br>');
+	quoteContainer.prepend(this.quoteName);
+	quoteContainer.prepend(header);
+	console.log("height: "+quoteContainer.innerHeight());
+	quoteContainer.appendTo('#myTable0');
+	//quoteContainerFake.appendTo('#myTable0');
+
+
+
+	
+
+	this.loadQuote = function(){
+		
+		var yahoo_url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22"+this.tick+"%22)%0A%09%09&env=http://datatables.org/alltables.env&format=json";
+		var price = this.price;
+		var priceChange = this.priceChange;
+		var priceChangePercentage = this.priceChangePercentage;
+		var quoteContainer = this.quoteContainer;
+		var tick = this.tick;
+		var quoteName = this.quoteName;
+		
+		$.ajax({
+			url: yahoo_url,
+			dataType: "jsonp",
+			success: function (data){
+				var quote = data.query.results.quote;
+				if(quote == null){
+					return;
+				}
+				console.log(quote);
+				console.log(parseFloat(quote.Change));
+				var priceColor = (parseFloat(quote.Change)<0?'red':'green');
+				price.text(quote.LastTradePriceOnly);
+				priceChange.text(quote.Change);
+				priceChange.css({color:priceColor});
+				priceChangePercentage.text("("+Math.round(parseFloat(quote.ChangeinPercent)*100)/100+"%)");
+				priceChangePercentage.css({color:priceColor});
+
+				quoteName.text(quote.Name);
+				console.log(quote);
+				quoteContainer.animate({opacity: 1}, 400);
+			},
+			error:function(){
+				loadQuoteFaileHandler(this);
+			}
+
+		});
+	}
+	this.loadQuote();
+	loadBasicChart(tick,chart);
+
+	//quoteContainer.css({top:quoteContainerFake.offset().top,left:quoteContainerFake.offset().left});
+	//console.log("x:"+quoteContainerFake.offset().top+" y:"+quoteContainerFake.offset().left+" height:"+quoteContainer.outerHeight());
+
+
+}
+
+function loadQuoteFaileHandler(quoteContainer){
+	var google_url = "http://finance.google.com/finance/info?client=ig&q="+ quoteContainer.tick;
+	$.ajax({
+		url: google_url,
+		dataType: "jsonp",
+		success: function (data){
+			var quote = data[0];
+			console.log("google");
+			if(quote == null){
+				return;
+			}
+			quoteContainer.price.text(quote.l);
+			quoteContainer.priceChange.text(quote.c);
+			quoteContainer.priceChangePercentage.text(quote.cp);
+		}
+	});
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //	Timer			
@@ -424,54 +651,61 @@ window.setInterval(function() {
 
 var lastScroll = 0;
 var navShown = false;
+var navAnimating = false;
 $(window).scroll(function(handler){
 	var scroll = $(window).scrollTop();
 	var delta = scroll-lastScroll;
 	var height = $('body').outerHeight();
 	var screenHeight = window.innerHeight;
-	// console.log(scroll);
-	var newColor = new $.Color( 128, 128, 128,scroll/100 );
+
 	if(scroll > height*0.9 - screenHeight ){
 		getMarketNews();
 		console.log("end of table", scroll, height, screenHeight);
 	}
-	if(scroll< 240){
+	if(scroll< 400){
 		searchHeaderPosition(scroll);
 	}else{
-		searchHeaderPosition(240);
+		searchHeaderPosition(400);
 	}
-	var navPosition = $('#nav').offset().top - scroll;
-	var navGapToShown = $('#nav').outerHeight() +navPosition;
+
+
+	// var navPosition = $('#nav').offset().top - scroll;
+	// var navGapToShown = $('#nav').outerHeight() +navPosition;
 	
 	
-	if(delta < navGapToShown && navPosition - delta < 0){
-		// console.log(navGapToShown,delta);
-		$('#nav').css({top:navPosition-delta});
-
-	}else if(delta>0 && navShown){
-
-		$('#nav').css({top:-$('#nav').outerHeight()});
-		// $('#nav').animate({top:-$('#nav').outerHeight()},200);
-		navShown=false;
-		console.log("down");
-	}else if(delta<0 && !navShown){
-		$('#nav').animate({top:0});
-		// $('#nav').animate({top:0},200);
-		navShown=true;
-		console.log("up");
-	}
-	lastScroll = scroll;
+	// if(delta>0 && navShown && !navAnimating){
+	// 	navAnimating = true;
+	// 	$('#nav').animate(
+	// 		{top:-$('#nav').outerHeight()},{complete: function(){
+	// 			navAnimating = false;
+	// 			navShown     = false;
+	// 		}}
+	// 	);
+	// 	console.log("down");
+	// }else if(delta<0 && !navShown && !navAnimating){
+	// 	navAnimating = true;
+	// 	$('#nav').animate(
+	// 		{top:0},{complete: function(){
+	// 			navAnimating = false;
+	// 			navShown     = true;
+	// 		}});
+	// 	console.log("up");
+	// }
+	// lastScroll = scroll;
 });
 
 function searchHeaderPosition(scroll){
 	$('#searchContainer').animate({
-		top:scroll/2
+		top:120-scroll/2
 	},0);
 	$('#headerSearchBackGroundImage').css({
-		'background-position': 'center '+(-scroll/2-120)+'px'
+		'background-position': 'center '+(-scroll/2-80)+'px'
 	});
 	$('#headerSearch').css({
-		background: 'rgba(48,48,48,'+(0.5*(1-scroll/240) + 0.25)+')'
+		background: 'rgba(48,48,48,'+(0.75*(1-scroll/240))+')'
+	});
+	$('#headerSearchBackGroundImage').css({
+		opacity:(1-scroll/240)
 	});
 }
 
@@ -492,7 +726,7 @@ function update_INDEXs(){
 				else if(i===1) title = "Dow";
 				else if(i===2) title = "NASDAQ";
 				var element_caption = $("#"+title);
-				changes_p = Math.round(data[i].cp*100)/100;	
+				changes_p = Math.round(data[i].cp*100)/100;
 				var matches = element_caption.html().match(/.*\<.*\>(-{0,1}\d{1,2}\.{0,1}\d{0,3})\%/);
 				// background color change
 				if (matches){
@@ -554,7 +788,7 @@ function createMotifChartAjax(motifName,newData){
 		maxTimestamp = 0,
 		maxLength = 0,
 		step,i,d,time,preClose,chartData=[];
-	// console.log(newData);
+
 	for(i=0;i<newData.length;i++){
 		if (newData[i].Timestamp.min<minTimestamp) minTimestamp = newData[i].Timestamp.min;
 		if (newData[i].Timestamp.max>maxTimestamp) maxTimestamp = newData[i].Timestamp.max;
@@ -683,6 +917,103 @@ function updateChart(d,gmtoffset){
 	// set the allowed units for data grouping
 }
 
+function loadBasicChart(tick,c){
+	var options = {
+        animation: false,
+        pointDot: false,
+		scaleShowHorizontalLines: true,
+		scaleShowVerticalLines: false,
+		// pointDotStrokeWidth : 0.1,
+
+		// pointDotRadius : 0.5,
+        bezierCurve : true,
+        bezierCurveTension : 0.3,
+	    pointHitDetectionRadius : 0.3,
+	    showScale:true,
+	    scaleShowLabels:false,
+	    scaleLineColor: "#FFFFFF",
+		scaleFontSize: 11,
+
+
+
+	    // scaleSteps:5,
+	    // scaleLineWidth:0
+
+    };
+    /*************************************************************************/
+
+	var ct = c.get(0).getContext('2d');
+    var gradient = ct.createLinearGradient(0, 0, 0,200);
+    // gradient.addColorStop(0, 'rgba(131,167,185,1.0)');
+    gradient.addColorStop(0, 'rgba(90, 175, 245,1.0)');
+
+    gradient.addColorStop(1, 'rgba(255,255,255,0.0)');
+
+	
+
+	$.ajax({
+		url: 'http://chartapi.finance.yahoo.com/instrument/1.0/'+tick+'/chartdata;type=quote;range=1d/json',
+		dataType:"jsonp",
+		success: function (data){
+			var series = data.series;
+			var previous_close = data.meta.previous_close;
+			var chartReferenceData = [];
+			var chartData = [];
+			var chartXLabels = [];
+			var step = (series[series.length-1].Timestamp- series[0].Timestamp)/series.length;
+			var i=0;
+			var d = new Date((series[0].Timestamp - data.meta.gmtoffset)*1000);
+			var currentHour;
+
+			console.log(series);
+	
+			for(;i<series.length;i=i+1){
+				chartData.push(series[i].close);
+				d.setTime((series[i].Timestamp - data.meta.gmtoffset)*1000);
+				if(d.getHours()%2==0 && d.getHours()!= currentHour){
+					currentHour = d.getHours();
+					chartXLabels.push(calculateHoursPmAm(currentHour));
+				}else{
+					chartXLabels.push("");
+				}
+				chartReferenceData.push(previous_close);
+			}
+
+			while(d.getTime()<(data.Timestamp.max - data.meta.gmtoffset)*1000){
+				d.setTime(d.getTime()+step*1000);
+				currentHour = d.getHours();
+				chartXLabels.push("");
+				chartReferenceData.push(previous_close);
+			}
+			
+			var data = {
+			    labels: chartXLabels,
+			    datasets: [
+			    	{
+			            label: tick,
+			            fillColor: "rgba(255,255,255,0)",
+			            strokeColor: "rgba(212, 106, 106,0.7)",
+			            data: chartReferenceData
+			        },
+			        {
+			            label: tick,
+			            fillColor: gradient,
+			            strokeColor: "rgba(111,147,165,1.0)",
+			            data: chartData
+			        }
+			        
+			    ]
+			};
+			var myLineChart = new Chart(ct).Line(data, options);
+
+
+			//quoteContainerFake.height(quoteContainer.height());
+		}
+	});
+}
+
+
+
 function documentDidLoad(){
 	screenSizeChanged();
 	
@@ -725,10 +1056,11 @@ function getMarketNews(){
 
 	}
 	newsPage = newsPage + 1;
-	
-
 
 }
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	Load Finance News
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getNews(news_url){
 
@@ -829,7 +1161,17 @@ function getNews(news_url){
   });
 
 }
+function calculateHoursPmAm(hour){
+	if (hour ==12){
+		return hour+"pm";
+	}else if (hour >12){
+		return (hour-12)+"pm";
+	}else{
+		return hour+"am";
+	}
 
+}
 function replaceBold(str){
 	return str.replace(/\<b\>/g,"").replace(/\<\/b\>/g,"");
 }
+

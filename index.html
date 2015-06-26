@@ -6,10 +6,14 @@
     <title>Real Time Stock Price Monitor</title>
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="shortcut icon" href="img/FantasyStock_128.png">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+	<!-- And if you want to support IE7, add this aswell -->
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet">
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/js.js"></script>
+	<script src="js/Chart.js"></script>
 	<script src="js/motifs.js"></script>
 	<script src="js/highstock.js"></script>
 	<script src="js/jquery.timeago.js" type="text/javascript"></script>
@@ -24,25 +28,19 @@
 	<body>
 		<div id="nav">
 
-			<div><a href="http://ted7726.github.io/">Real Time Stock Price Monitor</a></div>
-			<div id="about">About</div>
-			<!-- <img src = "img/wstr.jpg" id = "headerImage"></img> -->
+			<div class= "navItem"><a href="http://ted7726.github.io/">Real Time Stock Price</a></div>
+			<div id="about" class= "navItem">About</div><br>
 			
-				
-
-			
-			
-        </div style="width:100%">
-        <div id="header">
-        	
-        	<div id="searchContainer">
-        		<div id="headerSearchBackGroundImage"></div>
-	        	<div id="headerSearch">
-	      			<h2>Search Your Quote Get Real-Time Price</h2><input id="headerSearchText" placeholder="Symbols separated by ',' Ex. GOOG,YHOO,AAPL" style = ""></input><div id="submit">Add</div>
-	    		</div>
-    		</div>
-
         </div>
+        <div id="header"></div>
+
+        
+
+
+    	
+
+
+
 		<div class="INDEXs">
 			S&P500:<div id="SP500"></div>
 			NASDAQ:<div id="NASDAQ"></div>
@@ -87,6 +85,7 @@
 				<div id="fold" class="button">Fold</div>
 				<div id="unfold" class="button">Unfold</div>
 				<div id="test" class="button">test</div>
+				<div id="cleanFavorites" class="button">clean</div>
 				<div class='expand'></div>
 				<div id="detail">
 					<div id="closeChart" class="button2">close</div>
@@ -99,10 +98,7 @@
 				
 				
 				<div class="datagrid" >
-					
 					<div id="myTable0"></div>
-
-					
 				</div>
 				<div id="news0"></div>
 			</div>
@@ -122,6 +118,15 @@
 
 			</div>
 			
+		</div>
+		<div id="searchContainer">
+			<div id="headerSearchBackGroundImage"></div>
+			<div id="headerSearch">
+				<h2>Search Your Quote Get Real-Time Price</h2>
+				<div id="headerSearchTextContainer">
+					<input id="headerSearchText" placeholder="Search Quote"></input><div id="submit"><div class="img"></div></div>
+				</div>
+			</div>
 		</div>
 		
 		<div id="copyright">
