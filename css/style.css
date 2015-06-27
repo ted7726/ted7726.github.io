@@ -499,7 +499,8 @@ input, textarea{
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	position: relative;
+
+
 	
 }
 .datagrid table td, .datagrid table th {
@@ -592,34 +593,43 @@ input, textarea{
 .datagrid table tbody .alt:hover{
 	background: #D1DEE4;
 }
+#myTable{
+	position: relative;
+
+
+}
 
 .quoteContainerFake,
 .quoteContainer{
+	background:white;
 	margin: 10px;
 	padding:5px;
 	display: inline-block;
 	width:300px;
+	/*height:220px;*/
+	vertical-align: top;
 	z-index:0;
 }
 .quoteContainerFake{
 	/*height:200px;*/
-	background:grey;
+
+
 }
 
 .quoteContainer{
 
 	box-shadow: 0px 0px 5px 0px black;
-	position: relative;
+	position: absolute;
 
 	border-radius:3px;
 	opacity:0;
 	z-index: 0;
 
-	/*-webkit-transition: all 0.3s ease-in-out;*/
-	/*-moz-transition: 	all 0.3s ease-in-out;*/
-	/*-o-transition: 		all 0.3s ease-in-out;*/
-	/*-ms-transition: 	all 0.3s ease-in-out;*/
-	/*transition: 		all 0.3s ease-in-out;*/
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition: 		all 0.3s ease-in-out;
+	-ms-transition: 	all 0.3s ease-in-out;
+	transition: 		all 0.3s ease-in-out;
 
 }
 .quoteClose:hover,
@@ -633,7 +643,7 @@ input, textarea{
 	font-weight: 300;
 	display: inline-block;
 	padding: 6px 2px 6px 2px;
-	/*vertical-align: bottom;*/
+	vertical-align: bottom;
 
 
 }
@@ -668,6 +678,16 @@ input, textarea{
 	font-weight: 400;
 	font-size: 20px;
 }
+
+.quoteContainer .quoteLastTradeTime{
+	font-size: 12px;
+	right:20px;
+	float: right;
+
+	color: #808080;
+
+}
+
 .quoteContainer .quoteClose{
 	background-color: white;
 	width:20px;
@@ -682,7 +702,6 @@ input, textarea{
 	-o-transition: 		all 0.3s ease-in-out;
 	-ms-transition: 	all 0.3s ease-in-out;
 	transition: 		all 0.3s ease-in-out;
-
 }
 
 

@@ -184,7 +184,7 @@ $(document).ready(function(){
 	getMarketNews();
 	var favorites = getFavorites();
 	for(var i=0;i<favorites.length;i++){
-		new quote(favorites[i]);
+		new quote(favorites[i],i==favorites.length-1);
 	}
 	
 	/* Facebook and Google+ like button: */
@@ -215,10 +215,14 @@ function addFavorites(newQuote){
 	var favorites = getFavorites();
 	favorites.push(newQuote);
 	setFavorites(favorites);
+	//screenSizeChanged();
 }
 function cleanFavorites(){
 	setFavorites([]);
-	$('.quoteContainer').fadeOut();
+	$('.quoteContainer').css({opacity:0});
+	$('.quoteContainerFake').css({opacity:0});
+	$('.quoteContainer').remove();
+	$('.quoteContainerFake').remove();
 
 }
 function removeFavorites(removeQuote, container){
@@ -233,25 +237,24 @@ function removeFavorites(removeQuote, container){
 	}
 
 
-	container.fadeOut();
-	//container.css({opacity:0});
-	//for(var current = container;(current !=null && current.next() !=null);current = current.next()){
-	//	var next = current.next();
-	//	if(next.offset()==null){
-	//		break;
-	//	}
-	//	var translateStr = "translate("+(current.offset().left - next.offset().left)+"px,"+(current.offset().top- next.offset().top)+"px)";
-	//	console.log(translateStr,next);
-	//	next.css({
-	//		"-webkit-transform":translateStr,
-	//		"-ms-transform":translateStr,
-	//		"transform":translateStr
-	//	});
-    //
-	//}
-	//container.remove();
+	//container.fadeOut();
+	container.css({opacity:0});
+	container.next().css({opacity:0});
+
+
+
+	for(var currentFake = container.next();(currentFake !=null && currentFake.next() !=null);currentFake = currentContainer.next()){
+		var currentContainer = currentFake.next();
+		if(currentContainer.offset()==null){
+			break;
+		}
+		updateQuoteContainerOffset(currentContainer,currentFake);
+	}
+
 	//container.delay(300).hide();
-	//console.log(container);
+	container.next().remove();
+	container.remove();
+	console.log(container);
 
 
 
@@ -327,7 +330,7 @@ function addCustom(){
 
 	if(quotes){
 		Motifs.push(new combination(quotes,quotes_weight,customTitle));
-		new quote(quotes);
+		new quote(quotes,true);
 		addFavorites(quotes);
 		
 	}
@@ -494,12 +497,12 @@ function combination(qs,qs_weight,t){
 	
 }
 
-function quote(tick){
+function quote(tick,isUpdatingQuotes){
 	this.tick = tick;
 
-	//this.quoteContainerFake = jQuery('<div/>', {
-	//	class: 'quoteContainerFake'
-	//});
+	this.quoteContainerFake = jQuery('<div/>', {
+		class: 'quoteContainerFake'
+	});
 
 	this.quoteContainer = jQuery('<div/>', {
 		class: 'quoteContainer',
@@ -507,15 +510,17 @@ function quote(tick){
 			console.log('quoteClick' + tick);
 		}
 	});
-	//var quoteContainerFake	= this.quoteContainerFake;
+	var quoteContainerFake	= this.quoteContainerFake;
 	var quoteContainer		= this.quoteContainer;
 
 
 	var header                 = jQuery('<div/>', {class: 'quoteTitle', text: tick});
 	this.quoteName             = jQuery('<div/>', {class: 'quoteName'});
+	this.quoteLastTradeTime	   = jQuery('<div/>', {class: 'quoteLastTradeTime'});
+	this.price                 = jQuery('<div/>', {class: 'quotePrice'});
 	this.priceChange           = jQuery('<div/>', {class: 'quotePriceChange'});
 	this.priceChangePercentage = jQuery('<div/>', {class: 'priceChangePercentage'});
-	this.price                 = jQuery('<div/>', {class: 'quotePrice'});
+
 	this.close				   = jQuery('<img/>', {class: 'quoteClose', src: 'img/close.png',
 		click: function(){
 			console.log('quote remove' + tick);
@@ -525,12 +530,6 @@ function quote(tick){
 		}
 	});
 
-	// var chart = jQuery('<img/>', {
-	// 	// src: "http://chart.finance.yahoo.com/t?s="+tick+"&amp;lang=en-US&amp;region=US&amp;width=400&amp;height=240?",
-	// 	src: "http://ichart.yahoo.com/t?s="+tick,
-	// 	href: "http://finance.yahoo.com/echarts?s="+tick,
-	// });
-
 	var chart = jQuery('<canvas/>', {
 		href: "http://finance.yahoo.com/echarts?s="+tick
 	});
@@ -538,29 +537,31 @@ function quote(tick){
 
 	quoteContainer.prepend(this.close);
 	quoteContainer.prepend(chart);
+
 	quoteContainer.prepend(this.priceChangePercentage);
 	quoteContainer.prepend(this.priceChange);
 	quoteContainer.prepend(this.price);
 	quoteContainer.prepend('<br>');
+	//quoteContainer.prepend(this.quoteLastTradeTime);
 	quoteContainer.prepend(this.quoteName);
 	quoteContainer.prepend(header);
-	console.log("height: "+quoteContainer.innerHeight());
+	//console.log("height: "+quoteContainer.innerHeight());
+
 	quoteContainer.appendTo('#myTable0');
-	//quoteContainerFake.appendTo('#myTable0');
-
-
+	quoteContainerFake.appendTo('#myTable0');
 
 	
 
 	this.loadQuote = function(){
 		
 		var yahoo_url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22"+this.tick+"%22)%0A%09%09&env=http://datatables.org/alltables.env&format=json";
-		var price = this.price;
-		var priceChange = this.priceChange;
-		var priceChangePercentage = this.priceChangePercentage;
-		var quoteContainer = this.quoteContainer;
-		var tick = this.tick;
-		var quoteName = this.quoteName;
+		var price 					= this.price;
+		var priceChange 			= this.priceChange;
+		var priceChangePercentage 	= this.priceChangePercentage;
+		var quoteLastTradeTime		= this.quoteLastTradeTime;
+		var quoteContainer 			= this.quoteContainer;
+		var tick 					= this.tick;
+		var quoteName 				= this.quoteName;
 		
 		$.ajax({
 			url: yahoo_url,
@@ -570,17 +571,24 @@ function quote(tick){
 				if(quote == null){
 					return;
 				}
-				console.log(quote);
-				console.log(parseFloat(quote.Change));
+				if(parseFloat(quote.LastTradePriceOnly)>10){
+					quote.Change = Math.round(parseFloat(quote.Change)*100)/100;
+					quote.LastTradePriceOnly = Math.round(parseFloat(quote.LastTradePriceOnly)*100)/100;
+				}
+				//console.log(quote);
+				//console.log(parseFloat(quote.Change));
 				var priceColor = (parseFloat(quote.Change)<0?'red':'green');
+
 				price.text(quote.LastTradePriceOnly);
 				priceChange.text(quote.Change);
 				priceChange.css({color:priceColor});
 				priceChangePercentage.text("("+Math.round(parseFloat(quote.ChangeinPercent)*100)/100+"%)");
 				priceChangePercentage.css({color:priceColor});
+				quoteLastTradeTime.text(quote.LastTradeTime);
+
 
 				quoteName.text(quote.Name);
-				console.log(quote);
+				//console.log(quote);
 				quoteContainer.animate({opacity: 1}, 400);
 			},
 			error:function(){
@@ -590,12 +598,15 @@ function quote(tick){
 		});
 	}
 	this.loadQuote();
-	loadBasicChart(tick,chart);
+	loadBasicChart(tick,chart,isUpdatingQuotes);
+}
 
-	//quoteContainer.css({top:quoteContainerFake.offset().top,left:quoteContainerFake.offset().left});
-	//console.log("x:"+quoteContainerFake.offset().top+" y:"+quoteContainerFake.offset().left+" height:"+quoteContainer.outerHeight());
-
-
+function updateQuoteContainerOffset(quoteContainer,quoteContainerFake){
+	quoteContainer.css({
+			top:quoteContainerFake.offset().top-10,
+			left:quoteContainerFake.offset().left-10}
+	);
+	quoteContainerFake.height(quoteContainer.height());
 }
 
 function loadQuoteFaileHandler(quoteContainer){
@@ -667,31 +678,6 @@ $(window).scroll(function(handler){
 	}else{
 		searchHeaderPosition(400);
 	}
-
-
-	// var navPosition = $('#nav').offset().top - scroll;
-	// var navGapToShown = $('#nav').outerHeight() +navPosition;
-	
-	
-	// if(delta>0 && navShown && !navAnimating){
-	// 	navAnimating = true;
-	// 	$('#nav').animate(
-	// 		{top:-$('#nav').outerHeight()},{complete: function(){
-	// 			navAnimating = false;
-	// 			navShown     = false;
-	// 		}}
-	// 	);
-	// 	console.log("down");
-	// }else if(delta<0 && !navShown && !navAnimating){
-	// 	navAnimating = true;
-	// 	$('#nav').animate(
-	// 		{top:0},{complete: function(){
-	// 			navAnimating = false;
-	// 			navShown     = true;
-	// 		}});
-	// 	console.log("up");
-	// }
-	// lastScroll = scroll;
 });
 
 function searchHeaderPosition(scroll){
@@ -917,7 +903,7 @@ function updateChart(d,gmtoffset){
 	// set the allowed units for data grouping
 }
 
-function loadBasicChart(tick,c){
+function loadBasicChart(tick,c,isUpdatingQuotesGrid){
 	var options = {
         animation: false,
         pointDot: false,
@@ -945,7 +931,7 @@ function loadBasicChart(tick,c){
 	var ct = c.get(0).getContext('2d');
     var gradient = ct.createLinearGradient(0, 0, 0,200);
     // gradient.addColorStop(0, 'rgba(131,167,185,1.0)');
-    gradient.addColorStop(0, 'rgba(90, 175, 245,1.0)');
+    gradient.addColorStop(0, 'rgba(90, 175, 245,0.9)');
 
     gradient.addColorStop(1, 'rgba(255,255,255,0.0)');
 
@@ -1008,6 +994,9 @@ function loadBasicChart(tick,c){
 
 
 			//quoteContainerFake.height(quoteContainer.height());
+			if(isUpdatingQuotesGrid){
+				screenSizeChanged();
+			}
 		}
 	});
 }
@@ -1016,8 +1005,6 @@ function loadBasicChart(tick,c){
 
 function documentDidLoad(){
 	screenSizeChanged();
-	
-
 }
 // screen size changed
 $( window ).resize(function() {
@@ -1026,7 +1013,6 @@ $( window ).resize(function() {
   // $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
 });
 
-var animating = false;
 function screenSizeChanged(){
 	// $('#headerSearchBackGroundImage').css({
 	// 	'background-size':$('#header').innerWidth()
@@ -1040,6 +1026,10 @@ function screenSizeChanged(){
 	// }else if( containerWidth > 400){
 	// 	$('.newsContainer').stop().animate({width:400},100);
 	// }
+	$( ".quoteContainer" ).each(function( index ) {
+		updateQuoteContainerOffset($(this),$(this).next());
+	});
+
 }
 
 function getMarketNews(){
