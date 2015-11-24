@@ -33,7 +33,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: "GET",
 			url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc",
-			data: {query: queryString},
+			data: {query: queryString, region: "US", lang: "en"},
 			dataType: "jsonp",
 			jsonp : "callback",
 			jsonpCallback: "YAHOO.Finance.SymbolSuggest.ssCallback",
