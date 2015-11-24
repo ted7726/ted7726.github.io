@@ -32,24 +32,22 @@ $(document).ready(function(){
 		var queryString = (($('#headerSearchText').val()).replace(/.*,(\w*)/,"$1"));
 		$.ajax({
 			type: "GET",
-			url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc",
-			data: {query: queryString, region: "US", lang: "en"},
+			url: "http://ted7726finance-wilsonsu.rhcloud.com/query",
+			data: {q: queryString},
 			dataType: "jsonp",
-			jsonp : "callback",
-			jsonpCallback: "YAHOO.Finance.SymbolSuggest.ssCallback",
+			success: function(data) {
+				var queryResult = data;
+				var autoCompleteArray = [];
+				for(var i=0;i<queryResult.length;i++){
+					autoCompleteArray[i] = queryResult[i].name + "(" + queryResult[i].quote + ")"
+				}
+				$("#headerSearchText").autocomplete({
+					source: autoCompleteArray
+				});
+
+			}
 		});
 
-		YAHOO.Finance.SymbolSuggest.ssCallback = function (data) {
-			var queryResult = data.ResultSet.Result;
-			var autoCompleteArray = []
-			for(var i=0;i<queryResult.length;i++){
-				autoCompleteArray[i] = queryResult[i].name + "(" + queryResult[i].symbol + ")"
-			}
-			$("#headerSearchText").autocomplete({
-				source: autoCompleteArray
-		    });
-			
-		}
 	});
 
 
@@ -151,7 +149,7 @@ $(document).ready(function(){
 	
 	
 	$("#test").click(function(){
-		console.log("use for testing!");
+		//console.log("use for testing!");
 
 		// new quote("GOOG");
 
@@ -228,10 +226,10 @@ function cleanFavorites(){
 function removeFavorites(removeQuote, container){
 	var favorites = getFavorites();
 	var index = favorites.indexOf(removeQuote);
-	console.log(index);
+	//console.log(index);
 	if (index>-1){
 		favorites.splice(index,1);
-		console.log(favorites);
+		//console.log(favorites);
 		setFavorites(favorites);
 
 	}
@@ -254,7 +252,7 @@ function removeFavorites(removeQuote, container){
 	//container.delay(300).hide();
 	container.next().remove();
 	container.remove();
-	console.log(container);
+	//console.log(container);
 
 
 
@@ -394,7 +392,7 @@ function crossDomain(url){
 	$.getJSON('http://whateverorigin.org/get?url=' + 
 		encodeURIComponent(url) + '&callback=?',
 		function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	);
 }
@@ -507,7 +505,7 @@ function quote(tick,isUpdatingQuotes){
 	this.quoteContainer = jQuery('<div/>', {
 		class: 'quoteContainer',
 		click: function(){
-			console.log('quoteClick' + tick);
+			//console.log('quoteClick' + tick);
 		}
 	});
 	var quoteContainerFake	= this.quoteContainerFake;
@@ -523,7 +521,7 @@ function quote(tick,isUpdatingQuotes){
 
 	this.close				   = jQuery('<img/>', {class: 'quoteClose', src: 'img/close.png',
 		click: function(){
-			console.log('quote remove' + tick);
+			//console.log('quote remove' + tick);
 
 			removeFavorites(tick, quoteContainer);
 
@@ -621,7 +619,7 @@ function loadQuoteFaileHandler(quoteContainer){
 		dataType: "jsonp",
 		success: function (data){
 			var quote = data[0];
-			console.log("google");
+			//console.log("google");
 			if(quote == null){
 				return;
 			}
@@ -749,7 +747,7 @@ function yqlUpdate(SYM){
 	var q;
 	$.getJSON(yqlURL + encodeURIComponent(query) + dataFormat,
 		function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	);
 }
@@ -957,7 +955,7 @@ function loadBasicChart(tick,c,isUpdatingQuotesGrid){
 			var d = new Date((series[0].Timestamp - data.meta.gmtoffset)*1000);
 			var currentHour;
 
-			console.log(series);
+			//console.log(series);
 	
 			for(;i<series.length;i=i+1){
 				chartData.push(series[i].close);
@@ -1050,7 +1048,7 @@ function getMarketNews(){
 
 	for(var i=0;i<quoteKeywords.length;i++){
 		var keywords = quoteKeywords[i];
-		console.log("http://ajax.googleapis.com/ajax/services/search/news?v=1.0&q="+keywords+"&");
+		//console.log("http://ajax.googleapis.com/ajax/services/search/news?v=1.0&q="+keywords+"&");
 		getNews("http://ajax.googleapis.com/ajax/services/search/news?v=1.0&q="+keywords+"&");
 
 	}
@@ -1071,7 +1069,7 @@ function getNews(news_url){
     		return;
     	}
     	var articles = data["responseData"]["results"];
-    	console.log(articles);
+    	//console.log(articles);
     	var pages = data["responseData"]["cursor"]["pages"];
     	
     	newsPageStep = articles.length;
