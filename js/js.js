@@ -231,15 +231,10 @@ function removeFavorites(removeQuote, container){
 		favorites.splice(index,1);
 		//console.log(favorites);
 		setFavorites(favorites);
-
 	}
-
-
 	//container.fadeOut();
 	container.css({opacity:0});
 	container.next().css({opacity:0});
-
-
 
 	for(var currentFake = container.next();(currentFake !=null && currentFake.next() !=null);currentFake = currentContainer.next()){
 		var currentContainer = currentFake.next();
@@ -253,12 +248,7 @@ function removeFavorites(removeQuote, container){
 	container.next().remove();
 	container.remove();
 	//console.log(container);
-
-
-
 	//});
-
-
 }
 
 
