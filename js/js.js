@@ -320,7 +320,7 @@ function addCustom(){
 		Motifs.push(new combination(quotes,quotes_weight,customTitle));
 		new quote(quotes,true);
 		addFavorites(quotes);
-		
+
 	}
 	$("#headerSearchText").val("");
 }
