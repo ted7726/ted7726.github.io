@@ -36,7 +36,7 @@ $(document).ready(function(){
 			data: {q: queryString},
 			dataType: "jsonp",
 			success: function(data) {
-				var queryResult = data;
+				var queryResult = data.data;
 				var autoCompleteArray = [];
 				for(var i=0;i<queryResult.length;i++){
 					autoCompleteArray[i] = queryResult[i].name + "(" + queryResult[i].quote + ")"
@@ -297,18 +297,8 @@ function tourClose(){
 function addCustom(){
 	// analysis input
 	var customTitle;
-	if($("#text2").val() !==""){
-		var input = $("#text2").val().split("\n");
-		var quotes = new Array(input.length);
-		var quotes_weight = new Array(input.length);
-		for(var i=0;i<input.length;i++){
-			var matches = input[i].split("	");
-			quotes[i]=matches[0];
-			quotes_weight[i]=parseInt(matches[2]);
-		}
-		customTitle = ("Custom " + tableid);
-	}else if($("#headerSearchText").val() !==""){
-		var quotes_weight = new Array(1);	
+	if($("#headerSearchText").val() !==""){
+		var quotes_weight = new Array(1);
 		var quotes = new Array(1);
 		var customTitle = $("#headerSearchText").val();
 		quotes[0] = (customTitle).replace(/.*\((\w*)\)/,"$1");
